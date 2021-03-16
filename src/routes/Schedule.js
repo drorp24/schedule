@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import useTranslation from '../i18n/useTranslation'
 
+import Gantt from '../gantt/Gantt'
+
 const styles = {
   root: theme => ({
     display: 'grid',
@@ -12,7 +14,7 @@ const styles = {
       "resources gantt"
       "directives gantt"
     `,
-    gap: '1rem',
+    gap: '0.6rem',
     color: theme.palette.text.primary,
     background: theme.palette.background.default,
   }),
@@ -43,7 +45,9 @@ const Schedule = () => (
     <div css={{ ...styles.requests, ...styles.section }}>requests </div>
     <div css={{ ...styles.resources, ...styles.section }}>resources </div>
     <div css={{ ...styles.directives, ...styles.section }}>directives</div>
-    <div css={{ ...styles.gantt, ...styles.section }}>gantt</div>
+    <div css={{ ...styles.gantt, ...styles.section }}>
+      <Gantt />
+    </div>
   </div>
 )
 

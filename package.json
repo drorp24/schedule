@@ -34,6 +34,7 @@
     "react-window": "^1.8.6",
     "reselect": "^4.0.0",
     "uuid": "^8.3.2",
+    "vis-timeline": "^7.4.6",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

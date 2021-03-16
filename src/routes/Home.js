@@ -22,7 +22,7 @@ import useTranslation from '../i18n/useTranslation'
 
 import Page from '../layout/Page'
 import File from './File'
-import Schedule from '../schedule/Schedule'
+import Schedule from './Schedule'
 import Dashboard from './Dashboard'
 
 const Home = () => {
