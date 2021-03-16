@@ -43,6 +43,8 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'lowercase',
     fontSize: '2rem',
     letterSpacing: '0.8rem',
+    textAlign: 'center',
+    lineHeight: '3rem',
   },
   formContainerContainer: {
     display: 'flex',
@@ -95,7 +97,7 @@ export default function Login() {
           <ScheduleIcon />
         </div>
         <Typography variant="h3" className={classes.name}>
-          Schedule
+          {t('appName')}
         </Typography>
       </div>
 

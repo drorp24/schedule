@@ -1,4 +1,5 @@
 {
+  "appName": "Schedule",
   "schedule": "Schedule",
   "username": "User name",
   "usernameRequired": "User name is required",

@@ -1,5 +1,6 @@
 {
-  "schedule": "תיזמון",
+  "appName": "מה הלו\"ז",
+  "schedule": "המלצות",
   "username": "שם משתמש",
   "usernameRequired": "יש למלא שם משתמש",
   "password": "סיסמה",
