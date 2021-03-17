@@ -11,7 +11,7 @@ const useOptions = () => {
 
   return {
     editable: true,
-    groupdEditable: true,
+    groupEditable: true,
     locales: {
       en,
       he,
@@ -28,6 +28,7 @@ const useOptions = () => {
       // template: React...
     },
     type: 'range',
+    minHeight: '100%',
   }
 }
 

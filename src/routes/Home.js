@@ -9,6 +9,7 @@ import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 
 import Folder from '@material-ui/icons/FolderOpenOutlined'
 import ScheduleIcon from '@material-ui/icons/Schedule'
+import RoutesIcon from '@material-ui/icons/AltRouteOutlined'
 import SwitchRightOutlinedIcon from '@material-ui/icons/SwitchRightOutlined'
 import DarkModeOutlinedIcon from '@material-ui/icons/DarkModeOutlined'
 import LightModeOutlinedIcon from '@material-ui/icons/LightModeOutlined'
@@ -24,6 +25,7 @@ import Page from '../layout/Page'
 import File from './File'
 import Schedule from './Schedule'
 import Dashboard from './Dashboard'
+import Routes from './Routes'
 
 const Home = () => {
   const { url } = useRouteMatch()
@@ -56,6 +58,7 @@ const Home = () => {
       transition: 'width 0.5s',
       backgroundColor: 'rgba(0, 0, 0, 0.05)',
       overflow: 'hidden',
+      whiteSpace: 'nowrap',
     },
     link: {
       textDecoration: 'none',
@@ -136,6 +139,12 @@ const Home = () => {
       title: t('schedule'),
     },
     {
+      path: 'routes',
+      component: <Routes />,
+      icon: <RoutesIcon />,
+      title: t('routes'),
+    },
+    {
       path: 'dashboard',
       component: <Dashboard />,
       icon: <DashboardOutlinedIcon />,
@@ -200,7 +209,7 @@ const Home = () => {
           ))}
         </nav>
       </div>
-      <Divider orientation="vertical" />
+      {/* <Divider orientation="vertical" /> */}
       <div css={styles.route}>
         <Switch>
           {routes.map(({ path, component }) => (
