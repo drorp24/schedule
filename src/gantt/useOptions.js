@@ -1,13 +1,10 @@
-import { useSelector } from 'react-redux'
-import { useDirection } from '../utility/appUtilities'
+import { useLocale } from '../utility/appUtilities'
 
 import he from '../i18n/he.json'
 import en from '../i18n/en.json'
 
 const useOptions = () => {
-  const { locale } = useSelector(store => store.app)
-  const direction = useDirection()
-  const rtl = direction === 'rtl'
+  const { locale, rtl } = useLocale()
 
   return {
     editable: true,
@@ -17,9 +14,6 @@ const useOptions = () => {
       he,
     },
     locale,
-    rollingMode: {
-      // follow: true,
-    },
     rtl,
     snap: null,
     // template: React...

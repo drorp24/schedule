@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, memo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { DataSet, Timeline } from 'vis-timeline/standalone'
@@ -14,7 +14,7 @@ import noScrollbar from '../styling/noScrollbar'
 // - in it, display the volleys hierarchy with mui's Tree, created recursively as in their 'rich' example
 // - insert action icons, as in puzzle, one with thumbs-up icon for approval.
 
-const Gantt = () => {
+const Gantt = memo(() => {
   const ref = useRef()
   const options = useOptions()
   const { mode } = useSelector(store => store.app)
@@ -25,36 +25,20 @@ const Gantt = () => {
       backgroundColor: mode === 'light' ? 'white' : 'rgba(256, 256, 256, 0.05)',
       overflow: 'scroll',
       ...noScrollbar,
-      '& > div': {
-        borderColor:
-          mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.05)',
+      '& .vis-timeline': {
+        border: 'none',
+      },
+      '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text': {
+        color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
+      },
+      '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor': {
+        borderColor: '#616161',
       },
     }),
   }
 
   useEffect(() => {
     const container = ref.current
-
-    // const start = new Date('March 16, 2021 22:00:00')
-    // const end = new Date('March 16, 2021 23:00:00')
-
-    // const items = new DataSet([
-    //   {
-    //     id: 1,
-    //     content: 'item 1',
-    //     title: 'item1 title',
-    //     start,
-    //     end,
-    //     group: '1',
-    //   },
-    //   {
-    //     id: 2,
-    //     content: 'item 6',
-    //     start: Date.now(),
-    //     type: 'point',
-    //     group: '2',
-    //   },
-    // ])
 
     const groups = new DataSet([
       { id: '1', content: 'type_1' },
@@ -88,6 +72,6 @@ const Gantt = () => {
   }, [options])
 
   return <div css={styles.root} ref={ref} />
-}
+})
 
 export default Gantt

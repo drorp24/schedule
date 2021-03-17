@@ -1,11 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleDrawer, toggleLocale, toggleMode } from '../redux/app'
 import { logout } from '../redux/users'
 import { useDirection } from '../utility/appUtilities'
 
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import {
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useLocation,
+} from 'react-router-dom'
 
 import Folder from '@material-ui/icons/FolderOpenOutlined'
 import ScheduleIcon from '@material-ui/icons/Schedule'
@@ -17,7 +23,6 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Logout from '@material-ui/icons/PowerSettingsNewOutlined'
 import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
 
 import useTranslation from '../i18n/useTranslation'
 
@@ -29,6 +34,7 @@ import Routes from './Routes'
 
 const Home = () => {
   const { url } = useRouteMatch()
+  const { pathname } = useLocation()
   const dispatch = useDispatch()
   const open = useSelector(store => store.app.drawerOpen)
   const direction = useDirection()
@@ -42,7 +48,12 @@ const Home = () => {
   const routeWidth = {}
   drawerWidth.open = '12%'
   routeWidth.open = '88%'
-  const menuItem = { padding: 1, icon: 1.5 }
+  const menuItem = {
+    padding: 1,
+    icon: 1.5,
+    active: mode === 'light' ? 'rgba(0, 0, 0, 0.8)' : '#e0e0e0',
+    inactive: '#757575',
+  }
   drawerWidth.close = `calc(2*${menuItem.padding}rem + ${menuItem.icon}rem)`
   routeWidth.close = `calc(100vw - (2*${menuItem.padding}rem + ${menuItem.icon}rem))`
 
@@ -89,7 +100,6 @@ const Home = () => {
       padding: `${menuItem.padding}rem`,
       '& svg': {
         fontSize: `${menuItem.icon}rem`,
-        color: theme.palette.grey[greyShade],
       },
       '& svg[data-testid="SwitchRightOutlinedIcon"]': {
         transform: `rotate(${dir === 'rtl' ? 180 : 0}deg)`,
@@ -105,7 +115,7 @@ const Home = () => {
       color: theme.palette.grey[greyShade],
       '&:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        color: 'white',
+        color: 'white !important',
         '& svg': {
           color: 'white',
         },
@@ -131,24 +141,30 @@ const Home = () => {
       component: <File />,
       icon: <Folder />,
       title: t('file'),
+      color: pathname === '/home/file' ? menuItem.active : menuItem.inactive,
     },
     {
       path: 'schedule',
       component: <Schedule />,
       icon: <ScheduleIcon />,
       title: t('schedule'),
+      color:
+        pathname === '/home/schedule' ? menuItem.active : menuItem.inactive,
     },
     {
       path: 'routes',
       component: <Routes />,
       icon: <RoutesIcon />,
       title: t('routes'),
+      color: pathname === '/home/routes' ? menuItem.active : menuItem.inactive,
     },
     {
       path: 'dashboard',
       component: <Dashboard />,
       icon: <DashboardOutlinedIcon />,
       title: t('dashboard'),
+      color:
+        pathname === '/home/dashboard' ? menuItem.active : menuItem.inactive,
     },
   ]
   const toggles = [
@@ -189,11 +205,13 @@ const Home = () => {
               <ChevronLeftIcon />
             </div>
           </Button>
-          {routes.map(({ path, title, icon }) => (
+          {routes.map(({ path, title, icon, color }) => (
             <Link to={`${url}/${path}`} css={styles.link} key={path}>
               <Button fullWidth css={styles.drawerItem} title={title}>
-                <div css={styles.iconWrapper}>{icon}</div>
-                <div css={styles.title}>{title}</div>
+                <div css={styles.iconWrapper} style={{ color }}>
+                  {icon}
+                </div>
+                <div css={styles.title} /* style={{ color }} */>{title}</div>
               </Button>
             </Link>
           ))}
@@ -209,7 +227,6 @@ const Home = () => {
           ))}
         </nav>
       </div>
-      {/* <Divider orientation="vertical" /> */}
       <div css={styles.route}>
         <Switch>
           {routes.map(({ path, component }) => (

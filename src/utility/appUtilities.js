@@ -5,6 +5,13 @@ export const useDirection = () => {
   return locale === 'he' ? 'rtl' : 'ltr'
 }
 
+export const useLocale = () => {
+  const locale = useSelector(store => store.app.locale)
+  const direction = locale === 'he' ? 'rtl' : 'ltr'
+  const rtl = direction === 'rtl'
+  return { locale, direction, rtl }
+}
+
 export const useOtherDirection = () => {
   const locale = useSelector(store => store.app.locale)
   return locale === 'he' ? 'ltr' : 'trl'
@@ -15,10 +22,15 @@ export const useOtherMode = () => {
   return mode === 'light' ? 'dark' : 'light'
 }
 
-const dateTimeOptions = {
+const dateOptions = {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
   year: 'numeric',
-  month: 'short',
-  day: '2-digit',
+}
+
+const dateTimeOptions = {
+  ...dateOptions,
   hour: 'numeric',
   minute: 'numeric',
   hour12: true,
@@ -26,9 +38,9 @@ const dateTimeOptions = {
 
 export const useLocalDate = date => {
   const { locale } = useSelector(store => store.app)
-  return /* date */ false // ToDo: fix. Throws for newly created entities.
-    ? new Intl.DateTimeFormat(locale, dateTimeOptions).format(date)
-    : 'no date recorded'
+  const dateFormat = new Date(date)
+
+  return dateFormat.toLocaleDateString(locale, dateOptions)
 }
 
 // assumption: element is smaller than box

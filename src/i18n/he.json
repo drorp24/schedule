@@ -1,4 +1,7 @@
 {
+  "requests": "הזמנות",
+  "resources": "מלאי",
+  "directives": "הנחיות",
   "routes": "מסלולים",
   "appName": "מה הלו\"ז",
   "schedule": "המלצות",
