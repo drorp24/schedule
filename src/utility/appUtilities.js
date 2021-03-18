@@ -29,12 +29,12 @@ const dateOptions = {
   year: 'numeric',
 }
 
-const dateTimeOptions = {
-  ...dateOptions,
-  hour: 'numeric',
-  minute: 'numeric',
-  hour12: true,
-}
+// const dateTimeOptions = {
+//   ...dateOptions,
+//   hour: 'numeric',
+//   minute: 'numeric',
+//   hour12: true,
+// }
 
 export const useLocalDate = date => {
   const { locale } = useSelector(store => store.app)

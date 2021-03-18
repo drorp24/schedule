@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleDrawer, toggleLocale, toggleMode } from '../redux/app'
 import { logout } from '../redux/users'
@@ -38,7 +38,7 @@ const Home = () => {
   const dispatch = useDispatch()
   const open = useSelector(store => store.app.drawerOpen)
   const direction = useDirection()
-  const { mode } = useSelector(store => store.app)
+  const mode = useSelector(store => store.app.mode)
   const [dir, setDir] = useState(direction)
   const rtl = dir === 'rtl'
   const ltr = dir === 'ltr'

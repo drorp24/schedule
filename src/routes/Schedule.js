@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState, memo } from 'react'
 import { useSelector } from 'react-redux'
-import useTranslation from '../i18n/useTranslation'
+// import useTranslation from '../i18n/useTranslation'
 
 import Run from '../lists/Run'
 import Requests from '../lists/Requests'
@@ -11,14 +11,13 @@ import Directives from '../lists/Directives'
 import noScrollBar from '../styling/noScrollbar'
 
 import Gantt from '../gantt/Gantt'
-import { MicNone } from '@material-ui/icons'
 
-const Schedule = memo(() => {
+const Schedule = () => {
   const [list, setList] = useState(null)
   const noListSelected = list === null
 
-  const { mode } = useSelector(store => store.app)
-  const t = useTranslation()
+  const mode = useSelector(store => store.app.mode)
+  // const t = useTranslation()
 
   const styles = {
     root: theme => ({
@@ -109,6 +108,6 @@ const Schedule = memo(() => {
       </div>
     </div>
   )
-})
+}
 
-export default Schedule
+export default memo(Schedule)

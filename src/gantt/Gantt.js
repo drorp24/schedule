@@ -1,23 +1,26 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchRecommendations } from '../redux/recommendations'
 
-import { DataSet, Timeline } from 'vis-timeline/standalone'
 import 'vis-timeline/styles/vis-timeline-graph2d.css'
+import createTimeline from './createTimeline'
+import recommendationFields from './recommendationFields'
 
 import useOptions from './useOptions'
-import scheduleApi from '../api/scheduleApi'
 import noScrollbar from '../styling/noScrollbar'
 
 // ToDo next:
 // - create a React template for the tooltip (mui's Tooltip)
 // - in it, display the volleys hierarchy with mui's Tree, created recursively as in their 'rich' example
 // - insert action icons, as in puzzle, one with thumbs-up icon for approval.
+// ! - important: redux-persist
 
-const Gantt = memo(() => {
+const Gantt = () => {
   const ref = useRef()
   const options = useOptions()
-  const { mode } = useSelector(store => store.app)
+  const mode = useSelector(store => store.app.mode)
+  const dispatch = useDispatch()
 
   const styles = {
     root: theme => ({
@@ -39,39 +42,11 @@ const Gantt = memo(() => {
 
   useEffect(() => {
     const container = ref.current
-
-    const groups = new DataSet([
-      { id: '1', content: 'type_1' },
-      { id: '4', content: 'type_4' },
-    ])
-
-    scheduleApi('e0e80704-e4d7-45bd-b28f-d51186c9cef6').then(
-      recommendations => {
-        const items = new DataSet(
-          recommendations.map(
-            ({
-              id,
-              estimated_start_activity: start,
-              estimated_end_activity: end,
-              start_date,
-              platform_id,
-            }) => ({
-              id,
-              content: start_date.slice(-8),
-              start,
-              end,
-              group: platform_id.slice(-1).toString(),
-            })
-          )
-        )
-
-        const timeline = new Timeline(container, items, options)
-        timeline.setGroups(groups)
-      }
-    )
-  }, [options])
+    const buildTimeline = createTimeline({ container, options })
+    dispatch(fetchRecommendations({ recommendationFields, buildTimeline }))
+  }, [dispatch, options])
 
   return <div css={styles.root} ref={ref} />
-})
+}
 
-export default Gantt
+export default memo(Gantt)

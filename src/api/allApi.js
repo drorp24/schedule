@@ -5,7 +5,7 @@ import axios from 'axios'
 
 // const convertAPI = () => {}
 
-const scheduleApi = async runId => {
+const allApi = async runId => {
   const requests = `${process.env.REACT_APP_API_SERVER}${process.env.REACT_APP_REQUESTS_ENDPOINT}${runId}`
   const resources = `${process.env.REACT_APP_API_SERVER}${process.env.REACT_APP_RESOURCES_ENDPOINT}${runId}`
   const directives = `${process.env.REACT_APP_API_SERVER}${process.env.REACT_APP_DIRECTIVES_ENDPOINT}${runId}`
@@ -23,15 +23,17 @@ const scheduleApi = async runId => {
     getDirectives(),
     getRecommendations(),
   ])
-    .then(
-      ([requests, resources, directives, recommendations]) => {
-        return recommendations.data
-      }
-      // convertAPI(/* analysis.data, keyProxy(objectify(lists.data)) */)
-    )
+    .then(([requests, resources, directives, recommendations]) => {
+      return [
+        requests.data,
+        resources.data,
+        directives.data,
+        recommendations.data,
+      ]
+    })
     .catch(error => {
       console.error(error.message)
     })
 }
 
-export default scheduleApi
+export default allApi

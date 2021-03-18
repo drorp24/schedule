@@ -6,8 +6,10 @@ const useNotifications = setOpen => {
   const [severity, setSeverity] = useState('')
 
   const userError = useSelector(store => store.users.error)
-  const fileError = useSelector(store => store.content.error)
-  const contentError = useSelector(store => store.content.error === 'content')
+  const requestsError = useSelector(store => store.requests.error)
+  const resourcesError = useSelector(store => store.resources.error)
+  const directivesError = useSelector(store => store.directives.error)
+  const recommendationsError = useSelector(store => store.recommendations.error)
 
   useEffect(() => {
     if (userError) {
@@ -15,19 +17,42 @@ const useNotifications = setOpen => {
       setMessage(userError || 'Something went wrong')
       setSeverity('error')
     }
-    if (contentError) {
+    if (requestsError) {
       setOpen(true)
       setMessage(
-        "There are issues with the file's content. Check log for more details"
+        "There are issues with the file's requests. Check log for more details"
       )
       setSeverity('error')
     }
-    if (fileError && !contentError) {
+    if (resourcesError) {
       setOpen(true)
-      setMessage(contentError || 'Something went wrong')
+      setMessage(
+        "There are issues with the file's resources. Check log for more details"
+      )
       setSeverity('error')
     }
-  }, [setOpen, userError, contentError, fileError])
+    if (directivesError) {
+      setOpen(true)
+      setMessage(
+        "There are issues with the file's directives. Check log for more details"
+      )
+      setSeverity('error')
+    }
+    if (recommendationsError) {
+      setOpen(true)
+      setMessage(
+        "There are issues with the file's recommendations. Check log for more details"
+      )
+      setSeverity('error')
+    }
+  }, [
+    setOpen,
+    userError,
+    recommendationsError,
+    requestsError,
+    resourcesError,
+    directivesError,
+  ])
 
   return { message, severity }
 }
