@@ -11,7 +11,7 @@ import requestsApi from '../api/requestsApi'
 // * normalization
 const requestsAdapter = createEntityAdapter({
   selectId: ({ id }) => id,
-  sortComparer: (a, b) => {},
+  sortComparer: (a, b) => Number(b.score) - Number(a.score),
 })
 
 // * thunk
@@ -31,7 +31,7 @@ export const fetchRequests = createAsyncThunk(
 // * reducers / actions
 const initialState = requestsAdapter.getInitialState({
   loading: 'idle',
-  selected: null,
+  selectedId: null,
 })
 
 const requestsSlice = createSlice({
@@ -41,6 +41,9 @@ const requestsSlice = createSlice({
     clear: () => initialState,
     add: requestsAdapter.addOne,
     update: requestsAdapter.updateOne,
+    select: (state, { payload }) => {
+      state.selectedId = payload
+    },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -74,42 +77,45 @@ const requestsSlice = createSlice({
   },
 })
 
-// * memoized selectors (reselect)
-// common selector functions should be defined here rather than in the callers for memoization
+// * selectors (partly memoized)
 const requestsSelectors = requestsAdapter.getSelectors()
 
-// combine createAsyncThunk's loading/error states with createEntityAdapter's ids/entities join
-// 'entities' in this selector are returned as a sorted array rather than keyed
-export const selectRequests = ({ requests }) => {
-  const entities = requestsSelectors.selectAll(requests)
-  const { loading, error, selected } = requests
-  const loaded = entities.length > 0 && loading === 'idle' && !error
-  return { entities, selected, loading, error, loaded }
+// combine all aspects of entities:
+// - createEntityAdapter's memoized sorted entities
+// - keyed entities
+// - createAsyncThunk's loading/error states as well as my own 'loaded' state
+export const selectEntities = ({ requests }) => {
+  const sortedEntities = requestsSelectors.selectAll(requests)
+  const keyedEntities = requests.entities
+  const ids = requestsSelectors.selectIds(requests)
+  const { loading, error, selectedId } = requests
+  const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
+  return {
+    sortedEntities,
+    keyedEntities,
+    ids,
+    selectedId,
+    loading,
+    loaded,
+    error,
+  }
 }
-
-// this will return entities keyed, as they naturally appear in redux
-// todo: memoize with reselect
-export const selectEntities = ({ requests: { entities } }) => ({
-  entities,
-})
 
 export const selectEntityById = id => ({ requests }) =>
   requestsSelectors.selectById(requests, id)
 
-export const selectIds = ({ requests }) => requestsSelectors.selectIds(requests)
-
-export const selectSelectedId = ({ requests: { selected } }) => selected
+export const selectSelectedId = ({ requests: { selectedId } }) => selectedId
 
 export const selectSelectedEntity = ({ requests }) => {
-  const { selected } = requests
-  if (!selected) return null
+  const { selectedId } = requests
+  if (!selectedId) return null
 
-  const selectedE = selectEntityById(selected)({ requests })
+  const selectedEntity = selectEntityById(selectedId)({ requests })
 
-  return { selectedE }
+  return { selectedEntity }
 }
 
 const { reducer, actions } = requestsSlice
-export const { clear, add, update, error } = actions
+export const { clear, add, update, select, error } = actions
 
 export default reducer

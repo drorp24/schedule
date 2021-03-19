@@ -42,7 +42,7 @@ const Gantt = () => {
 
   useEffect(() => {
     const container = ref.current
-    const buildTimeline = createTimeline({ container, options })
+    const buildTimeline = createTimeline({ container, options, dispatch })
     dispatch(fetchRecommendations({ recommendationFields, buildTimeline }))
   }, [dispatch, options])
 

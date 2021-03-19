@@ -1,4 +1,8 @@
 {
+  "fulfilled": "הזמנות סופקו",
+  "id": "זיהוי",
+  "location": "מיקום",
+  "supplier": "ספק",
   "requests": "הזמנות",
   "resources": "מלאי",
   "directives": "הנחיות",

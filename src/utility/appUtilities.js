@@ -9,7 +9,8 @@ export const useLocale = () => {
   const locale = useSelector(store => store.app.locale)
   const direction = locale === 'he' ? 'rtl' : 'ltr'
   const rtl = direction === 'rtl'
-  return { locale, direction, rtl }
+  const placement = rtl ? 'left' : 'right'
+  return { locale, direction, rtl, placement }
 }
 
 export const useOtherDirection = () => {
@@ -20,6 +21,13 @@ export const useOtherDirection = () => {
 export const useOtherMode = () => {
   const mode = useSelector(store => store.app.mode)
   return mode === 'light' ? 'dark' : 'light'
+}
+
+export const useMode = () => {
+  const mode = useSelector(store => store.app.mode)
+  const otherMode = mode === 'light' ? 'dark' : 'light'
+  const light = mode === 'light'
+  return { mode, otherMode, light }
 }
 
 const dateOptions = {
@@ -37,7 +45,7 @@ const dateOptions = {
 // }
 
 export const useLocalDate = date => {
-  const { locale } = useSelector(store => store.app)
+  const locale = useSelector(store => store.app.locale)
   const dateFormat = new Date(date)
 
   return dateFormat.toLocaleDateString(locale, dateOptions)

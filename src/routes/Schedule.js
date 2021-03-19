@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
 
 import Run from '../lists/Run'
-import Requests from '../lists/Requests'
-import Resources from '../lists/Resources'
-import Directives from '../lists/Directives'
+import Requests from '../lists/requests/Requests'
+import Resources from '../lists/resources/Resources'
+import Directives from '../lists/directives/Directives'
 
 import noScrollBar from '../styling/noScrollbar'
 

@@ -1,4 +1,8 @@
 {
+  "fulfilled": "Fulfilled",
+  "id": "Id",
+  "location": "Location",
+  "supplier": "Supplier",
   "requests": "Requests",
   "resources": "Resources",
   "directives": "Directives",

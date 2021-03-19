@@ -1,19 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchRequests } from '../redux/requests'
+import { /* useSelector, */ useDispatch } from 'react-redux'
+import { fetchRequests } from '../../redux/requests'
+
+import RequestsTable from './RequestsTable'
 import requestsFields from './requestsFields'
 
-import useTranslation from '../i18n/useTranslation'
+import useTranslation from '../../i18n/useTranslation'
 
-import RequestsIcon from '@material-ui/icons/ListAltOutlined'
+// import RequestsIcon from '@material-ui/icons/ListAltOutlined'
 
 const Requests = () => {
   const t = useTranslation()
   const dispatch = useDispatch()
 
   const styles = {
-    root: theme => ({}),
+    root: theme => ({
+      height: '100%',
+      fontSize: '0.85rem',
+    }),
     listHeader: {
       display: 'flex',
       flexDirection: 'row',
@@ -29,10 +34,11 @@ const Requests = () => {
 
   return (
     <div css={styles.root}>
-      <div css={styles.listHeader}>
+      {/* <div css={styles.listHeader}>
         <div>{t('requests')}</div>
         <RequestsIcon />
-      </div>
+      </div> */}
+      <RequestsTable />
     </div>
   )
 }

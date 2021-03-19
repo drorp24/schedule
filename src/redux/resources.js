@@ -33,7 +33,7 @@ export const fetchResources = createAsyncThunk(
 // * reducers / actions
 const initialState = resourcesAdapter.getInitialState({
   loading: 'idle',
-  selected: null,
+  selectedid: null,
 })
 
 const resourcesSlice = createSlice({
@@ -43,6 +43,9 @@ const resourcesSlice = createSlice({
     clear: () => initialState,
     add: resourcesAdapter.addOne,
     update: resourcesAdapter.updateOne,
+    select: (state, { payload }) => {
+      state.selectedid = payload
+    },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -76,40 +79,42 @@ const resourcesSlice = createSlice({
   },
 })
 
-// * memoized selectors (reselect)
-// common selector functions should be defined here rather than in the callers for memoization
+// * selectors (partly memoized)
 const resourcesSelectors = resourcesAdapter.getSelectors()
 
-// combine createAsyncThunk's loading/error states with createEntityAdapter's ids/entities join
-// 'entities' in this selector are returned as a sorted array rather than keyed
-export const selectResources = ({ resources }) => {
-  const entities = resourcesSelectors.selectAll(resources)
-  const { loading, error, selected } = resources
-  const loaded = entities.length > 0 && loading === 'idle' && !error
-  return { entities, selected, loading, error, loaded }
+// combine all aspects of entities:
+// - createEntityAdapter's memoized sorted entities
+// - keyed entities
+// - createAsyncThunk's loading/error states as well as my own 'loaded' state
+export const selectEntities = ({ resources }) => {
+  const sortedEntities = resourcesSelectors.selectAll(resources)
+  const keyedEntities = resources.entities
+  const ids = resourcesSelectors.selectIds(resources)
+  const { loading, error, selectedid } = resources
+  const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
+  return {
+    sortedEntities,
+    keyedEntities,
+    ids,
+    selectedid,
+    loading,
+    error,
+    loaded,
+  }
 }
-
-// this will return entities keyed, as they naturally appear in redux
-// todo: memoize with reselect
-export const selectEntities = ({ resources: { entities } }) => ({
-  entities,
-})
 
 export const selectEntityById = id => ({ resources }) =>
   resourcesSelectors.selectById(resources, id)
 
-export const selectIds = ({ resources }) =>
-  resourcesSelectors.selectIds(resources)
-
-export const selectSelectedId = ({ resources: { selected } }) => selected
+export const selectSelectedId = ({ resources: { selectedid } }) => selectedid
 
 export const selectSelectedEntity = ({ resources }) => {
-  const { selected } = resources
-  if (!selected) return null
+  const { selectedid } = resources
+  if (!selectedid) return null
 
-  const selectedE = selectEntityById(selected)({ resources })
+  const selectedEntity = selectEntityById(selectedid)({ resources })
 
-  return { selectedE }
+  return { selectedEntity }
 }
 
 const { reducer, actions } = resourcesSlice

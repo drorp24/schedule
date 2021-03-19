@@ -1,6 +1,10 @@
 import { DataSet, Timeline } from 'vis-timeline/standalone'
 
-const createTimeline = ({ container, options }) => ({ recommendations }) => {
+import { selectRecommendation } from './timelineEvents'
+
+const createTimeline = ({ container, options, dispatch }) => ({
+  recommendations,
+}) => {
   let plaformsObj = {}
 
   const items = new DataSet(
@@ -31,6 +35,7 @@ const createTimeline = ({ container, options }) => ({ recommendations }) => {
 
   const timeline = new Timeline(container, items, options)
   timeline.setGroups(groups)
+  timeline.on('select', selectRecommendation(dispatch))
   return timeline
 }
 

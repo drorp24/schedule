@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchDirectives } from '../redux/directives'
-import directivesFields from './directivesFields'
+import { fetchResources } from '../../redux/resources'
+import resourcesFields from './resourcesFields'
 
-import useTranslation from '../i18n/useTranslation'
+import useTranslation from '../../i18n/useTranslation'
 
-import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
+import ResourcesIcon from '@material-ui/icons/ArtTrackOutlined'
 
-const Directives = () => {
+const Resources = () => {
   const t = useTranslation()
   const dispatch = useDispatch()
 
@@ -19,21 +19,25 @@ const Directives = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      '& svg': {
+        fontSize: '1.8rem',
+      },
       fontSize: '0.85rem',
     },
   }
+
   useEffect(() => {
-    dispatch(fetchDirectives({ directivesFields }))
+    dispatch(fetchResources({ resourcesFields }))
   }, [dispatch])
 
   return (
     <div css={styles.root}>
       <div css={styles.listHeader}>
-        <div>{t('directives')}</div>
-        <DirectivesIcon />
+        <div>{t('resources')}</div>
+        <ResourcesIcon />
       </div>
     </div>
   )
 }
 
-export default Directives
+export default Resources
