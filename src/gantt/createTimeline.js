@@ -1,11 +1,13 @@
 import { DataSet, Timeline } from 'vis-timeline/standalone'
 
-import { selectRecommendation } from './timelineEvents'
+import { selectRecommendation, changeDetailsLevel } from './timelineEvents'
+import itemTemplate from './itemTemplate'
 
 const createTimeline = ({ container, options, dispatch }) => ({
   recommendations,
 }) => {
   let plaformsObj = {}
+  let recommendationsObj = {}
 
   const items = new DataSet(
     recommendations.map(
@@ -15,17 +17,35 @@ const createTimeline = ({ container, options, dispatch }) => ({
         estimated_end_activity: end,
         start_date,
         platform_id,
+        drone_formation,
+        drone_package_config_id,
+        fulfills,
       }) => {
         plaformsObj[platform_id] = {
           id: platform_id,
           content: platform_id.slice(-6),
         }
+        recommendationsObj[id] = {
+          id,
+          estimated_start_activity: start,
+          estimated_end_activity: end,
+          start_date,
+          platform_id,
+          drone_formation,
+          drone_package_config_id,
+          fulfills,
+        }
         return {
           id,
-          content: start_date.slice(-8),
+          template: itemTemplate,
           start,
           end,
           group: platform_id,
+          platform_id,
+          drone_formation,
+          drone_package_config_id,
+          title: `<div>drone formation: ${drone_formation}</div>`,
+          fulfills,
         }
       }
     )
@@ -36,6 +56,10 @@ const createTimeline = ({ container, options, dispatch }) => ({
   const timeline = new Timeline(container, items, options)
   timeline.setGroups(groups)
   timeline.on('select', selectRecommendation(dispatch))
+  timeline.on(
+    'rangechanged',
+    changeDetailsLevel({ timeline, recommendationsObj })
+  )
   return timeline
 }
 

@@ -37,12 +37,49 @@ const Gantt = () => {
       '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor': {
         borderColor: '#616161',
       },
+      '& .vis-labelset .vis-label.draggable': {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        '& .vis-inner': {
+          transform: 'rotate(270deg)',
+          textTransform: 'uppercase',
+        },
+      },
+      '& .vis-item': {
+        height: '2rem',
+        fontSize: '0.85rem',
+        '&.vis-selected': {
+          backgroundColor: '#607d8b !important',
+          color: '#fff',
+          '& .vis-item-content > div': {
+            backgroundColor: '#607d8b !important',
+          },
+        },
+        '& .vis-item-overflow': {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        '& svg': {
+          fontSize: '1.2rem',
+        },
+        '& .vis-item-content': {
+          width: '100%',
+          padding: 0,
+        },
+      },
     }),
   }
 
   useEffect(() => {
     const container = ref.current
-    const buildTimeline = createTimeline({ container, options, dispatch })
+    const buildTimeline = createTimeline({
+      container,
+      options,
+      dispatch,
+    })
     dispatch(fetchRecommendations({ recommendationFields, buildTimeline }))
   }, [dispatch, options])
 
