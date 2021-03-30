@@ -39,7 +39,13 @@ const useOptions = () => {
     onUpdate: (item, callback) => {
       console.log('onUpdate called')
       console.log('item: ', item)
-      callback(item)
+      const response = prompt('Update recommendation', 'Edit me')
+      if (response) {
+        item.content = response
+        callback(item)
+      } else {
+        callback(null)
+      }
     },
     onRemove: (item, callback) => {
       console.log('onRemove called')
