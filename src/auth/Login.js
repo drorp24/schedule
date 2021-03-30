@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../redux/users'
 
 import { useForm } from 'react-hook-form'
-import { FormattedMessage } from 'react-intl'
+import { useMode, useLocale } from '../utility/appUtilities'
 import useTranslation from '../i18n/useTranslation'
+import useTheme from '../styling/useTheme'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
@@ -75,7 +76,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
   const loggedIn = useSelector(store => !!store.users.loggedIn.username)
-  const { mode } = useSelector(store => store.app)
+  const { mode } = useMode()
+  const { direction } = useLocale()
+  const theme = useTheme({ mode, direction })
   const dispatch = useDispatch()
   const classes = useStyles()
   const { register, handleSubmit, errors } = useForm()
@@ -104,7 +107,7 @@ export default function Login() {
       <div
         className={classes.formContainerContainer}
         style={{
-          backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'darkgrey',
+          backgroundColor: theme.palette.background.backdrop,
         }}
       >
         <div className={classes.formContainer}>
@@ -112,7 +115,7 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            <FormattedMessage id="signIn" />
+            {t('signIn')}
           </Typography>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -159,20 +162,20 @@ export default function Login() {
               color="primary"
               className={classes.submit}
             >
-              <FormattedMessage id="signIn" />
+              {t('signIn')}
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
-                  <FormattedMessage id="forgotPassword" />
+                  {t('forgotPassword')}
                 </Link>
               </Grid>
               <Grid item>
                 <Link disabled href="#" variant="body2">
-                  <FormattedMessage id="signUp" />
+                  {t('signUp')}
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </form>
         </div>
       </div>

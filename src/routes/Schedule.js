@@ -19,12 +19,18 @@ const Schedule = () => {
   const mode = useSelector(store => store.app.mode)
   // const t = useTranslation()
 
+  const heights = {
+    run: 5,
+  }
+
+  heights.list = (100 - heights.run - 6) / 3
+
   const styles = {
     root: theme => ({
       display: 'grid',
       gridTemplateColumns: '35fr 65fr',
       gap: '0.7rem',
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {
       display: 'flex',
@@ -41,14 +47,18 @@ const Schedule = () => {
 
     run: {
       padding: '0 1rem',
-      height: '10%',
+      height: `${heights.run}%`,
       overflow: 'hidden',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
     },
     requests: {
-      height: noListSelected ? '28%' : list === 'requests' ? '100%' : 0,
+      height: noListSelected
+        ? `${heights.list}%`
+        : list === 'requests'
+        ? '100%'
+        : 0,
       padding: noListSelected || list === 'requests' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'requests' ? '1px solid' : 'none',
       borderColor:
@@ -58,7 +68,11 @@ const Schedule = () => {
       ...noScrollBar,
     },
     resources: {
-      height: noListSelected ? '28%' : list === 'resources' ? '100%' : 0,
+      height: noListSelected
+        ? `${heights.list}%`
+        : list === 'resources'
+        ? '100%'
+        : 0,
       padding: noListSelected || list === 'resources' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'resources' ? '1px solid' : 'none',
       borderColor:
@@ -68,7 +82,11 @@ const Schedule = () => {
       ...noScrollBar,
     },
     directives: {
-      height: noListSelected ? '28%' : list === 'directives' ? '100%' : 0,
+      height: noListSelected
+        ? `${heights.list}%`
+        : list === 'directives'
+        ? '100%'
+        : 0,
       padding: noListSelected || list === 'directives' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'directives' ? '1px solid' : 'none',
       borderColor:
