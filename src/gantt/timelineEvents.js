@@ -21,7 +21,7 @@ export const changeDetailsLevel = ({ timeline, recommendationsObj }) => ({
       platform_id,
       drone_formation,
       drone_package_config_id,
-    } = recommendationsObj[id]
+    } = recommendationsObj[id] || {}
 
     const itemEl = document.querySelector(`[data-id='${id}']`)
     const contentEl = itemEl.querySelector('.vis-item-content')

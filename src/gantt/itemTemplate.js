@@ -38,12 +38,12 @@ const itemTemplate = (
 ) => {
   const { backgroundColor: bg, borderColor: bc } = platforms[platform_id]
 
-  if (!granular)
+  if (!granular && start_date)
     return `
     <div style="${
       styles.item
     } background-color: ${bg}; border-color: ${bc}; padding: 5px;">
-      <div style="font-size: 0.65rem;">${start_date.slice(-8)}</div>
+      <div style="font-size: 0.65rem;">${start_date?.slice(-8)}</div>
     </div>
   `
 
