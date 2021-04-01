@@ -2,9 +2,7 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
-  // current,
 } from '@reduxjs/toolkit'
-// import { createSelector } from 'reselect'
 
 import directivesApi from '../api/directivesApi'
 
@@ -33,7 +31,7 @@ export const fetchDirectives = createAsyncThunk(
 // * reducers / actions
 const initialState = directivesAdapter.getInitialState({
   loading: 'idle',
-  selectedid: null,
+  selectedId: null,
 })
 
 const directivesSlice = createSlice({
@@ -44,7 +42,7 @@ const directivesSlice = createSlice({
     add: directivesAdapter.addOne,
     update: directivesAdapter.updateOne,
     select: (state, { payload }) => {
-      state.selectedid = payload
+      state.selectedId = payload
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -90,14 +88,18 @@ export const selectEntities = ({ directives }) => {
   const sortedEntities = directivesSelectors.selectAll(directives)
   const keyedEntities = directives.entities
   const ids = directivesSelectors.selectIds(directives)
-  const { loading, error, selectedid } = directives
+  const { loading, error, selectedId } = directives
+  const selectedEntity = keyedEntities[selectedId]
+  const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedid,
+    selectedId,
+    selectedEntity,
     loading,
+    isLoading,
     error,
     loaded,
   }
@@ -106,18 +108,18 @@ export const selectEntities = ({ directives }) => {
 export const selectEntityById = id => ({ directives }) =>
   directivesSelectors.selectById(directives, id)
 
-export const selectSelectedId = ({ directives: { selectedid } }) => selectedid
+export const selectSelectedId = ({ directives: { selectedId } }) => selectedId
 
 export const selectSelectedEntity = ({ directives }) => {
-  const { selectedid } = directives
-  if (!selectedid) return null
+  const { selectedId } = directives
+  if (!selectedId) return null
 
-  const selectedEntity = selectEntityById(selectedid)({ directives })
+  const selectedEntity = selectEntityById(selectedId)({ directives })
 
   return { selectedEntity }
 }
 
 const { reducer, actions } = directivesSlice
-export const { clear, add, update, error } = actions
+export const { clear, add, update, select, error } = actions
 
 export default reducer

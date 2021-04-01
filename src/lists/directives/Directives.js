@@ -1,39 +1,69 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchDirectives } from '../../redux/directives'
-import directivesFields from './directivesFields'
+import { memo, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import {
+  fetchDirectives,
+  selectEntities,
+  selectEntityById,
+} from '../../redux/directives'
 
-import useTranslation from '../../i18n/useTranslation'
+import directivesFields from '../directives/directivesFields'
+import TooltipDetails from '../directives/DirectiveDetails'
+import config from '../config'
 
-import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
+import Table from '../Table'
+
+import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
+
+const styles = {
+  typeIcon: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: '0 12px',
+    color: config.directives.color,
+  },
+  centered: {
+    textAlign: 'center',
+  },
+}
+
+const properties = [
+  { name: 'id' },
+  { name: 'customer_delivery_unit_id' },
+  {
+    name: 'dangerZones',
+    rowStyle: styles.typeIcon,
+    icon: <PinDropOutlinedIcon />,
+  },
+  {
+    name: 'flightDistricts',
+    rowStyle: styles.typeIcon,
+    icon: <PinDropOutlinedIcon />,
+  },
+]
+
+const { directives: conf } = config
 
 const Directives = () => {
-  const t = useTranslation()
   const dispatch = useDispatch()
 
-  const styles = {
-    root: theme => ({}),
-    listHeader: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      fontSize: '0.85rem',
-    },
-  }
   useEffect(() => {
     dispatch(fetchDirectives({ directivesFields }))
   }, [dispatch])
 
   return (
-    <div css={styles.root}>
-      <div css={styles.listHeader}>
-        <div>{t('directives')}</div>
-        <DirectivesIcon />
-      </div>
-    </div>
+    <Table
+      {...{
+        selectEntities,
+        selectEntityById,
+        properties,
+        TooltipDetails,
+        conf,
+      }}
+    />
   )
 }
 
-export default Directives
+export default memo(Directives)

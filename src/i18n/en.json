@@ -1,5 +1,11 @@
 {
+  "customer_delivery_unit_id": "Cust unit",
+  "dangerZones": "Danger Zones",
+  "drone_type": "Type",
+  "name": "Name",
+  "flightDistricts": "Flight districts",
   "fulfilled": "Fulfilled",
+  "employed": "Employed",
   "id": "Id",
   "location": "Loc",
   "supplier": "Supplier",

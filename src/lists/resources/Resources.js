@@ -1,43 +1,97 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchResources } from '../../redux/resources'
-import resourcesFields from './resourcesFields'
+import {
+  fetchResources,
+  selectEntities,
+  selectEntityById,
+} from '../../redux/resources'
+import { selectSelectedEntity } from '../../redux/recommendations'
 
-import useTranslation from '../../i18n/useTranslation'
+import resourcesFields from '../resources/resourcesFields'
+import TooltipDetails from '../resources/ResourceDetails'
+import config from '../config'
 
-import ResourcesIcon from '@material-ui/icons/ArtTrackOutlined'
+import Table from '../Table'
+
+import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
+
+const styles = {
+  typeIcon: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: '0 12px',
+    color: config.resources.color,
+  },
+  centered: {
+    textAlign: 'center',
+  },
+}
+
+const properties = [
+  {
+    name: 'location',
+    rowStyle: styles.typeIcon,
+    icon: <PinDropOutlinedIcon />,
+  },
+  { name: 'id' },
+  { name: 'name' },
+  { name: 'drone_type' },
+]
+
+const { resources: conf } = config
 
 const Resources = () => {
-  const t = useTranslation()
-  const dispatch = useDispatch()
+  const selectedRecommendation = useSelector(selectSelectedEntity)
+  const { sortedEntities } = useSelector(selectEntities)
 
-  const styles = {
-    root: theme => ({}),
-    listHeader: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      '& svg': {
-        fontSize: '1.8rem',
-      },
-      fontSize: '0.85rem',
-    },
-  }
+  const [filter, setFilter] = useState(null)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchResources({ resourcesFields }))
   }, [dispatch])
 
+  useEffect(() => {
+    if (!selectedRecommendation || !selectedRecommendation.employs) return
+
+    const { platform_id, drone_package_config_id } = selectedRecommendation
+
+    const employed = {}
+
+    // ToDo: no foreign key from recommendation into resources
+    // the following is merely a guesswork:
+
+    sortedEntities.forEach(
+      ({ id, drone_loading_dock: { name, drone_type } }) => {
+        if (`${name}-${drone_type}` === platform_id)
+          employed[id] = drone_package_config_id
+      }
+    )
+
+    console.log('platform_id: ', platform_id)
+    console.log('sortedEntities: ', sortedEntities)
+    console.log('employed: ', employed)
+
+    setFilter(employed)
+    console.log('employed: ', employed)
+  }, [selectedRecommendation, sortedEntities])
+
   return (
-    <div css={styles.root}>
-      <div css={styles.listHeader}>
-        <div>{t('resources')}</div>
-        <ResourcesIcon />
-      </div>
-    </div>
+    <Table
+      {...{
+        selectEntities,
+        selectEntityById,
+        properties,
+        filter,
+        TooltipDetails,
+        conf,
+      }}
+    />
   )
 }
 
-export default Resources
+export default memo(Resources)

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { select } from '../../redux/requests'
 
 import useTheme from '../../styling/useTheme'
-import { useDirection, useMode, useLocalDate } from '../../utility/appUtilities'
+import { useMode, useLocalDate } from '../../utility/appUtilities'
 
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
@@ -17,27 +17,26 @@ import Avatar from '@material-ui/core/Avatar'
 // import RequestsIcon from '@material-ui/icons/ListAltOutlined'
 import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
 import config from '../config'
+import useTranslation from '../../i18n/useTranslation'
 
-const RequestDetails = ({
+const DirectiveDetails = ({
   entity: {
     id,
-    supplier_category,
-    update_time,
-    start_time,
-    end_time,
-    score,
-    location,
-    options,
+    name,
+    customer_delivery_unit,
+    supplier_category_id,
+    danger_zones,
+    flight_districts,
   },
 }) => {
-  const direction = useDirection()
   const { otherMode } = useMode()
-  const theme = useTheme({ mode: otherMode, direction })
+  const theme = useTheme({ mode: otherMode })
+  const t = useTranslation()
   const dispatch = useDispatch(0)
 
   const handleDelete = () => {}
 
-  const color = config.requests.color
+  const color = config.directives.color
   // const icon = <RequestsIcon />
 
   const useStyles = makeStyles(theme => ({
@@ -125,23 +124,23 @@ const RequestDetails = ({
     <ThemeProvider theme={theme}>
       <Card elevation={0} css={styles.root}>
         <CardHeader
-          avatar={<Avatar css={styles.avatar}>{score}</Avatar>}
-          title={id}
-          subheader={useLocalDate(update_time)}
+          // avatar={<Avatar css={styles.avatar}>{}</Avatar>}
+          title={name}
+          subheader={customer_delivery_unit}
           classes={{ title, content, subheader }}
         />
         <Divider css={styles.divider} />
         <div css={styles.subTypes}>
-          {options &&
-            options.map(
-              option =>
-                option && (
+          {danger_zones &&
+            danger_zones.map(
+              ({ type }) =>
+                type && (
                   <Chip
                     size="small"
-                    label={option.id}
+                    label={type}
                     css={styles.entityType}
                     onDelete={handleDelete}
-                    key={option.id}
+                    key={type}
                     classes={{
                       icon: classes.icon,
                       label: classes.label,
@@ -153,7 +152,7 @@ const RequestDetails = ({
         </div>
         <CardContent>
           <Divider css={{ ...styles.modeColor, ...styles.dividerSplitLine }}>
-            Deliver to
+            {t('flightDistricts')}
           </Divider>
           <div css={styles.explainer}></div>
         </CardContent>
@@ -173,4 +172,4 @@ const RequestDetails = ({
   )
 }
 
-export default RequestDetails
+export default DirectiveDetails

@@ -2,9 +2,7 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
-  // current,
 } from '@reduxjs/toolkit'
-// import { createSelector } from 'reselect'
 
 import resourcesApi from '../api/resourcesApi'
 
@@ -33,7 +31,7 @@ export const fetchResources = createAsyncThunk(
 // * reducers / actions
 const initialState = resourcesAdapter.getInitialState({
   loading: 'idle',
-  selectedid: null,
+  selectedId: null,
 })
 
 const resourcesSlice = createSlice({
@@ -44,7 +42,7 @@ const resourcesSlice = createSlice({
     add: resourcesAdapter.addOne,
     update: resourcesAdapter.updateOne,
     select: (state, { payload }) => {
-      state.selectedid = payload
+      state.selectedId = payload
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -90,14 +88,18 @@ export const selectEntities = ({ resources }) => {
   const sortedEntities = resourcesSelectors.selectAll(resources)
   const keyedEntities = resources.entities
   const ids = resourcesSelectors.selectIds(resources)
-  const { loading, error, selectedid } = resources
+  const { loading, error, selectedId } = resources
+  const selectedEntity = keyedEntities[selectedId]
+  const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedid,
+    selectedId,
+    selectedEntity,
     loading,
+    isLoading,
     error,
     loaded,
   }
@@ -106,18 +108,18 @@ export const selectEntities = ({ resources }) => {
 export const selectEntityById = id => ({ resources }) =>
   resourcesSelectors.selectById(resources, id)
 
-export const selectSelectedId = ({ resources: { selectedid } }) => selectedid
+export const selectSelectedId = ({ resources: { selectedId } }) => selectedId
 
 export const selectSelectedEntity = ({ resources }) => {
-  const { selectedid } = resources
-  if (!selectedid) return null
+  const { selectedId } = resources
+  if (!selectedId) return null
 
-  const selectedEntity = selectEntityById(selectedid)({ resources })
+  const selectedEntity = selectEntityById(selectedId)({ resources })
 
   return { selectedEntity }
 }
 
 const { reducer, actions } = resourcesSlice
-export const { clear, add, update, error } = actions
+export const { clear, add, update, select, error } = actions
 
 export default reducer

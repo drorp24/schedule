@@ -19,6 +19,10 @@ const recommendationFields = ({
     delivery_request_id,
     option_id,
   })),
+  employs: {
+    platform_id,
+    drone_package_config_id,
+  },
 })
 
 export default recommendationFields

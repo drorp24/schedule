@@ -35,7 +35,7 @@ const Schedule = () => {
     lists: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between',
+      justifyContent: 'space-around',
     },
     section: {
       padding: '1rem',

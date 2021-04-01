@@ -106,7 +106,7 @@ const styles = {
   dimText: {
     color: '#9e9e9e',
   },
-  filterLine: {
+  listHeader: {
     position: 'absolute',
     top: '-1.5rem',
     width: '100%',
@@ -115,6 +115,11 @@ const styles = {
     alignItems: 'center',
     fontSize: '0.75rem',
     textTransform: 'uppercase',
+  },
+  filter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }
 
@@ -126,7 +131,7 @@ const styles = {
 // - its own implementation of 'selectEntityById' redux selector,
 // - properties - an array of { name, rowStyle, headStyle, icon } (last 3 optional)
 //   where name is a path in the entity object, as deep as needed (can include array positions too),
-// - filter - an object whose key is the entity's id value (value doesn't matter)
+// - filter - an optional object whose key is the entity's id value (value doesn't matter)
 //   It is assumed that every entity has one,
 // - TooltipDetails - a react component that accepts 'entity' as prop
 //   and renders the specific content to be displayed by the tooltip that shows upon hovering Info.
@@ -136,7 +141,7 @@ const Table = ({
   selectEntities,
   selectEntityById,
   properties,
-  filter,
+  filter = null,
   TooltipDetails,
   conf,
 }) => {
@@ -175,21 +180,22 @@ const Table = ({
           height -= itemSize
           return (
             <>
-              <div css={styles.filterLine}>
-                <IconButton
-                  css={styles.filterIcon}
-                  style={{
-                    color:
-                      filterResults && filter
-                        ? conf.color
-                        : theme.palette.menu.inactive,
-                  }}
-                  onClick={filterToggle}
-                >
-                  <FilterIcon />
-                </IconButton>
-                <div style={{ color: conf.color }}>
-                  {filterResults && filter ? t('fulfilled') : ''}
+              <div css={styles.listHeader} style={{ color: conf.color }}>
+                {conf.icon}
+                <div css={styles.filter}>
+                  <div>{filterResults && filter ? t(conf.filter) : ''}</div>
+                  <IconButton
+                    css={styles.filterIcon}
+                    style={{
+                      color:
+                        filterResults && filter
+                          ? conf.color
+                          : theme.palette.menu.inactive,
+                    }}
+                    onClick={filterToggle}
+                  >
+                    <FilterIcon />
+                  </IconButton>
                 </div>
               </div>
               <Header
@@ -250,7 +256,7 @@ const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
         ))}
 
         <Tooltip
-          // open={id === 'del-79'}
+          // open={id === 'sup_cat_1'}
           title={<TooltipDetails {...{ entity }} />}
           arrow
           TransitionComponent={Zoom}

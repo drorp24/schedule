@@ -2,9 +2,7 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
-  // current,
 } from '@reduxjs/toolkit'
-// import { createSelector } from 'reselect'
 
 import requestsApi from '../api/requestsApi'
 

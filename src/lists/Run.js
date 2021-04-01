@@ -6,7 +6,6 @@ import ToggleButton from '@material-ui/core/ToggleButton'
 
 import RequestsIcon from '@material-ui/icons/ListAltOutlined'
 import ResourcesIcon from '@material-ui/icons/ArtTrackOutlined'
-// import DirectivesIcon from '@material-ui/icons/EditNotificationsOutlined'
 import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
 
 const styles = {

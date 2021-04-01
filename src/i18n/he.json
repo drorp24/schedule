@@ -1,5 +1,11 @@
 {
+  "customer_delivery_unit_id": "לקוח",
+  "dangerZones": "אזורי סכנה",
+  "drone_type": "סוג",
+  "name": "שם",
+  "flightDistricts": "מתחמי טיס",
   "fulfilled": "הזמנות שסופקו",
+  "employed": "משאבים שנוצלו",
   "id": "זיהוי",
   "location": "מיקום",
   "supplier": "ספק",
