@@ -1,8 +1,9 @@
 {
   "fulfilled": "Fulfilled",
   "id": "Id",
-  "location": "Location",
+  "location": "Loc",
   "supplier": "Supplier",
+  "suppliers_category_id": "Supplier",
   "requests": "Requests",
   "resources": "Resources",
   "directives": "Directives",

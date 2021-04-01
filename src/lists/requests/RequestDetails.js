@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { select } from '../../redux/requests'
 
 import useTheme from '../../styling/useTheme'
@@ -16,6 +16,7 @@ import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
 // import RequestsIcon from '@material-ui/icons/ListAltOutlined'
 import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
+import config from '../config'
 
 const RequestDetails = ({
   entity: {
@@ -30,13 +31,13 @@ const RequestDetails = ({
   },
 }) => {
   const direction = useDirection()
-  const { mode, otherMode } = useMode()
+  const { otherMode } = useMode()
   const theme = useTheme({ mode: otherMode, direction })
   const dispatch = useDispatch(0)
 
   const handleDelete = () => {}
 
-  const color = 'orange'
+  const color = config.requests.color
   // const icon = <RequestsIcon />
 
   const useStyles = makeStyles(theme => ({

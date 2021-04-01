@@ -19,6 +19,7 @@
     "leaflet": "^1.7.1",
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "lodash.debounce": "^4.0.8",
+    "lodash.get": "^4.4.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-flow-renderer": "^8.7.0",
@@ -42,7 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "both": "concurrently \"react-scripts start\" \"python ../text_analysis/server.py\""
+    "both": "concurrently \"react-scripts start\" \"node ../Ice_Ring_Gateway_Interface/index.js\""
   },
   "eslintConfig": {
     "extends": [

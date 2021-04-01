@@ -3,6 +3,7 @@
   "id": "זיהוי",
   "location": "מיקום",
   "supplier": "ספק",
+  "suppliers_category_id": "ספק",
   "requests": "הזמנות",
   "resources": "מלאי",
   "directives": "הנחיות",

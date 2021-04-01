@@ -53,7 +53,7 @@ const itemTemplate = (
     } background-color: ${bg}; border-color: ${bc}; padding: 5px;">
       <span style="${styles.centered}">
         <span style="${styles.iconContainer}">${timeSvg}</span>
-        <span>${start_date.slice(-8)}</span>
+        <span>${start_date && start_date.slice(-8)}</span>
       </span>
       <span style="${styles.centered}">
         <span style="${styles.iconContainer}">${airplaneSvg}</span>

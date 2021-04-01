@@ -89,13 +89,17 @@ export const selectEntities = ({ requests }) => {
   const keyedEntities = requests.entities
   const ids = requestsSelectors.selectIds(requests)
   const { loading, error, selectedId } = requests
+  const selectedEntity = keyedEntities[selectedId]
+  const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
     selectedId,
+    selectedEntity,
     loading,
+    isLoading,
     loaded,
     error,
   }

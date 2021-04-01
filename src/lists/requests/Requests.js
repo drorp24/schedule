@@ -1,46 +1,89 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from 'react'
-import { /* useSelector, */ useDispatch } from 'react-redux'
-import { fetchRequests } from '../../redux/requests'
+import { memo, useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  fetchRequests,
+  selectEntities,
+  selectEntityById,
+} from '../../redux/requests'
+import { selectSelectedEntity } from '../../redux/recommendations'
 
-import RequestsTable from './RequestsTable'
 import requestsFields from './requestsFields'
+import TooltipDetails from './RequestDetails'
+import config from '../config'
 
-import useTranslation from '../../i18n/useTranslation'
+import Table from '../Table'
 
-// import RequestsIcon from '@material-ui/icons/ListAltOutlined'
+import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
+
+const styles = {
+  typeIcon: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: '0 12px',
+    color: config.requests.color,
+  },
+  centered: {
+    textAlign: 'center',
+  },
+}
+
+const properties = [
+  {
+    name: 'location',
+    rowStyle: styles.typeIcon,
+    icon: <PinDropOutlinedIcon />,
+  },
+  { name: 'id' },
+  { name: 'suppliers_category_id' },
+  { name: 'score' },
+]
+
+const { requests: conf } = config
 
 const Requests = () => {
-  const t = useTranslation()
-  const dispatch = useDispatch()
+  const selectedRecommendation = useSelector(selectSelectedEntity)
 
-  const styles = {
-    root: theme => ({
-      height: '100%',
-      fontSize: '0.85rem',
-    }),
-    listHeader: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      fontSize: '0.85rem',
-    },
-  }
+  const [filter, setFilter] = useState(null)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchRequests({ requestsFields }))
   }, [dispatch])
 
+  useEffect(() => {
+    if (!selectedRecommendation || !selectedRecommendation.fulfills?.length)
+      return
+
+    const fulfilled = {}
+
+    selectedRecommendation.fulfills.forEach(
+      ({ delivery_request_id, option_id }) => {
+        // ToDo: there's no point in assigning option_id as there are multiple per request
+        // a 'true' value or similar would be less confusing
+        fulfilled[delivery_request_id] = option_id
+      }
+    )
+
+    setFilter(fulfilled)
+    console.log('fulfilled: ', fulfilled)
+  }, [selectedRecommendation])
+
   return (
-    <div css={styles.root}>
-      {/* <div css={styles.listHeader}>
-        <div>{t('requests')}</div>
-        <RequestsIcon />
-      </div> */}
-      <RequestsTable />
-    </div>
+    <Table
+      {...{
+        selectEntities,
+        selectEntityById,
+        properties,
+        filter,
+        TooltipDetails,
+        conf,
+      }}
+    />
   )
 }
 
-export default Requests
+export default memo(Requests)

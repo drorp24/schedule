@@ -1,6 +1,6 @@
 const requestsFields = ({
   id,
-  supplier_category,
+  suppliers_category_id,
   update_time,
   start_time,
   end_time,
@@ -9,7 +9,7 @@ const requestsFields = ({
   data: { delivery_options },
 }) => ({
   id,
-  supplier_category,
+  suppliers_category_id,
   update_time,
   start_time,
   end_time,
