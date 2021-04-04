@@ -19,6 +19,10 @@ import IconButton from '@material-ui/core/IconButton'
 import Progress from '../layout/Progress'
 import FilterIcon from '@material-ui/icons/FilterListOutlined'
 
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+
 const map = ({ entity, properties }) =>
   properties.map(({ name, rowStyle, icon }) => ({
     name,
@@ -106,21 +110,97 @@ const styles = {
   dimText: {
     color: '#9e9e9e',
   },
-  listHeader: {
+  toolbar: {
     position: 'absolute',
-    top: '-1.5rem',
-    width: '100%',
+    top: '-1rem',
+    margin: '0 -1rem',
+    width: 'calc(100% + 2rem)',
+    height: '1.5rem',
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     fontSize: '0.75rem',
     textTransform: 'uppercase',
   },
+  toolbarIcon: {
+    margin: '0 12px',
+    display: 'flex',
+  },
   filter: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    width: '100%',
   },
+  select: {
+    '& .MuiInputBase-input': {
+      fontSize: '0.65rem',
+    },
+    '&:hover': {
+      border: 'none',
+    },
+    '&.MuiInput-underline': {
+      '&::before': {
+        border: 'none',
+      },
+    },
+    '&.MuiInput-underline:hover:not(.Mui-disabled):before': {
+      border: 'none',
+      // toolbar,
+    },
+  },
+  menuItem: {
+    fontSize: '0.75rem !important',
+  },
+  filterIcon: {
+    paddingTop: '0 !important',
+    top: '0.35rem',
+  },
+}
+
+const Toolbar = ({ conf, filterResults, setFilterResults, filter }) => {
+  const { icon, filters, color } = conf
+  const theme = useTheme()
+
+  const filterToggle = () => setFilterResults(value => !value)
+
+  return (
+    <div css={styles.toolbar} style={{ color }}>
+      <div css={styles.toolbarIcon}>{icon}</div>
+      {filters && (
+        <div css={styles.filter}>
+          {filterResults && filter ? <Filter {...{ filters }} /> : ''}
+          <IconButton
+            css={styles.filterIcon}
+            style={{
+              color:
+                filterResults && filter ? color : theme.palette.menu.inactive,
+            }}
+            onClick={filterToggle}
+          >
+            <FilterIcon />
+          </IconButton>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const Filter = ({ filters }) => {
+  const t = useTranslation()
+  if (filters)
+    return (
+      <FormControl fullWidth>
+        <Select value={t(filters[0])} onChange={() => {}} css={styles.select}>
+          {filters.map(filter => (
+            <MenuItem value={t(filter)} css={styles.menuItem} key={filter}>
+              {t(filter)}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    )
 }
 
 // ! Table is a generic implementation of react-window that accepts any entity type
@@ -148,7 +228,6 @@ const Table = ({
   let { isLoading, ids, selectedId } = useSelector(selectEntities)
 
   const [filterResults, setFilterResults] = useState(true)
-  const filterToggle = () => setFilterResults(value => !value)
   if (filterResults && filter) {
     ids = ids.filter(id => filter[id])
   }
@@ -157,8 +236,6 @@ const Table = ({
   const itemSize = usePixels(3)
   const direction = useDirection()
   const outerRef = useRef()
-  const t = useTranslation()
-  const theme = useTheme()
 
   useEffect(() => {
     const scrollTo = entityId => {
@@ -180,24 +257,7 @@ const Table = ({
           height -= itemSize
           return (
             <>
-              <div css={styles.listHeader} style={{ color: conf.color }}>
-                {conf.icon}
-                <div css={styles.filter}>
-                  <div>{filterResults && filter ? t(conf.filter) : ''}</div>
-                  <IconButton
-                    css={styles.filterIcon}
-                    style={{
-                      color:
-                        filterResults && filter
-                          ? conf.color
-                          : theme.palette.menu.inactive,
-                    }}
-                    onClick={filterToggle}
-                  >
-                    <FilterIcon />
-                  </IconButton>
-                </div>
-              </div>
+              <Toolbar {...{ conf, filterResults, setFilterResults, filter }} />
               <Header
                 properties={properties}
                 style={{ ...styles.row, ...styles.header, height: itemSize }}
@@ -251,8 +311,8 @@ const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
         }}
         style={style}
       >
-        {fields.map(({ value, icon, rowStyle }) => (
-          <Cell {...{ value, icon, cellStyle: rowStyle }} />
+        {fields.map(({ name, value, icon, rowStyle }) => (
+          <Cell {...{ value, icon, cellStyle: rowStyle, key: name }} />
         ))}
 
         <Tooltip
@@ -280,7 +340,7 @@ const Header = ({ properties, style }) => {
   return (
     <div style={{ ...style, ...line }}>
       {properties.map(({ name, headStyle }) => (
-        <Cell value={t(name)} cellStyle={headStyle} />
+        <Cell value={t(name)} cellStyle={headStyle} key={name} />
       ))}
       <Cell value={t('info')} />
     </div>
