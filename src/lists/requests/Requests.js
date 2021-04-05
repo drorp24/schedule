@@ -7,6 +7,7 @@ import {
   selectEntityById,
 } from '../../redux/requests'
 import { selectSelectedEntity } from '../../redux/recommendations'
+import { selectEntities as selectRuns } from '../../redux/runs'
 
 import requestsFields from './requestsFields'
 import TooltipDetails from './RequestDetails'
@@ -45,14 +46,15 @@ const { requests: conf } = config
 
 const Requests = () => {
   const selectedRecommendation = useSelector(selectSelectedEntity)
+  const { selectedId: selectedRun } = useSelector(selectRuns)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchRequests({ requestsFields }))
-  }, [dispatch])
+    if (selectedRun) dispatch(fetchRequests({ selectedRun, requestsFields }))
+  }, [dispatch, selectedRun])
 
   useEffect(() => {
     if (!selectedRecommendation || !selectedRecommendation.fulfills?.length)
@@ -69,7 +71,6 @@ const Requests = () => {
     )
 
     setFilter(fulfilled)
-    console.log('fulfilled: ', fulfilled)
   }, [selectedRecommendation])
 
   return (
