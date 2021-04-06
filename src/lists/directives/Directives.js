@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { memo, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchDirectives,
   selectEntities,
   selectEntityById,
 } from '../../redux/directives'
+import { selectEntities as selectRuns } from '../../redux/runs'
 
 import directivesFields from '../directives/directivesFields'
 import TooltipDetails from '../directives/DirectiveDetails'
@@ -47,11 +48,13 @@ const properties = [
 const { directives: conf } = config
 
 const Directives = () => {
+  const { selectedId: selectedRun } = useSelector(selectRuns)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchDirectives({ directivesFields }))
-  }, [dispatch])
+    if (selectedRun)
+      dispatch(fetchDirectives({ selectedRun, directivesFields }))
+  }, [dispatch, selectedRun])
 
   return (
     <Table

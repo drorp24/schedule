@@ -3,7 +3,7 @@ import { useState, memo } from 'react'
 import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
 
-import Run from '../lists/Run'
+import Select from '../lists/Select'
 import Requests from '../lists/requests/Requests'
 import Resources from '../lists/resources/Resources'
 import Directives from '../lists/directives/Directives'
@@ -109,7 +109,7 @@ const Schedule = () => {
     <div css={styles.root}>
       <div css={styles.lists}>
         <div css={{ ...styles.section, ...styles.run }}>
-          <Run {...{ list, setList }} />
+          <Select {...{ list, setList }} />
         </div>
         <div css={{ ...styles.section, ...styles.requests }}>
           <Requests />

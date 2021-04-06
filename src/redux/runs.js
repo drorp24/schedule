@@ -4,22 +4,22 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
-import directivesApi from '../api/directivesApi'
+import runsApi from '../api/runsApi'
 
 // * normalization
-const directivesAdapter = createEntityAdapter({
-  selectId: ({ id }) => id,
+const runsAdapter = createEntityAdapter({
+  selectId: ({ publish_time }) => publish_time,
   sortComparer: (a, b) => {},
 })
 
 // * thunk
-export const fetchDirectives = createAsyncThunk(
-  'directives/fetch',
-  async ({ selectedRun, directivesFields }, thunkAPI) => {
+export const fetchRuns = createAsyncThunk(
+  'runs/fetch',
+  async ({ runsFields }, thunkAPI) => {
     try {
-      const response = await directivesApi(selectedRun)
-      const directives = response.map(directivesFields)
-      return { directives }
+      const response = await runsApi()
+      const runs = response.map(runsFields)
+      return { runs }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.toString())
     }
@@ -27,25 +27,25 @@ export const fetchDirectives = createAsyncThunk(
 )
 
 // * reducers / actions
-const initialState = directivesAdapter.getInitialState({
+const initialState = runsAdapter.getInitialState({
   loading: 'idle',
   selectedId: null,
 })
 
-const directivesSlice = createSlice({
-  name: 'directives',
+const runsSlice = createSlice({
+  name: 'runs',
   initialState,
   reducers: {
     clear: () => initialState,
-    add: directivesAdapter.addOne,
-    update: directivesAdapter.updateOne,
+    add: runsAdapter.addOne,
+    update: runsAdapter.updateOne,
     select: (state, { payload }) => {
       state.selectedId = payload
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
-    [fetchDirectives.pending]: (state, { meta: { requestId } }) => {
+    [fetchRuns.pending]: (state, { meta: { requestId } }) => {
       if (state.loading === 'idle') {
         state.currentRequestId = requestId
         state.loading = 'pending'
@@ -53,19 +53,19 @@ const directivesSlice = createSlice({
       }
     },
 
-    [fetchDirectives.fulfilled]: (
+    [fetchRuns.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { directives } }
+      { meta: { requestId }, payload: { runs } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
-        directivesAdapter.setAll(state, directives)
+        runsAdapter.setAll(state, runs)
       }
     },
 
-    [fetchDirectives.rejected]: (state, { meta: { requestId }, payload }) => {
+    [fetchRuns.rejected]: (state, { meta: { requestId }, payload }) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
@@ -76,17 +76,17 @@ const directivesSlice = createSlice({
 })
 
 // * selectors (partly memoized)
-const directivesSelectors = directivesAdapter.getSelectors()
+const runsSelectors = runsAdapter.getSelectors()
 
 // combine all aspects of entities:
 // - createEntityAdapter's memoized sorted entities
 // - keyed entities
 // - createAsyncThunk's loading/error states as well as my own 'loaded' state
-export const selectEntities = ({ directives }) => {
-  const sortedEntities = directivesSelectors.selectAll(directives)
-  const keyedEntities = directives.entities
-  const ids = directivesSelectors.selectIds(directives)
-  const { loading, error, selectedId } = directives
+export const selectEntities = ({ runs }) => {
+  const sortedEntities = runsSelectors.selectAll(runs)
+  const keyedEntities = runs.entities
+  const ids = runsSelectors.selectIds(runs)
+  const { loading, error, selectedId } = runs
   const selectedEntity = keyedEntities[selectedId]
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
@@ -103,21 +103,21 @@ export const selectEntities = ({ directives }) => {
   }
 }
 
-export const selectEntityById = id => ({ directives }) =>
-  directivesSelectors.selectById(directives, id)
+export const selectEntityById = id => ({ runs }) =>
+  runsSelectors.selectById(runs, id)
 
-export const selectSelectedId = ({ directives: { selectedId } }) => selectedId
+export const selectSelectedId = ({ runs: { selectedId } }) => selectedId
 
-export const selectSelectedEntity = ({ directives }) => {
-  const { selectedId } = directives
+export const selectSelectedEntity = ({ runs }) => {
+  const { selectedId } = runs
   if (!selectedId) return null
 
-  const selectedEntity = selectEntityById(selectedId)({ directives })
+  const selectedEntity = selectEntityById(selectedId)({ runs })
 
   return { selectedEntity }
 }
 
-const { reducer, actions } = directivesSlice
+const { reducer, actions } = runsSlice
 export const { clear, add, update, select, error } = actions
 
 export default reducer

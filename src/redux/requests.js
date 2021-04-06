@@ -15,9 +15,9 @@ const requestsAdapter = createEntityAdapter({
 // * thunk
 export const fetchRequests = createAsyncThunk(
   'requests/fetch',
-  async ({ requestsFields }, thunkAPI) => {
+  async ({ selectedRun, requestsFields }, thunkAPI) => {
     try {
-      const response = await requestsApi('e0e80704-e4d7-45bd-b28f-d51186c9cef6')
+      const response = await requestsApi(selectedRun)
       const requests = response.map(requestsFields)
       return { requests }
     } catch (error) {

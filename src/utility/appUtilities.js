@@ -37,18 +37,39 @@ const dateOptions = {
   year: 'numeric',
 }
 
-// const dateTimeOptions = {
-//   ...dateOptions,
-//   hour: 'numeric',
-//   minute: 'numeric',
-//   hour12: true,
-// }
+const timeOptions = {
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: false,
+}
 
 export const useLocalDate = date => {
   const locale = useSelector(store => store.app.locale)
   const dateFormat = new Date(date)
 
   return dateFormat.toLocaleDateString(locale, dateOptions)
+}
+
+// unlike useLocalDate, which returns a hook, hence cannot be invoked inside a callback (e.g., 'map'),
+// useLocaleDate returns a function. which can be invoked inside a callback
+// so you would do something like const d = useLocaleDate(), then you can use the 'd' function anywhere you like.
+export const useLocaleDate = () => useLocalDate
+
+// following is yet another version, which is not hook based and requires locale as input
+// since the hook-based version don't always work, for some unknown reason
+export const localeDate = locale => date => {
+  if (!locale || !date) return
+  const dateFormat = new Date(date)
+  return dateFormat.toLocaleDateString(locale, dateOptions)
+}
+
+export const localeDateTime = locale => date => {
+  if (!locale || !date) return
+  const dateFormat = new Date(date)
+  return dateFormat.toLocaleTimeString(locale, {
+    ...dateOptions,
+    ...timeOptions,
+  })
 }
 
 // assumption: element is smaller than box

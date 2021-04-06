@@ -7,6 +7,7 @@ import {
   selectEntityById,
 } from '../../redux/resources'
 import { selectSelectedEntity } from '../../redux/recommendations'
+import { selectEntities as selectRuns } from '../../redux/runs'
 
 import resourcesFields from '../resources/resourcesFields'
 import TooltipDetails from '../resources/ResourceDetails'
@@ -46,14 +47,15 @@ const { resources: conf } = config
 const Resources = () => {
   const selectedRecommendation = useSelector(selectSelectedEntity)
   const { sortedEntities } = useSelector(selectEntities)
+  const { selectedId: selectedRun } = useSelector(selectRuns)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchResources({ resourcesFields }))
-  }, [dispatch])
+    if (selectedRun) dispatch(fetchResources({ selectedRun, resourcesFields }))
+  }, [dispatch, selectedRun])
 
   useEffect(() => {
     if (!selectedRecommendation || !selectedRecommendation.employs) return

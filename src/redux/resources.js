@@ -15,11 +15,9 @@ const resourcesAdapter = createEntityAdapter({
 // * thunk
 export const fetchResources = createAsyncThunk(
   'resources/fetch',
-  async ({ resourcesFields }, thunkAPI) => {
+  async ({ selectedRun, resourcesFields }, thunkAPI) => {
     try {
-      const response = await resourcesApi(
-        'e0e80704-e4d7-45bd-b28f-d51186c9cef6'
-      )
+      const response = await resourcesApi(selectedRun)
       const resources = response.map(resourcesFields)
       return { resources }
     } catch (error) {

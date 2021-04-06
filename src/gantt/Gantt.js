@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /** @jsxImportSource @emotion/react */
-import { useRef, useEffect, memo } from 'react'
+import { useRef, useEffect, memo, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRecommendations } from '../redux/recommendations'
+import { selectEntities as selectRuns } from '../redux/runs'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css'
 import createTimeline from './createTimeline'
@@ -9,6 +11,7 @@ import recommendationFields from './recommendationFields'
 
 import useOptions from './useOptions'
 import noScrollbar from '../styling/noScrollbar'
+import Progress from '../layout/Progress'
 
 // ToDo next:
 // - create a React template for the tooltip (mui's Tooltip)
@@ -20,6 +23,8 @@ const Gantt = () => {
   const ref = useRef()
   const options = useOptions()
   const mode = useSelector(store => store.app.mode)
+  const { selectedId: selectedRun } = useSelector(selectRuns)
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
 
   const styles = {
@@ -72,16 +77,36 @@ const Gantt = () => {
       },
     }),
   }
+  const container = ref.current
+
+  const buildTimeline = createTimeline({
+    container,
+    options,
+    dispatch,
+  })
 
   useEffect(() => {
-    const container = ref.current
-    const buildTimeline = createTimeline({
-      container,
-      options,
-      dispatch,
-    })
-    dispatch(fetchRecommendations({ recommendationFields, buildTimeline }))
-  }, [dispatch, options])
+    if (selectedRun) {
+      // force a re-render for an otherwise unchanging DOM element
+      setLoading(true)
+      if (ref.current) ref.current.innerHTML = ''
+
+      dispatch(
+        fetchRecommendations({
+          selectedRun,
+          recommendationFields,
+          buildTimeline,
+        })
+      ).then(() => setLoading(false))
+    }
+  }, [dispatch, selectedRun])
+
+  if (loading)
+    return (
+      <div css={styles.root}>
+        <Progress />
+      </div>
+    )
 
   return <div css={styles.root} ref={ref} />
 }

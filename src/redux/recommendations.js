@@ -22,13 +22,11 @@ const recommendationsAdapter = createEntityAdapter({
 // * thunk
 export const fetchRecommendations = createAsyncThunk(
   'recommendations/fetch',
-  async ({ recommendationFields, buildTimeline }, thunkAPI) => {
+  async ({ selectedRun, recommendationFields, buildTimeline }, thunkAPI) => {
     try {
-      const response = await recommendationsApi(
-        'e0e80704-e4d7-45bd-b28f-d51186c9cef6'
-      )
+      const response = await recommendationsApi(selectedRun)
       const recommendations = response.map(recommendationFields)
-      buildTimeline({ recommendations })
+      const timeline = buildTimeline({ recommendations })
       return { recommendations }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.toString())
