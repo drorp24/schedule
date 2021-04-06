@@ -15,14 +15,22 @@ const requestsAdapter = createEntityAdapter({
 // * thunk
 export const fetchRequests = createAsyncThunk(
   'requests/fetch',
-  async ({ selectedRun, requestsFields }, thunkAPI) => {
+  async ({ runId, requestsFields }, { rejectWithValue, getState }) => {
     try {
-      const response = await requestsApi(selectedRun)
+      const response = await requestsApi(runId)
       const requests = response.map(requestsFields)
-      return { requests }
+      return { runId, requests }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.toString())
+      return rejectWithValue(error.toString())
     }
+  },
+  {
+    condition: ({ runId }, { getState }) => {
+      const {
+        requests: { meta },
+      } = getState()
+      if (meta?.runId === runId) return false
+    },
   }
 )
 
@@ -30,6 +38,7 @@ export const fetchRequests = createAsyncThunk(
 const initialState = requestsAdapter.getInitialState({
   loading: 'idle',
   selectedId: null,
+  meta: null,
 })
 
 const requestsSlice = createSlice({
@@ -55,12 +64,13 @@ const requestsSlice = createSlice({
 
     [fetchRequests.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { requests } }
+      { meta: { requestId }, payload: { runId, requests } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
+        state.meta = { runId }
         requestsAdapter.setAll(state, requests)
       }
     },

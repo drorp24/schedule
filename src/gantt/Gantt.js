@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /** @jsxImportSource @emotion/react */
-import { useRef, useEffect, memo, useState } from 'react'
+import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRecommendations } from '../redux/recommendations'
 import { selectEntities as selectRuns } from '../redux/runs'
@@ -9,7 +8,8 @@ import 'vis-timeline/styles/vis-timeline-graph2d.css'
 import createTimeline from './createTimeline'
 import recommendationFields from './recommendationFields'
 
-import useOptions from './useOptions'
+import { useLocale } from '../utility/appUtilities'
+import { timelineOptions } from './options'
 import noScrollbar from '../styling/noScrollbar'
 import Progress from '../layout/Progress'
 
@@ -21,9 +21,10 @@ import Progress from '../layout/Progress'
 
 const Gantt = () => {
   const ref = useRef()
-  const options = useOptions()
+  const { locale, rtl } = useLocale()
+  const options = useMemo(() => timelineOptions({ locale, rtl }), [locale, rtl])
   const mode = useSelector(store => store.app.mode)
-  const { selectedId: selectedRun } = useSelector(selectRuns)
+  const { selectedId: runId } = useSelector(selectRuns)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
 
@@ -77,29 +78,29 @@ const Gantt = () => {
       },
     }),
   }
-  const container = ref.current
-
-  const buildTimeline = createTimeline({
-    container,
-    options,
-    dispatch,
-  })
 
   useEffect(() => {
-    if (selectedRun) {
-      // force a re-render for an otherwise unchanging DOM element
+    const container = ref.current
+    const buildTimeline = createTimeline({
+      container,
+      options,
+      dispatch,
+    })
+
+    if (runId) {
       setLoading(true)
+      // force a re-render for an otherwise unchanging DOM element
       if (ref.current) ref.current.innerHTML = ''
 
       dispatch(
         fetchRecommendations({
-          selectedRun,
+          runId,
           recommendationFields,
           buildTimeline,
         })
       ).then(() => setLoading(false))
     }
-  }, [dispatch, selectedRun])
+  }, [dispatch, options, runId])
 
   if (loading)
     return (

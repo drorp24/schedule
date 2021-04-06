@@ -45,17 +45,18 @@ const properties = [
 const { resources: conf } = config
 
 const Resources = () => {
+  console.log('Resources is rendered')
   const selectedRecommendation = useSelector(selectSelectedEntity)
   const { sortedEntities } = useSelector(selectEntities)
-  const { selectedId: selectedRun } = useSelector(selectRuns)
+  const { selectedId: runId } = useSelector(selectRuns)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (selectedRun) dispatch(fetchResources({ selectedRun, resourcesFields }))
-  }, [dispatch, selectedRun])
+    if (runId) dispatch(fetchResources({ runId, resourcesFields }))
+  }, [dispatch, runId])
 
   useEffect(() => {
     if (!selectedRecommendation || !selectedRecommendation.employs) return

@@ -13,6 +13,7 @@ import noScrollBar from '../styling/noScrollbar'
 import Gantt from '../gantt/Gantt'
 
 const Schedule = () => {
+  console.log('Schedule is rendered')
   const [list, setList] = useState(null)
   const noListSelected = list === null
 
@@ -52,6 +53,7 @@ const Schedule = () => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      borderRadius: '3px',
     },
     requests: {
       height: noListSelected

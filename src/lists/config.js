@@ -7,16 +7,19 @@ import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
 
 const config = {
   requests: {
+    name: 'requests',
     color: orange[500],
     filters: ['fulfilledBySelected', 'fulfilled', 'unfulfilled'],
     icon: <RequestsIcon style={{ fontSize: '1.2rem' }} />,
   },
   resources: {
+    name: 'resources',
     color: blue[500],
     filters: ['emplyedBySelected', 'employed', 'unemployed'],
     icon: <ResourcesIcon />,
   },
   directives: {
+    name: 'directives',
     color: red[500],
     filters: null,
     icon: <DirectivesIcon />,

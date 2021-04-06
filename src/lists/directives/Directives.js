@@ -48,13 +48,13 @@ const properties = [
 const { directives: conf } = config
 
 const Directives = () => {
-  const { selectedId: selectedRun } = useSelector(selectRuns)
+  console.log('Directives is rendered')
+  const { selectedId: runId } = useSelector(selectRuns)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (selectedRun)
-      dispatch(fetchDirectives({ selectedRun, directivesFields }))
-  }, [dispatch, selectedRun])
+    if (runId) dispatch(fetchDirectives({ runId, directivesFields }))
+  }, [dispatch, runId])
 
   return (
     <Table

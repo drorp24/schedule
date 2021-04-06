@@ -38,7 +38,7 @@ const styles = {
   },
 }
 
-const ListSelection = ({ list, setList }) => {
+const ListSelection = memo(({ list, setList }) => {
   const handleListSelection = (event, newList) => {
     setList(newList)
   }
@@ -63,7 +63,7 @@ const ListSelection = ({ list, setList }) => {
       </ToggleButtonGroup>
     </div>
   )
-}
+})
 
 const Select = ({ list, setList }) => (
   <div css={styles.header}>

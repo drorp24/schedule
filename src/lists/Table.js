@@ -11,13 +11,12 @@ import useTranslation from '../i18n/useTranslation'
 import usePixels from '../utility/usePixels'
 import noScrollbar from '../styling/noScrollbar'
 
-import useTheme from '../styling/useTheme'
 import Tooltip from '@material-ui/core/Tooltip'
 import Zoom from '@material-ui/core/Zoom'
 import Info from '@material-ui/icons/InfoOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import Progress from '../layout/Progress'
-import FilterIcon from '@material-ui/icons/FilterListOutlined'
+import FilterIcon from '@material-ui/icons/FilterListRounded'
 
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
@@ -110,22 +109,38 @@ const styles = {
   dimText: {
     color: '#9e9e9e',
   },
-  toolbar: {
+  toolbar: theme => ({
     position: 'absolute',
     top: '-1rem',
     margin: '0 -1rem',
     width: 'calc(100% + 2rem)',
     height: '1.5rem',
-    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    backgroundColor: theme.palette.background.prominent,
+    color: '#fff',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     fontSize: '0.75rem',
     textTransform: 'uppercase',
-  },
-  toolbarIcon: {
+    '& .MuiIconButton-root': {
+      color: 'inherit',
+    },
+    '& .MuiInputBase-root': {
+      color: 'inherit',
+    },
+    '& .MuiSelect-icon': {
+      color: 'inherit',
+    },
+  }),
+  entity: {
     margin: '0 12px',
     display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    lineHeight: '1.5rem',
+    '& svg': {
+      margin: '0 0.5rem',
+    },
   },
   filter: {
     display: 'flex',
@@ -133,9 +148,16 @@ const styles = {
     alignItems: 'center',
     width: '100%',
   },
+  formControl: {
+    '& div': {
+      padding: 0,
+      letterSpacing: 'initial',
+    },
+  },
   select: {
+    textTransform: 'capitalize',
     '& .MuiInputBase-input': {
-      fontSize: '0.65rem',
+      fontSize: '0.75rem',
     },
     '&:hover': {
       border: 'none',
@@ -150,39 +172,44 @@ const styles = {
       // toolbar,
     },
   },
+  name: {
+    fontSize: '0.65rem',
+  },
   menuItem: {
     fontSize: '0.75rem !important',
+    textTransform: 'capitalize',
   },
   filterIcon: {
     paddingTop: '0 !important',
     top: '0.35rem',
+    '& svg': {
+      fontSize: '1.2rem',
+    },
   },
 }
 
 const Toolbar = ({ conf, filterResults, setFilterResults, filter }) => {
-  const { icon, filters, color } = conf
-  const theme = useTheme()
+  const t = useTranslation()
+  const { name, icon, filters, color } = conf
 
   const filterToggle = () => setFilterResults(value => !value)
 
   return (
-    <div css={styles.toolbar} style={{ color }}>
-      <div css={styles.toolbarIcon}>{icon}</div>
-      {filters && (
-        <div css={styles.filter}>
-          {filterResults && filter ? <Filter {...{ filters }} /> : ''}
-          <IconButton
-            css={styles.filterIcon}
-            style={{
-              color:
-                filterResults && filter ? color : theme.palette.menu.inactive,
-            }}
-            onClick={filterToggle}
-          >
-            <FilterIcon />
-          </IconButton>
-        </div>
-      )}
+    <div css={styles.toolbar}>
+      <div css={styles.entity}>
+        {icon}
+        {t(name)}
+      </div>
+      {filters && filterResults && filter ? <Filter {...{ filters }} /> : ''}
+      <IconButton
+        css={styles.filterIcon}
+        style={{
+          color: filterResults && filter ? color : '#bdbdbd',
+        }}
+        onClick={filterToggle}
+      >
+        <FilterIcon />
+      </IconButton>
     </div>
   )
 }
@@ -191,7 +218,7 @@ const Filter = ({ filters }) => {
   const t = useTranslation()
   if (filters)
     return (
-      <FormControl fullWidth>
+      <FormControl fullWidth css={styles.formControl}>
         <Select value={t(filters[0])} onChange={() => {}} css={styles.select}>
           {filters.map(filter => (
             <MenuItem value={t(filter)} css={styles.menuItem} key={filter}>

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect, memo } from 'react'
+import { useEffect, memo, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRuns, selectEntities, select } from '../../redux/runs'
 import runsFields from './runsFields'
@@ -37,34 +37,39 @@ const styles = {
 }
 
 const RunSelection = () => {
+  // ToDo: find out why RunSelection and all 4 lists are re-rendered 8 times
+  // Schedule, their common parent, is rendered but once.
   console.log('RunSelection is rendered')
+
   const { loaded, selectedId, sortedEntities } = useSelector(selectEntities)
   const { locale } = useLocale()
-  const d = localeDateTime(locale)
   const dispatch = useDispatch()
 
-  const runs =
-    locale &&
-    loaded &&
-    sortedEntities.length &&
-    sortedEntities.map(({ id, publish_time }) => ({
-      id,
-      date: d(publish_time),
-    }))
-
+  const d = localeDateTime(locale)
   const selectRun = ({ target: { value } }) => {
     if (value !== selectedId) dispatch(select(value))
   }
+
+  const runs = useMemo(
+    () =>
+      locale &&
+      loaded &&
+      sortedEntities.length &&
+      sortedEntities.map(({ id, publish_time }) => ({
+        id,
+        date: d(publish_time),
+      })),
+    [d, loaded, locale, sortedEntities]
+  )
 
   useEffect(() => {
     dispatch(fetchRuns({ runsFields }))
   }, [dispatch])
 
-  if (!runs || !runs.length) return null
-
-  if (!selectedId) {
-    const defaultRun = runs[0].id
-    dispatch(select(defaultRun))
+  if (!runs || !runs.length) {
+    console.log('no runs, returning null')
+    console.log('runs: ', runs)
+    return null
   }
 
   return (

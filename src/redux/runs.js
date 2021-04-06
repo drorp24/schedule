@@ -61,6 +61,7 @@ const runsSlice = createSlice({
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
+        state.selectedId = runs[0]?.id
         runsAdapter.setAll(state, runs)
       }
     },

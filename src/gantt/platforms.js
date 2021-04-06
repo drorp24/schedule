@@ -6,7 +6,7 @@ const platforms = keyProxy({
     borderColor: '#97B0F8',
   },
   'drone_loading_dock_1-drone_type_4': {
-    backgroundColor: '#dcedc8',
+    backgroundColor: '#ffecb3',
     borderColor: '#aed581',
   },
   UNDEFINED: {

@@ -15,14 +15,22 @@ const resourcesAdapter = createEntityAdapter({
 // * thunk
 export const fetchResources = createAsyncThunk(
   'resources/fetch',
-  async ({ selectedRun, resourcesFields }, thunkAPI) => {
+  async ({ runId, resourcesFields }, thunkAPI) => {
     try {
-      const response = await resourcesApi(selectedRun)
+      const response = await resourcesApi(runId)
       const resources = response.map(resourcesFields)
-      return { resources }
+      return { runId, resources }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.toString())
     }
+  },
+  {
+    condition: ({ runId }, { getState }) => {
+      const {
+        resources: { meta },
+      } = getState()
+      if (meta?.runId === runId) return false
+    },
   }
 )
 
@@ -30,6 +38,7 @@ export const fetchResources = createAsyncThunk(
 const initialState = resourcesAdapter.getInitialState({
   loading: 'idle',
   selectedId: null,
+  meta: null,
 })
 
 const resourcesSlice = createSlice({
@@ -55,12 +64,13 @@ const resourcesSlice = createSlice({
 
     [fetchResources.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { resources } }
+      { meta: { requestId }, payload: { runId, resources } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
+        state.meta = { runId }
         resourcesAdapter.setAll(state, resources)
       }
     },

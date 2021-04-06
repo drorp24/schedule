@@ -15,14 +15,22 @@ const directivesAdapter = createEntityAdapter({
 // * thunk
 export const fetchDirectives = createAsyncThunk(
   'directives/fetch',
-  async ({ selectedRun, directivesFields }, thunkAPI) => {
+  async ({ runId, directivesFields }, thunkAPI) => {
     try {
-      const response = await directivesApi(selectedRun)
+      const response = await directivesApi(runId)
       const directives = response.map(directivesFields)
-      return { directives }
+      return { runId, directives }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.toString())
     }
+  },
+  {
+    condition: ({ runId }, { getState }) => {
+      const {
+        directives: { meta },
+      } = getState()
+      if (meta?.runId === runId) return false
+    },
   }
 )
 
@@ -30,6 +38,7 @@ export const fetchDirectives = createAsyncThunk(
 const initialState = directivesAdapter.getInitialState({
   loading: 'idle',
   selectedId: null,
+  meta: null,
 })
 
 const directivesSlice = createSlice({
@@ -55,12 +64,13 @@ const directivesSlice = createSlice({
 
     [fetchDirectives.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { directives } }
+      { meta: { requestId }, payload: { runId, directives } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
+        state.meta = { runId }
         directivesAdapter.setAll(state, directives)
       }
     },

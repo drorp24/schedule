@@ -11,6 +11,8 @@ export const changeDetailsLevel = ({ timeline, recommendationsObj }) => ({
   start,
   end,
 }) => {
+  if (!timeline) return
+  // console.log('timeline: ', timeline)
   const visibleItems = timeline?.getVisibleItems()
   if (!visibleItems) return
   const granular = end - start < 7200000

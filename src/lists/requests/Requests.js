@@ -45,16 +45,17 @@ const properties = [
 const { requests: conf } = config
 
 const Requests = () => {
+  console.log('Requests is rendered')
   const selectedRecommendation = useSelector(selectSelectedEntity)
-  const { selectedId: selectedRun } = useSelector(selectRuns)
+  const { selectedId: runId } = useSelector(selectRuns)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (selectedRun) dispatch(fetchRequests({ selectedRun, requestsFields }))
-  }, [dispatch, selectedRun])
+    if (runId) dispatch(fetchRequests({ runId, requestsFields }))
+  }, [dispatch, runId])
 
   useEffect(() => {
     if (!selectedRecommendation || !selectedRecommendation.fulfills?.length)

@@ -22,15 +22,28 @@ const recommendationsAdapter = createEntityAdapter({
 // * thunk
 export const fetchRecommendations = createAsyncThunk(
   'recommendations/fetch',
-  async ({ selectedRun, recommendationFields, buildTimeline }, thunkAPI) => {
+  async ({ runId, recommendationFields, buildTimeline }, thunkAPI) => {
     try {
-      const response = await recommendationsApi(selectedRun)
+      const response = await recommendationsApi(runId)
       const recommendations = response.map(recommendationFields)
       const timeline = buildTimeline({ recommendations })
-      return { recommendations }
+      return { runId, recommendations }
     } catch (error) {
+      console.log('error: ', error)
       return thunkAPI.rejectWithValue(error.toString())
     }
+  },
+  {
+    condition: ({ runId, buildTimeline }, { getState }) => {
+      const {
+        recommendations: { meta, entities },
+      } = getState()
+      if (meta?.runId === runId) {
+        const recommendations = Object.values(entities)
+        buildTimeline({ recommendations })
+        return false
+      }
+    },
   }
 )
 
@@ -38,6 +51,7 @@ export const fetchRecommendations = createAsyncThunk(
 const initialState = recommendationsAdapter.getInitialState({
   loading: 'idle',
   selectedId: null,
+  meta: null,
 })
 
 const recommendationsSlice = createSlice({
@@ -63,12 +77,13 @@ const recommendationsSlice = createSlice({
 
     [fetchRecommendations.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { recommendations } }
+      { meta: { requestId }, payload: { runId, recommendations } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
         state.error = null
+        state.meta = { runId }
         recommendationsAdapter.setAll(state, recommendations)
       }
     },
