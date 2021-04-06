@@ -11,10 +11,15 @@ export const changeDetailsLevel = ({ timeline, recommendationsObj }) => ({
   start,
   end,
 }) => {
-  if (!timeline) return
-  // console.log('timeline: ', timeline)
-  const visibleItems = timeline?.getVisibleItems()
-  if (!visibleItems) return
+  if (!timeline) {
+    console.error('No timeline')
+    return
+  }
+  const visibleItems = timeline.getVisibleItems()
+  if (!visibleItems) {
+    console.error('No visibleItems')
+    return
+  }
   const granular = end - start < 7200000
 
   visibleItems.forEach(id => {
@@ -26,10 +31,14 @@ export const changeDetailsLevel = ({ timeline, recommendationsObj }) => ({
     } = recommendationsObj[id] || {}
 
     const itemEl = document.querySelector(`[data-id='${id}']`)
+    if (!itemEl) {
+      console.error(`no itemEl for id ${id}`)
+      return
+    }
     const contentEl = itemEl.querySelector('.vis-item-content')
     if (!contentEl) {
-      console.log('no contentEl for:')
-      console.log('itemEl: ', itemEl)
+      console.error('no contentEl for:')
+      console.error('itemEl: ', itemEl)
       return
     }
 
