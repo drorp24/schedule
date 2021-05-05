@@ -1,7 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { selectSelectedId, selectSelectedEntity } from '../redux/content'
+import {
+  selectSelectedId,
+  selectSelectedEntity,
+} from '../redux/recommendations'
 
 import { useMap, Polygon, Polyline, Marker } from 'react-leaflet'
 import { flyToOptions } from './config'
@@ -34,12 +37,13 @@ const SelectedGeo = () => {
     if (!map || !selectedId || !memoizedSelectedEntity) return
 
     const { type, coordinates } = memoizedSelectedEntity
+    if (!coordinates) return
     const polygon = type === 'Point' ? [coordinates] : coordinates
 
     map.flyToBounds(L.polygon(polygon).getBounds(), flyToOptions)
   }, [map, selectedId, memoizedSelectedEntity])
 
-  if (!selectedEntity) return null
+  if (!selectedEntity || !selectedEntity.coordinates) return null
   const { id, type, coordinates } = selectedEntity
 
   const positions = coordinates

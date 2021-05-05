@@ -53,12 +53,12 @@ export default function App() {
             <ErrorBoundary>
               <Router>
                 <Switch>
-                  <ProtectedRoute exact path="/">
+                  <Route exact path="/">
                     <Redirect to="/home/schedule" />
-                  </ProtectedRoute>
-                  <ProtectedRoute path="/home">
+                  </Route>
+                  <Route path="/home">
                     <Home />
-                  </ProtectedRoute>
+                  </Route>
                   <Route path="/login">
                     <Login />
                   </Route>

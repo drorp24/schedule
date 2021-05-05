@@ -2,6 +2,7 @@ import { DataSet, Timeline } from 'vis-timeline/standalone'
 
 import { selectRecommendation, changeDetailsLevel } from './timelineEvents'
 import itemTemplate from './itemTemplate'
+import { humanize } from '../utility/appUtilities'
 
 const createTimeline = ({ container, options, dispatch }) => ({
   recommendations,
@@ -23,7 +24,7 @@ const createTimeline = ({ container, options, dispatch }) => ({
       }) => {
         plaformsObj[platform_id] = {
           id: platform_id,
-          content: platform_id.slice(-6),
+          content: humanize(platform_id.slice(-6)),
         }
         recommendationsObj[id] = {
           id,

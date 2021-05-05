@@ -73,7 +73,7 @@ export const timelineOptions = ({ locale, rtl }) => ({
     // template: React...
   },
   type: 'range',
-  minHeight: '100%',
+  zoomable: false,
   onMove: (item, callback) => {
     console.log('onMove called')
     console.log('item: ', item)

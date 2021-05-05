@@ -2,15 +2,17 @@
 import { useState, memo } from 'react'
 import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
+import { useLocale } from '../utility/appUtilities'
 
 import Select from '../lists/Select'
 import Requests from '../lists/requests/Requests'
 import Resources from '../lists/resources/Resources'
 import Directives from '../lists/directives/Directives'
+import Map from '../map/Map'
+import Gantt from '../gantt/Gantt'
 
 import noScrollBar from '../styling/noScrollbar'
-
-import Gantt from '../gantt/Gantt'
+import Paper from '@material-ui/core/Paper'
 
 const Schedule = () => {
   console.log('Schedule is rendered')
@@ -18,7 +20,6 @@ const Schedule = () => {
   const noListSelected = list === null
 
   const mode = useSelector(store => store.app.mode)
-  // const t = useTranslation()
 
   const heights = {
     run: 5,
@@ -30,13 +31,14 @@ const Schedule = () => {
     root: theme => ({
       display: 'grid',
       gridTemplateColumns: '35fr 65fr',
-      gap: '0.7rem',
       backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-around',
+      padding: '0 0.5rem',
+      zIndex: 401,
     },
     section: {
       padding: '1rem',
@@ -97,19 +99,25 @@ const Schedule = () => {
       overflow: 'scroll',
       ...noScrollBar,
     },
-    gantt: {
-      overflow: /* 'scroll' */ 'hidden',
-      backgroundColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.05)',
-      padding: '0',
+    results: {
+      display: 'grid',
+      gridTemplateRows: '65% 35%',
+      gap: '0.5rem',
+      backgroundColor: 'white',
     },
+    gantt: theme => ({
+      overflow: 'scroll',
+      ...noScrollBar,
+      border: '1px solid rgba(0, 0, 0, 0.3)',
+    }),
+    map: {},
     sectionTitle: {
       color: mode === 'dark' ? '#9e9e9e' : 'inherit',
     },
   }
   return (
     <div css={styles.root}>
-      <div css={styles.lists}>
+      <Paper square elevation={5} css={styles.lists}>
         <div css={{ ...styles.section, ...styles.run }}>
           <Select {...{ list, setList }} />
         </div>
@@ -122,9 +130,14 @@ const Schedule = () => {
         <div css={{ ...styles.section, ...styles.directives }}>
           <Directives />
         </div>
-      </div>
-      <div css={{ ...styles.section, ...styles.gantt }}>
-        <Gantt />
+      </Paper>
+      <div css={styles.results}>
+        <div css={styles.map}>
+          <Map />
+        </div>
+        <div css={styles.gantt}>
+          <Gantt />
+        </div>
       </div>
     </div>
   )

@@ -1,5 +1,15 @@
 import { useSelector } from 'react-redux'
 
+export const capitalize = s => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+export const humanize = s => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase().replace(/_/g, ' ')
+}
+
 export const useDirection = () => {
   const locale = useSelector(store => store.app.locale)
   return locale === 'he' ? 'rtl' : 'ltr'
@@ -10,7 +20,18 @@ export const useLocale = () => {
   const direction = locale === 'he' ? 'rtl' : 'ltr'
   const rtl = direction === 'rtl'
   const placement = rtl ? 'left' : 'right'
-  return { locale, direction, rtl, placement }
+  const antiPlacement = rtl ? 'right' : 'left'
+  const capitalPlacement = capitalize(placement)
+  const capitalAntiPlacement = capitalize(antiPlacement)
+  return {
+    locale,
+    direction,
+    rtl,
+    placement,
+    antiPlacement,
+    capitalPlacement,
+    capitalAntiPlacement,
+  }
 }
 
 export const useOtherDirection = () => {

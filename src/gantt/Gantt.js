@@ -31,11 +31,19 @@ const Gantt = () => {
   const styles = {
     root: theme => ({
       height: '100%',
-      backgroundColor: mode === 'light' ? 'white' : 'rgba(256, 256, 256, 0.05)',
+      backgroundColor:
+        mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.7)',
       overflow: 'scroll',
       ...noScrollbar,
+      '& .vis-panel.vis-bottom': {
+        fontSize: '0.75rem',
+        fontWeight: 900,
+      },
       '& .vis-timeline': {
         border: 'none',
+      },
+      '& .vis-labelset': {
+        width: '1.5rem',
       },
       '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text': {
         color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
@@ -50,10 +58,12 @@ const Gantt = () => {
         '& .vis-inner': {
           transform: 'rotate(270deg)',
           textTransform: 'uppercase',
+          fontSize: '0.75rem',
+          whiteSpace: 'nowrap',
         },
       },
       '& .vis-item': {
-        height: '2rem',
+        height: '1rem',
         fontSize: '0.85rem',
         '&.vis-selected': {
           backgroundColor: '#607d8b !important',
@@ -98,7 +108,15 @@ const Gantt = () => {
           recommendationFields,
           buildTimeline,
         })
-      ).then(() => setLoading(false))
+      ).then(() => {
+        setLoading(false)
+        setTimeout(() => {
+          ref.current.scrollTo({
+            top: ref.current.scrollHeight,
+            behavior: 'smooth',
+          })
+        }, 0)
+      })
     }
   }, [dispatch, options, runId])
 
