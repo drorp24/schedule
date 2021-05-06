@@ -41,12 +41,14 @@ const styles = {
   header: {
     fontWeight: '700',
     padding: '0 12px',
+    borderBottom: 'none',
   },
   row: {
     display: 'flex',
     justifyContent: 'space-between',
     boxSizing: 'border-box',
     cursor: 'pointer',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
   },
   lightEven: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -112,6 +114,8 @@ const styles = {
   toolbar: theme => ({
     position: 'absolute',
     top: '-1rem',
+    borderTopLeftRadius: '4px',
+    borderTopRightRadius: '4px',
     margin: '0 -1rem',
     width: 'calc(100% + 2rem)',
     height: '1.5rem',
@@ -317,11 +321,11 @@ const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
     const { id } = entity
     const fields = map({ entity, properties })
 
-    const { light } = useMode()
+    // const { light } = useMode()
     const { placement } = useLocale()
 
-    const bg =
-      index % 2 ? styles.odd : light ? styles.lightEven : styles.darkEven
+    // const bg =
+    //   index % 2 ? styles.odd : light ? styles.lightEven : styles.darkEven
     const line = { lineHeight: `${style.height}px` }
 
     const selectedRow = id === selectedId ? styles.selected : {}
@@ -332,7 +336,7 @@ const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
         css={{
           ...style,
           ...styles.row,
-          ...bg,
+          // ...bg,
           ...line,
           ...selectedRow,
         }}

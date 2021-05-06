@@ -15,6 +15,7 @@ const useTheme = ({ mode, direction } = {}) => {
         primary: '#97B0F8',
         paper: '#fff',
         backdrop: 'rgba(0, 0, 0, 0.05)',
+        darkerBackdrop: 'rgba(0, 0, 0, 0.075)',
         prominent: 'rgba(0, 0, 0, 0.5)',
         border: 'rgba(0, 0, 0, 0.2)',
         text: 'rgba(0, 0, 0, 0.87)',
@@ -28,6 +29,7 @@ const useTheme = ({ mode, direction } = {}) => {
         primary: '#D5DDF6',
         paper: '#3b3b3b',
         backdrop: 'rgba(0, 0, 0, 0.05)',
+        darkerBackdrop: 'rgba(0, 0, 0, 0.075)',
         prominent: 'rgba(0, 0, 0, 0.5)',
         border: 'rgba(256, 256, 256, 0.15)',
         text: '#9e9e9e',
@@ -51,6 +53,7 @@ const useTheme = ({ mode, direction } = {}) => {
         background: {
           paper: colors[mode].paper,
           backdrop: colors[mode].backdrop,
+          darkerBackdrop: colors[mode].darkerBackdrop,
           prominent: colors[mode].prominent,
         },
         border: `1px solid ${colors[mode].border}`,

@@ -1,6 +1,5 @@
 import { select } from '../redux/recommendations'
-import itemTemplate from './itemTemplate'
-import platforms from './platforms'
+// import itemTemplate from './itemTemplate'
 
 export const selectRecommendation = dispatch => ({ items }) => {
   const selectedId = items[0]
@@ -42,26 +41,22 @@ export const changeDetailsLevel = ({ timeline, recommendationsObj }) => ({
       return
     }
 
-    const { backgroundColor, borderColor } = platforms[platform_id]
-    itemEl.style.backgroundColor = backgroundColor
-    itemEl.style.borderColor = borderColor
-
     contentEl.style.display = 'flex'
     contentEl.style.flexDirection = 'row'
     contentEl.style.justifyContent = 'center'
     contentEl.style.alignItems = 'center'
 
-    contentEl.innerHTML = itemTemplate(
-      {
-        start_date,
-        platform_id,
-        drone_formation,
-        drone_package_config_id,
-      },
-      undefined,
-      undefined,
-      granular
-    )
+    // contentEl.innerHTML = itemTemplate(
+    //   {
+    //     start_date,
+    //     platform_id,
+    //     drone_formation,
+    //     drone_package_config_id,
+    //   },
+    //   undefined,
+    //   undefined,
+    //   granular
+    // )
     // timeline.redraw()
   })
 }

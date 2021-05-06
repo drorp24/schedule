@@ -1,5 +1,3 @@
-import platforms from './platforms'
-
 const airplaneSvg = `
   <svg
     class="MuiSvgIcon-root"
@@ -36,21 +34,15 @@ const itemTemplate = (
   data,
   granular
 ) => {
-  const { backgroundColor: bg, borderColor: bc } = platforms[platform_id]
-
   if (!granular && start_date)
     return `
-    <div style="${
-      styles.item
-    } background-color: ${bg}; border-color: ${bc}; padding: 5px;">
+    <div style="${styles.item} padding: 5px;">
       <div style="font-size: 0.65rem;">${start_date?.slice(-8)}</div>
     </div>
   `
 
   return `
-    <div style="${
-      styles.item
-    } background-color: ${bg}; border-color: ${bc}; padding: 5px;">
+    <div style="${styles.item} padding: 5px;">
       <span style="${styles.centered}">
         <span style="${styles.iconContainer}">${timeSvg}</span>
         <span>${start_date && start_date.slice(-8)}</span>

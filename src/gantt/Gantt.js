@@ -12,7 +12,9 @@ import { useLocale } from '../utility/appUtilities'
 import { timelineOptions } from './options'
 import noScrollbar from '../styling/noScrollbar'
 import Progress from '../layout/Progress'
+import flight from '../assets/flight.png'
 
+import './gantt.css'
 // ToDo next:
 // - create a React template for the tooltip (mui's Tooltip)
 // - in it, display the volleys hierarchy with mui's Tree, created recursively as in their 'rich' example
@@ -31,10 +33,12 @@ const Gantt = () => {
   const styles = {
     root: theme => ({
       height: '100%',
-      backgroundColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.7)',
+      backgroundColor: theme.palette.background.darkerBackdrop,
       overflow: 'scroll',
       ...noScrollbar,
+      '& .vis-tooltip': {
+        direction: 'ltr',
+      },
       '& .vis-panel.vis-bottom': {
         fontSize: '0.75rem',
         fontWeight: 900,
@@ -43,7 +47,7 @@ const Gantt = () => {
         border: 'none',
       },
       '& .vis-labelset': {
-        width: '1.5rem',
+        // width: '1.5rem',
       },
       '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text': {
         color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
@@ -56,14 +60,17 @@ const Gantt = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         '& .vis-inner': {
-          transform: 'rotate(270deg)',
-          textTransform: 'uppercase',
           fontSize: '0.75rem',
           whiteSpace: 'nowrap',
+          background: `url(${flight}) no-repeat center center`,
+          backgroundSize: 'contain',
+          transform: 'scaleX(-1)',
+          color: 'transparent',
         },
       },
       '& .vis-item': {
         height: '1rem',
+        border: '1px solid transparent',
         fontSize: '0.85rem',
         '&.vis-selected': {
           backgroundColor: '#607d8b !important',

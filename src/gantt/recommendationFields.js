@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 const recommendationFields = ({
   id,
   estimated_start_activity,
@@ -23,6 +25,8 @@ const recommendationFields = ({
     platform_id,
     drone_package_config_id,
   },
+  // ToDo: fake data; replace with new Api
+  formation_id: uuidv4(),
 })
 
 export default recommendationFields

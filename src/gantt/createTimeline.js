@@ -1,13 +1,16 @@
 import { DataSet, Timeline } from 'vis-timeline/standalone'
 
-import { selectRecommendation, changeDetailsLevel } from './timelineEvents'
-import itemTemplate from './itemTemplate'
-import { humanize } from '../utility/appUtilities'
+import {
+  selectRecommendation /* , changeDetailsLevel */,
+} from './timelineEvents'
+// import itemTemplate from './itemTemplate'
+import { color } from './config'
+import pickNext from '../utility/pickNext'
 
 const createTimeline = ({ container, options, dispatch }) => ({
   recommendations,
 }) => {
-  let plaformsObj = {}
+  let groupsObj = {}
   let recommendationsObj = {}
 
   const items = new DataSet(
@@ -21,10 +24,13 @@ const createTimeline = ({ container, options, dispatch }) => ({
         drone_formation,
         drone_package_config_id,
         fulfills,
+        formation_id,
       }) => {
-        plaformsObj[platform_id] = {
-          id: platform_id,
-          content: humanize(platform_id.slice(-6)),
+        groupsObj[formation_id] = {
+          id: formation_id,
+          content: 'Ab',
+          title: formation_id,
+          className: pickNext(color),
         }
         recommendationsObj[id] = {
           id,
@@ -35,32 +41,39 @@ const createTimeline = ({ container, options, dispatch }) => ({
           drone_formation,
           drone_package_config_id,
           fulfills,
+          formation_id,
         }
         return {
           id,
-          template: itemTemplate,
+          // template: itemTemplate,
           start,
           end,
-          group: platform_id,
+          group: formation_id,
+          formation_id,
           platform_id,
           drone_formation,
           drone_package_config_id,
-          title: `<div>drone formation: ${drone_formation}</div>`,
+          title: `
+          <div>
+            <p>docking station: ??? </p>
+            <p>platform_id: ${platform_id}</p>
+            <p>drone_package_config_id: ${drone_package_config_id}</p>
+          </div>`,
           fulfills,
         }
       }
     )
   )
 
-  const groups = new DataSet(Object.values(plaformsObj))
+  const groups = new DataSet(Object.values(groupsObj))
 
   const timeline = new Timeline(container, items, options)
   timeline.setGroups(groups)
   timeline.on('select', selectRecommendation(dispatch))
-  timeline.on(
-    'rangechanged',
-    changeDetailsLevel({ timeline, recommendationsObj })
-  )
+  // timeline.on(
+  //   'rangechanged',
+  //   changeDetailsLevel({ timeline, recommendationsObj })
+  // )
   return timeline
 }
 

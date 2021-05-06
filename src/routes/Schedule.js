@@ -30,7 +30,7 @@ const Schedule = () => {
   const styles = {
     root: theme => ({
       display: 'grid',
-      gridTemplateColumns: '35fr 65fr',
+      gridTemplateColumns: '30fr 70fr',
       backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {
@@ -40,16 +40,7 @@ const Schedule = () => {
       padding: '0 0.5rem',
       zIndex: 401,
     },
-    section: {
-      padding: '1rem',
-      backgroundColor: mode === 'light' ? 'white' : 'rgba(256, 256, 256, 0.05)',
-      border: '1px solid',
-      borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
-    },
-
     run: {
-      padding: '0 1rem',
       height: `${heights.run}%`,
       overflow: 'hidden',
       display: 'flex',
@@ -57,7 +48,7 @@ const Schedule = () => {
       alignItems: 'center',
       borderRadius: '3px',
     },
-    requests: {
+    requests: theme => ({
       height: noListSelected
         ? `${heights.list}%`
         : list === 'requests'
@@ -67,11 +58,14 @@ const Schedule = () => {
       border: noListSelected || list === 'requests' ? '1px solid' : 'none',
       borderColor:
         mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+      borderRadius: '4px',
+      borderTop: 'none',
+      backgroundColor: theme.palette.background.darkerBackdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
-    },
-    resources: {
+    }),
+    resources: theme => ({
       height: noListSelected
         ? `${heights.list}%`
         : list === 'resources'
@@ -81,11 +75,14 @@ const Schedule = () => {
       border: noListSelected || list === 'resources' ? '1px solid' : 'none',
       borderColor:
         mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+      borderRadius: '4px',
+      borderTop: 'none',
+      backgroundColor: theme.palette.background.darkerBackdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
-    },
-    directives: {
+    }),
+    directives: theme => ({
       height: noListSelected
         ? `${heights.list}%`
         : list === 'directives'
@@ -95,20 +92,25 @@ const Schedule = () => {
       border: noListSelected || list === 'directives' ? '1px solid' : 'none',
       borderColor:
         mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+      borderRadius: '4px',
+      borderTop: 'none',
+      backgroundColor: theme.palette.background.darkerBackdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
-    },
+    }),
     results: {
       display: 'grid',
       gridTemplateRows: '65% 35%',
-      gap: '0.5rem',
+      gap: '0.2rem',
       backgroundColor: 'white',
+      overflow: 'hidden',
     },
     gantt: theme => ({
       overflow: 'scroll',
       ...noScrollBar,
       border: '1px solid rgba(0, 0, 0, 0.3)',
+      // paddingRight: '2px',
     }),
     map: {},
     sectionTitle: {
@@ -121,13 +123,13 @@ const Schedule = () => {
         <div css={{ ...styles.section, ...styles.run }}>
           <Select {...{ list, setList }} />
         </div>
-        <div css={{ ...styles.section, ...styles.requests }}>
+        <div css={styles.requests}>
           <Requests />
         </div>
-        <div css={{ ...styles.section, ...styles.resources }}>
+        <div css={styles.resources}>
           <Resources />
         </div>
-        <div css={{ ...styles.section, ...styles.directives }}>
+        <div css={styles.directives}>
           <Directives />
         </div>
       </Paper>
