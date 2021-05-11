@@ -39,7 +39,6 @@ const styles = {
 const RunSelection = () => {
   // ToDo: find out why RunSelection and all 4 lists are re-rendered 8 times
   // Schedule, their common parent, is rendered but once.
-  console.log('RunSelection is rendered')
 
   const { loaded, selectedId, sortedEntities } = useSelector(selectEntities)
   const { locale } = useLocale()
@@ -66,11 +65,7 @@ const RunSelection = () => {
     dispatch(fetchRuns({ runsFields }))
   }, [dispatch])
 
-  if (!runs || !runs.length) {
-    console.log('no runs, returning null')
-    console.log('runs: ', runs)
-    return null
-  }
+  if (!runs || !runs.length) return null
 
   return (
     <FormControl fullWidth>

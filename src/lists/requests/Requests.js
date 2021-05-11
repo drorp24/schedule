@@ -45,7 +45,6 @@ const properties = [
 const { requests: conf } = config
 
 const Requests = () => {
-  console.log('Requests is rendered')
   const selectedRecommendation = useSelector(selectSelectedEntity)
   const { selectedId: runId } = useSelector(selectRuns)
 

@@ -60,7 +60,7 @@ const Gantt = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         '& .vis-inner': {
-          fontSize: '0.75rem',
+          fontSize: '0.5rem',
           whiteSpace: 'nowrap',
           background: `url(${flight}) no-repeat center center`,
           backgroundSize: 'contain',

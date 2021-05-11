@@ -28,7 +28,7 @@ const createTimeline = ({ container, options, dispatch }) => ({
       }) => {
         groupsObj[formation_id] = {
           id: formation_id,
-          content: 'Ab',
+          content: 'Abc',
           title: formation_id,
           className: pickNext(color),
         }

@@ -15,7 +15,6 @@ import noScrollBar from '../styling/noScrollbar'
 import Paper from '@material-ui/core/Paper'
 
 const Schedule = () => {
-  console.log('Schedule is rendered')
   const [list, setList] = useState(null)
   const noListSelected = list === null
 
@@ -57,10 +56,10 @@ const Schedule = () => {
       padding: noListSelected || list === 'requests' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'requests' ? '1px solid' : 'none',
       borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
       borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.darkerBackdrop,
+      backgroundColor: theme.palette.background.backdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
@@ -74,10 +73,10 @@ const Schedule = () => {
       padding: noListSelected || list === 'resources' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'resources' ? '1px solid' : 'none',
       borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
       borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.darkerBackdrop,
+      backgroundColor: theme.palette.background.backdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
@@ -91,17 +90,17 @@ const Schedule = () => {
       padding: noListSelected || list === 'directives' ? '1rem' : '0 1rem',
       border: noListSelected || list === 'directives' ? '1px solid' : 'none',
       borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.15)',
+        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
       borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.darkerBackdrop,
+      backgroundColor: theme.palette.background.backdrop,
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
     }),
     results: {
       display: 'grid',
-      gridTemplateRows: '65% 35%',
+      gridTemplateRows: '60% 40%',
       gap: '0.2rem',
       backgroundColor: 'white',
       overflow: 'hidden',
@@ -119,7 +118,7 @@ const Schedule = () => {
   }
   return (
     <div css={styles.root}>
-      <Paper square elevation={5} css={styles.lists}>
+      <Paper elevation={5} css={styles.lists}>
         <div css={{ ...styles.section, ...styles.run }}>
           <Select {...{ list, setList }} />
         </div>

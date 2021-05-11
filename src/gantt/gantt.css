@@ -1,3 +1,21 @@
+/* .vis-panel.vis-bottom {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+} */
+
+.vis-label[title]:hover::after {
+  content: attr(title);
+  position: fixed;
+  z-index: 400;
+  top: 0;
+  left: 0;
+  width: calc(100% - 4rem);
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+}
+
 .red .vis-item,
 .red.vis-label {
   background-color: rgb(244, 67, 54);

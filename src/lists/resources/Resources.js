@@ -45,7 +45,6 @@ const properties = [
 const { resources: conf } = config
 
 const Resources = () => {
-  console.log('Resources is rendered')
   const selectedRecommendation = useSelector(selectSelectedEntity)
   const { sortedEntities } = useSelector(selectEntities)
   const { selectedId: runId } = useSelector(selectRuns)

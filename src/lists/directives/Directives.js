@@ -48,7 +48,6 @@ const properties = [
 const { directives: conf } = config
 
 const Directives = () => {
-  console.log('Directives is rendered')
   const { selectedId: runId } = useSelector(selectRuns)
   const dispatch = useDispatch()
 

@@ -30,6 +30,9 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  buttonGroup: {
+    height: '4vh',
+  },
   requestsIcon: {
     fontSize: '1.2rem !important',
   },
@@ -50,6 +53,7 @@ const ListSelection = memo(({ list, setList }) => {
         value={list}
         onChange={handleListSelection}
         size="small"
+        css={styles.buttonGroup}
       >
         <ToggleButton value="requests" css={styles.button}>
           <RequestsIcon css={styles.requestsIcon} />

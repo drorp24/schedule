@@ -24,7 +24,10 @@ export const fetchRecommendations = createAsyncThunk(
   'recommendations/fetch',
   async ({ runId, recommendationFields, buildTimeline }, thunkAPI) => {
     try {
-      const response = await recommendationsApi(runId)
+      const { response, newFormat } = await recommendationsApi(runId)
+      console.clear()
+      console.log('response: ', response)
+      console.log('newFormat: ', newFormat)
       const recommendations = response.map(recommendationFields)
       const timeline = buildTimeline({ recommendations })
       return { runId, recommendations }
