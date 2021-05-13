@@ -71,6 +71,16 @@ export const useLocalDate = date => {
   return dateFormat.toLocaleDateString(locale, dateOptions)
 }
 
+export const useLocalDateTime = date => {
+  const locale = useSelector(store => store.app.locale)
+  const dateFormat = new Date(date)
+
+  return dateFormat.toLocaleDateString(locale, {
+    ...dateOptions,
+    ...timeOptions,
+  })
+}
+
 // unlike useLocalDate, which returns a hook, hence cannot be invoked inside a callback (e.g., 'map'),
 // useLocaleDate returns a function. which can be invoked inside a callback
 // so you would do something like const d = useLocaleDate(), then you can use the 'd' function anywhere you like.

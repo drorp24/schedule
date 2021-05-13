@@ -134,7 +134,7 @@ const Gantt = () => {
       </div>
     )
 
-  return <div css={styles.root} ref={ref} />
+  return <div css={styles.root} ref={ref} id="gantt" />
 }
 
 export default memo(Gantt)

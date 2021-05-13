@@ -8,13 +8,32 @@
   content: attr(title);
   position: fixed;
   z-index: 400;
-  top: 0;
-  left: 0;
+  top: 53vh;
+  height: 7vh;
+  right: 32vw;
   width: calc(100% - 4rem);
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
+/* [data-id]:hover::after {
+  content: attr(data-id);
+  position: fixed;
+  z-index: 400;
+  top: 0;
+  height: 7vh;
+  right: 0;
+  width: 30vw;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} */
 
 .red .vis-item,
 .red.vis-label {

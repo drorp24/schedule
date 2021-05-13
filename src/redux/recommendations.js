@@ -24,10 +24,8 @@ export const fetchRecommendations = createAsyncThunk(
   'recommendations/fetch',
   async ({ runId, recommendationFields, buildTimeline }, thunkAPI) => {
     try {
-      const { response, newFormat } = await recommendationsApi(runId)
-      console.clear()
-      console.log('response: ', response)
-      console.log('newFormat: ', newFormat)
+      const response = await recommendationsApi(runId)
+      console.log('current response: ', response)
       const recommendations = response.map(recommendationFields)
       const timeline = buildTimeline({ recommendations })
       return { runId, recommendations }
@@ -141,6 +139,23 @@ export const selectSelectedEntity = ({ recommendations }) => {
   const selectedEntity = selectEntityById(selectedId)({ recommendations })
 
   return selectedEntity
+}
+
+export const selectSelectedLocations = ({ recommendations, requests }) => {
+  const { selectedId } = recommendations
+  if (!selectedId) return null
+
+  const selectedEntity = selectEntityById(selectedId)({ recommendations })
+
+  const locations = []
+  const { fulfills } = selectedEntity
+  if (!fulfills?.length) return null
+
+  fulfills.forEach(({ delivery_request_id }) => {
+    locations.push(requests.entities[delivery_request_id]?.location)
+  })
+
+  return locations
 }
 
 const { reducer, actions } = recommendationsSlice

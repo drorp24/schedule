@@ -20,6 +20,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-flow-renderer": "^8.7.0",

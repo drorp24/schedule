@@ -1,8 +1,8 @@
-const objectify = array =>
+const objectify = (array, key = 'id') =>
   array.reduce(
     (obj, item) => ({
       ...obj,
-      [item.id]: item,
+      [item[key]]: item,
     }),
     {}
   )

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleDrawer, toggleLocale, toggleMode } from '../redux/app'
 import { logout } from '../redux/users'
-import { useDirection } from '../utility/appUtilities'
+import { useLocale } from '../utility/appUtilities'
 
 import {
   Switch,
@@ -23,6 +23,7 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Logout from '@material-ui/icons/PowerSettingsNewOutlined'
 import Button from '@material-ui/core/Button'
+import Logo from '../assets/Rafael-2.svg'
 
 import useTranslation from '../i18n/useTranslation'
 
@@ -37,7 +38,7 @@ const Home = () => {
   const { pathname } = useLocation()
   const dispatch = useDispatch()
   const open = useSelector(store => store.app.drawerOpen)
-  const direction = useDirection()
+  const { direction, placement } = useLocale()
   const mode = useSelector(store => store.app.mode)
   const [dir, setDir] = useState(direction)
   const rtl = dir === 'rtl'
@@ -131,6 +132,15 @@ const Home = () => {
       zIndex: '0',
       '& > div': {
         height: '100%',
+      },
+    },
+    logo: {
+      position: 'absolute',
+      [placement]: '0',
+      height: '10vh',
+      '& img': {
+        height: '100%',
+        width: 'auto',
       },
     },
   }
@@ -235,6 +245,9 @@ const Home = () => {
             </Route>
           ))}
         </Switch>
+      </div>
+      <div css={styles.logo}>
+        <img src={Logo} alt="logo" />
       </div>
     </Page>
   )

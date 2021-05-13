@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, memo } from 'react'
+import { useState, memo, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
 import { useLocale } from '../utility/appUtilities'
@@ -10,6 +10,7 @@ import Resources from '../lists/resources/Resources'
 import Directives from '../lists/directives/Directives'
 import Map from '../map/Map'
 import Gantt from '../gantt/Gantt'
+import RecDetails from '../gantt/RecDetails'
 
 import noScrollBar from '../styling/noScrollbar'
 import Paper from '@material-ui/core/Paper'
@@ -115,7 +116,62 @@ const Schedule = () => {
     sectionTitle: {
       color: mode === 'dark' ? '#9e9e9e' : 'inherit',
     },
+    logo: {
+      position: 'fixed',
+    },
+    recDetails: {
+      position: 'absolute',
+    },
   }
+
+  const noneHovered = useMemo(
+    () => ({
+      start: null,
+      end: null,
+      platform_id: null,
+      drone_package_config_id: null,
+      drone_formation: null,
+    }),
+    []
+  )
+  const [hovered, setHovered] = useState(noneHovered)
+
+  useEffect(() => {
+    // const recDetails = document.getElementById('recDetails')
+    // if (!recDetails) return
+    // recDetails.style = recDetails.style || {}
+
+    document
+      .querySelector('#gantt')
+      .addEventListener('mouseover', function (e) {
+        if (e.target.hasAttribute('data-id')) {
+          const recDetails = document.getElementById('recDetails')
+          recDetails.style = recDetails.style || {}
+          recDetails.style.visibility = 'visible'
+          console.log('hover')
+          setHovered(e.target.dataset)
+          // setTimeout(() => {
+          //   recDetails.style.visibility = 'hidden'
+          // }, 1000)
+        }
+      })
+
+    // document.querySelectorAll('[data-id]').forEach(el => {
+    //   el.addEventListener('mouseout', function (e) {
+    //     console.log('out')
+    //     setHovered(noneHovered)
+    //   })
+    // })
+
+    // document.querySelector('#gantt').addEventListener('mouseout', function (e) {
+    //   // recDetails.style.visibility = 'hidden'
+    //   if (e.target.hasAttribute('data-id')) {
+    //     console.log('out')
+    //     setHovered(noneHovered)
+    //   }
+    // })
+  }, [noneHovered])
+
   return (
     <div css={styles.root}>
       <Paper elevation={5} css={styles.lists}>
@@ -138,6 +194,9 @@ const Schedule = () => {
         </div>
         <div css={styles.gantt}>
           <Gantt />
+        </div>
+        <div css={styles.recDetails}>
+          <RecDetails {...hovered} />
         </div>
       </div>
     </div>

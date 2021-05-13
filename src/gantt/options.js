@@ -59,7 +59,7 @@ import en from '../i18n/en.json'
 export const timelineOptions = ({ locale, rtl }) => ({
   editable: true,
   groupEditable: true,
-  dataAttributes: ['id'],
+  dataAttributes: 'all',
   locales: {
     en,
     he,

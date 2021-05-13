@@ -74,12 +74,7 @@ const Resources = () => {
       }
     )
 
-    console.log('platform_id: ', platform_id)
-    console.log('sortedEntities: ', sortedEntities)
-    console.log('employed: ', employed)
-
     setFilter(employed)
-    console.log('employed: ', employed)
   }, [selectedRecommendation, sortedEntities])
 
   return (

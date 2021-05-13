@@ -53,12 +53,6 @@ const createTimeline = ({ container, options, dispatch }) => ({
           platform_id,
           drone_formation,
           drone_package_config_id,
-          title: `
-          <div>
-            <p>docking station: ??? </p>
-            <p>platform_id: ${platform_id}</p>
-            <p>drone_package_config_id: ${drone_package_config_id}</p>
-          </div>`,
           fulfills,
         }
       }
