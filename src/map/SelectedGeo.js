@@ -54,7 +54,7 @@ const SelectedGeo = () => {
     selectedRef.current = { selectedId: selectedId, locations }
 
     const locationPoints = locations.map(({ coordinates }) => [...coordinates])
-    const locationBounds = L.latLngBounds(...locationPoints)
+    const locationBounds = L.latLngBounds(locationPoints)
 
     map.flyToBounds(locationBounds, flyToOptions)
   }, [map, selectedId, selectedEntity, locations, sameCoordinates, sameId])

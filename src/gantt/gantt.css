@@ -35,42 +35,60 @@
   justify-content: center;
 } */
 
+#recDetails {
+  opacity: 1;
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%),
+    0px 5px 8px 0px rgb(0 0 0 / 14%), 0px 1px 14px 0px rgb(0 0 0 / 12%);
+}
+
+[data-id]:hover {
+  border: 3px solid /* #97b0f8 */ rgba(0, 0, 0, 0.7);
+}
+
 .red .vis-item,
-.red.vis-label {
+.red.vis-label,
+#recDetails.red {
   background-color: rgb(244, 67, 54);
 }
 
 .blue .vis-item,
-.blue.vis-label {
+.blue.vis-label,
+#recDetails.blue {
   background-color: rgb(33, 150, 243);
 }
 
 .green .vis-item,
-.green.vis-label {
+.green.vis-label,
+#recDetails.green {
   background-color: rgb(255, 152, 0);
 }
 
 .purple .vis-item,
-.purple.vis-label {
+.purple.vis-label,
+#recDetails.purple {
   background-color: #9c27b0;
 }
 
 .indigo .vis-item,
-.indigo.vis-label {
+.indigo.vis-label,
+#recDetails.indigo {
   background-color: #3f51b5;
 }
 
 .teal .vis-item,
-.teal.vis-label {
+.teal.vis-label,
+#recDetails.teal {
   background-color: #1de9b6;
 }
 
 .lightgreen .vis-item,
-.lightgreen.vis-label {
+.lightgreen.vis-label,
+#recDetails.lightgreen {
   background-color: #8bc34a;
 }
 
 .amber .vis-item,
-.amber.vis-label {
+.amber.vis-label,
+#recDetails.amber {
   background-color: #ffc107;
 }

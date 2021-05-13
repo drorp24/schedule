@@ -40,33 +40,37 @@ const RecDetails = ({
   platform_id,
   drone_package_config_id,
   drone_formation,
-}) => (
-  <div css={styles.root} id="recDetails">
-    <div>
-      <StartIcon />
-    </div>
-    <div>{useLocalDateTime(start)}</div>
+  classname,
+}) => {
+  console.log('classname: ', classname)
+  return (
+    <div css={styles.root} id="recDetails" className={classname}>
+      <div>
+        <StartIcon />
+      </div>
+      <div>{useLocalDateTime(start)}</div>
 
-    <div>
-      <EndIcon />
-    </div>
-    <div>{useLocalDateTime(end)}</div>
+      <div>
+        <EndIcon />
+      </div>
+      <div>{useLocalDateTime(end)}</div>
 
-    <div>
-      <PlatformIcon />
-    </div>
-    <div>{platform_id}</div>
+      <div>
+        <PlatformIcon />
+      </div>
+      <div>{platform_id}</div>
 
-    <div>
-      <PackageIcon />
-    </div>
-    <div>{drone_package_config_id}</div>
+      <div>
+        <PackageIcon />
+      </div>
+      <div>{drone_package_config_id}</div>
 
-    <div>
-      <FormationIcon />
+      <div>
+        <FormationIcon />
+      </div>
+      <div>{drone_formation}</div>
     </div>
-    <div>{drone_formation}</div>
-  </div>
-)
+  )
+}
 
 export default RecDetails

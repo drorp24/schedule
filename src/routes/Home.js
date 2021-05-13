@@ -137,7 +137,7 @@ const Home = () => {
     logo: {
       position: 'absolute',
       [placement]: '0',
-      height: '10vh',
+      height: '8vh',
       '& img': {
         height: '100%',
         width: 'auto',

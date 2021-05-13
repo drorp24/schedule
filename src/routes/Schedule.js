@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, memo, useEffect, useMemo } from 'react'
+import { useState, memo, useEffect, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
 import { useLocale } from '../utility/appUtilities'
@@ -135,6 +135,7 @@ const Schedule = () => {
     []
   )
   const [hovered, setHovered] = useState(noneHovered)
+  const timeoutRef = useRef()
 
   useEffect(() => {
     // const recDetails = document.getElementById('recDetails')
@@ -163,13 +164,20 @@ const Schedule = () => {
     //   })
     // })
 
-    // document.querySelector('#gantt').addEventListener('mouseout', function (e) {
-    //   // recDetails.style.visibility = 'hidden'
-    //   if (e.target.hasAttribute('data-id')) {
-    //     console.log('out')
-    //     setHovered(noneHovered)
-    //   }
-    // })
+    document.querySelector('#gantt').addEventListener('mouseout', function (e) {
+      console.log('mouseout')
+      // recDetails.style.visibility = 'hidden'
+      if (e.target.hasAttribute('data-id')) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = setTimeout(() => {
+          const recDetails = document.getElementById('recDetails')
+          recDetails.style = recDetails.style || {}
+          recDetails.style.visibility = 'hidden'
+          setHovered(noneHovered)
+          console.log('out')
+        }, 1000)
+      }
+    })
   }, [noneHovered])
 
   return (
