@@ -68,10 +68,10 @@ export const timelineOptions = ({ locale, rtl }) => ({
   rtl,
   snap: null,
   // template: itemTemplate,
-  tooltip: {
-    followMouse: true,
-    // template: React...
-  },
+  // tooltip: {
+  //   followMouse: true,
+  //   // template: React...
+  // },
   type: 'range',
   zoomable: false,
   onMove: (item, callback) => {

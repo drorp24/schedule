@@ -10,7 +10,7 @@ import Resources from '../lists/resources/Resources'
 import Directives from '../lists/directives/Directives'
 import Map from '../map/Map'
 import Gantt from '../gantt/Gantt'
-import RecDetails from '../gantt/RecDetails'
+import RecDetails, { useRecDetails } from '../gantt/RecDetails'
 
 import noScrollBar from '../styling/noScrollbar'
 import Paper from '@material-ui/core/Paper'
@@ -135,50 +135,8 @@ const Schedule = () => {
     []
   )
   const [hovered, setHovered] = useState(noneHovered)
-  const timeoutRef = useRef()
 
-  useEffect(() => {
-    // const recDetails = document.getElementById('recDetails')
-    // if (!recDetails) return
-    // recDetails.style = recDetails.style || {}
-
-    document
-      .querySelector('#gantt')
-      .addEventListener('mouseover', function (e) {
-        if (e.target.hasAttribute('data-id')) {
-          const recDetails = document.getElementById('recDetails')
-          recDetails.style = recDetails.style || {}
-          recDetails.style.visibility = 'visible'
-          console.log('hover')
-          setHovered(e.target.dataset)
-          // setTimeout(() => {
-          //   recDetails.style.visibility = 'hidden'
-          // }, 1000)
-        }
-      })
-
-    // document.querySelectorAll('[data-id]').forEach(el => {
-    //   el.addEventListener('mouseout', function (e) {
-    //     console.log('out')
-    //     setHovered(noneHovered)
-    //   })
-    // })
-
-    document.querySelector('#gantt').addEventListener('mouseout', function (e) {
-      console.log('mouseout')
-      // recDetails.style.visibility = 'hidden'
-      if (e.target.hasAttribute('data-id')) {
-        clearTimeout(timeoutRef.current)
-        timeoutRef.current = setTimeout(() => {
-          const recDetails = document.getElementById('recDetails')
-          recDetails.style = recDetails.style || {}
-          recDetails.style.visibility = 'hidden'
-          setHovered(noneHovered)
-          console.log('out')
-        }, 1000)
-      }
-    })
-  }, [noneHovered])
+  useRecDetails({ setHovered, noneHovered })
 
   return (
     <div css={styles.root}>
