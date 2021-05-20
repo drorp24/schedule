@@ -1,11 +1,7 @@
 import { DataSet, Timeline } from 'vis-timeline/standalone'
 
-import {
-  selectRecommendation /* , changeDetailsLevel */,
-} from './timelineEvents'
+import { updateSelected } from './timelineEvents'
 // import itemTemplate from './itemTemplate'
-import { color } from './config'
-import pickNext from '../utility/pickNext'
 
 const createTimeline =
   ({ container, options, dispatch }) =>
@@ -25,8 +21,9 @@ const createTimeline =
           drone_package_config_id,
           fulfills,
           formation_id,
+          color,
         }) => {
-          const className = pickNext(color)
+          const className = color
           groupsObj[formation_id] = {
             id: formation_id,
             content: 'Abc',
@@ -65,7 +62,18 @@ const createTimeline =
 
     const timeline = new Timeline(container, items, options)
     timeline.setGroups(groups)
-    timeline.on('select', selectRecommendation(dispatch))
+
+    // ! 'select' strange behavior
+    // vis-timeline 'select' event provides an array with the up-to-date state of selection.
+    // This should have been the easiest most straightforward solution to updating redux.
+    // However for some obscure reason, calling dispatch makes select trigger twice, the 2nd time around
+    // unselecting the item clicked, rendering 'select' event completely unusable.
+    // Therefore I am using 'click' and getSelection instead.
+    //
+    // timeline.on('select', updateSelected(dispatch))
+
+    timeline.on('click', updateSelected({ dispatch, timeline }))
+
     // timeline.on(
     //   'rangechanged',
     //   changeDetailsLevel({ timeline, recommendationsObj })

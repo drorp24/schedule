@@ -36,6 +36,9 @@ const Gantt = () => {
       backgroundColor: theme.palette.background.darkerBackdrop,
       overflow: 'scroll',
       ...noScrollbar,
+      '& .vis-delete-rtl': {
+        display: 'none',
+      },
       '& .vis-tooltip': {
         direction: 'ltr',
       },
@@ -49,12 +52,14 @@ const Gantt = () => {
       '& .vis-labelset': {
         // width: '1.5rem',
       },
-      '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text': {
-        color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
-      },
-      '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor': {
-        borderColor: '#616161',
-      },
+      '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text':
+        {
+          color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
+        },
+      '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor':
+        {
+          borderColor: '#616161',
+        },
       '& .vis-labelset .vis-label.draggable': {
         display: 'flex',
         flexDirection: 'column',
@@ -73,11 +78,9 @@ const Gantt = () => {
         border: '1px solid transparent',
         fontSize: '0.85rem',
         '&.vis-selected': {
-          backgroundColor: '#607d8b !important',
-          color: '#fff',
-          '& .vis-item-content > div': {
-            backgroundColor: '#607d8b !important',
-          },
+          // animation: 'highlight 3s infinite',
+          // boxSizing: 'content-box',
+          border: '4px solid black',
         },
         '& .vis-item-overflow': {
           display: 'flex',

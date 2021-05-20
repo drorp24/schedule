@@ -10,6 +10,7 @@ import {
   ZoomControl,
 } from 'react-leaflet'
 import { tileProviders, locations } from './config'
+import { useMode } from '../utility/appUtilities'
 
 const styles = {
   map: {
@@ -18,24 +19,30 @@ const styles = {
   },
 }
 
-const Map = () => (
-  <MapContainer
-    center={locations.home}
-    zoom={11}
-    scrollWheelZoom={false}
-    css={styles.map}
-    zoomControl={false}
-  >
-    <LayersControl position="bottomright">
-      {tileProviders.map(({ name, checked, args }) => (
-        <LayersControl.BaseLayer {...{ name, checked }} key={name}>
-          <WMSTileLayer {...{ ...args }} />
-        </LayersControl.BaseLayer>
-      ))}
-    </LayersControl>
-    <ZoomControl position="bottomleft" />
-    <SelectedGeo />
-  </MapContainer>
-)
+const Map = () => {
+  const { mode } = useMode()
+  return (
+    <MapContainer
+      center={locations.home}
+      zoom={11}
+      scrollWheelZoom={false}
+      css={styles.map}
+      zoomControl={false}
+    >
+      <LayersControl position="bottomright">
+        {tileProviders.map(({ name, checked, args, bestFor }) => (
+          <LayersControl.BaseLayer
+            {...{ name, checked: bestFor === mode }}
+            key={name}
+          >
+            <WMSTileLayer {...{ ...args }} />
+          </LayersControl.BaseLayer>
+        ))}
+      </LayersControl>
+      <ZoomControl position="bottomleft" />
+      <SelectedGeo />
+    </MapContainer>
+  )
+}
 
 export default Map

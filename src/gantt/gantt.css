@@ -57,10 +57,10 @@
   background-color: rgb(33, 150, 243);
 }
 
-.green .vis-item,
-.green.vis-label,
-#recDetails.green {
-  background-color: rgb(255, 152, 0);
+.orange .vis-item,
+.orange.vis-label,
+#recDetails.orange {
+  background-color: rgb(219, 132, 0);
 }
 
 .purple .vis-item,
@@ -91,4 +91,13 @@
 .amber.vis-label,
 #recDetails.amber {
   background-color: #ffc107;
+}
+
+@keyframes highlight {
+  0% {
+    border: 0px solid black;
+  }
+  100% {
+    border: 3px solid black;
+  }
 }

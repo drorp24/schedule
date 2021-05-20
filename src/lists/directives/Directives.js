@@ -23,7 +23,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 12px',
-    color: config.directives.color,
+    // color: config.directives.color,
   },
   centered: {
     textAlign: 'center',

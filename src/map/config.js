@@ -1,9 +1,49 @@
+import * as L from 'leaflet'
+
+import shadow from '../assets/marker-shadow.png'
+import amber from './markers/amber.svg'
+import blue from './markers/blue.svg'
+import indigo from './markers/indigo.svg'
+import lightgreen from './markers/lightgreen.svg'
+import orange from './markers/orange.svg'
+import purple from './markers/purple.svg'
+import red from './markers/red.svg'
+import teal from './markers/teal.svg'
+import defaultIcon from './markers/default.png'
+
+const icons = {
+  amber,
+  blue,
+  indigo,
+  lightgreen,
+  orange,
+  purple,
+  red,
+  teal,
+}
+
+export const dropIcon = color =>
+  new L.Icon({
+    iconUrl: color ? icons[color] : defaultIcon,
+    shadowUrl: shadow,
+    iconSize: [20, 25],
+    shadowSize: [20, 20],
+  })
+
 export const tileProviders = [
+  {
+    name: 'stadiaDark',
+    bestFor: 'dark',
+    args: {
+      url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+      attribution:
+        '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+    },
+  },
   {
     name: 'esriWorldStreetMap',
     args: {
-      url:
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
       attribution:
         'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012',
     },
@@ -11,24 +51,22 @@ export const tileProviders = [
   {
     name: 'esriWorldImagery',
     args: {
-      url:
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       attribution:
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
     },
   },
   {
+    bestFor: 'light',
     name: 'cartoDbVoyager',
     args: {
-      url:
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     },
   },
   {
     name: 'osm',
-    checked: true,
     args: {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution:
@@ -49,14 +87,6 @@ export const tileProviders = [
       url: 'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png',
       attribution:
         '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-    },
-  },
-  {
-    name: 'thunderforest',
-    args: {
-      url: 'https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png',
-      attribution:
-        '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   },
   {

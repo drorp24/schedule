@@ -5,9 +5,9 @@ import createEntities from './createEntities'
 const recommendationsApi = async runId => {
   const recommendationsEndpoint = `${process.env.REACT_APP_API_SERVER}${process.env.REACT_APP_RECOMMENDATIONS_ENDPOINT}${runId}`
   try {
-    console.log('sampleJson: ', sampleJson)
-    const recommendations = createEntities(sampleJson)
-    console.log('recommendations: ', recommendations)
+    // console.log('sampleJson: ', sampleJson)
+    // const recommendations = createEntities(sampleJson)
+    // console.log('recommendations: ', recommendations)
 
     // const ops = {}
     // sampleJson.forEach(({ single_op_id }) => {

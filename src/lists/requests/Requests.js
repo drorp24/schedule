@@ -6,7 +6,7 @@ import {
   selectEntities,
   selectEntityById,
 } from '../../redux/requests'
-import { selectSelectedEntity } from '../../redux/recommendations'
+import { selectSelectedEntities } from '../../redux/recommendations'
 import { selectEntities as selectRuns } from '../../redux/runs'
 
 import requestsFields from './requestsFields'
@@ -24,7 +24,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 12px',
-    color: config.requests.color,
+    // color: config.requests.color,
   },
   centered: {
     textAlign: 'center',
@@ -45,8 +45,8 @@ const properties = [
 const { requests: conf } = config
 
 const Requests = () => {
-  const selectedRecommendation = useSelector(selectSelectedEntity)
   const { selectedId: runId } = useSelector(selectRuns)
+  const { reqFulfilled } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
@@ -57,21 +57,8 @@ const Requests = () => {
   }, [dispatch, runId])
 
   useEffect(() => {
-    if (!selectedRecommendation || !selectedRecommendation.fulfills?.length)
-      return
-
-    const fulfilled = {}
-
-    selectedRecommendation.fulfills.forEach(
-      ({ delivery_request_id, option_id }) => {
-        // ToDo: there's no point in assigning option_id as there are multiple per request
-        // a 'true' value or similar would be less confusing
-        fulfilled[delivery_request_id] = option_id
-      }
-    )
-
-    setFilter(fulfilled)
-  }, [selectedRecommendation])
+    setFilter(reqFulfilled)
+  }, [reqFulfilled])
 
   return (
     <Table

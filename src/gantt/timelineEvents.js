@@ -1,11 +1,22 @@
 import { select } from '../redux/recommendations'
 // import itemTemplate from './itemTemplate'
+import { addToSelection, updateSelection } from '../redux/recommendations'
 
 export const selectRecommendation =
-  dispatch =>
+  ({ dispatch, timeline }) =>
   ({ items }) => {
     const selectedId = items[0]
+    const selected = timeline.getSelection()
     dispatch(select(selectedId))
+  }
+
+export const updateSelected =
+  ({ dispatch, timeline }) =>
+  ({ item }) => {
+    setTimeout(() => {
+      const selection = timeline.getSelection()
+      dispatch(updateSelection(selection))
+    }, 0)
   }
 
 // * Change detail level according to zoom. Left here for future use.

@@ -1,10 +1,12 @@
-export const color = [
+const color = [
   'red',
   'blue',
-  'green',
+  'orange',
   'purple',
   'indigo',
   'teal',
   'lightgreen',
   'amber',
 ]
+
+export default color

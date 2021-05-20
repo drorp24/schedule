@@ -6,7 +6,7 @@ import {
   selectEntities,
   selectEntityById,
 } from '../../redux/resources'
-import { selectSelectedEntity } from '../../redux/recommendations'
+import { selectSelectedEntities } from '../../redux/recommendations'
 import { selectEntities as selectRuns } from '../../redux/runs'
 
 import resourcesFields from '../resources/resourcesFields'
@@ -24,7 +24,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 12px',
-    color: config.resources.color,
+    // color: config.resources.color,
   },
   centered: {
     textAlign: 'center',
@@ -45,9 +45,8 @@ const properties = [
 const { resources: conf } = config
 
 const Resources = () => {
-  const selectedRecommendation = useSelector(selectSelectedEntity)
-  const { sortedEntities } = useSelector(selectEntities)
   const { selectedId: runId } = useSelector(selectRuns)
+  const { resEmployed } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
@@ -58,24 +57,8 @@ const Resources = () => {
   }, [dispatch, runId])
 
   useEffect(() => {
-    if (!selectedRecommendation || !selectedRecommendation.employs) return
-
-    const { platform_id, drone_package_config_id } = selectedRecommendation
-
-    const employed = {}
-
-    // ToDo: no foreign key from recommendation into resources
-    // the following is merely a guesswork:
-
-    sortedEntities.forEach(
-      ({ id, drone_loading_dock: { name, drone_type } }) => {
-        if (`${name}-${drone_type}` === platform_id)
-          employed[id] = drone_package_config_id
-      }
-    )
-
-    setFilter(employed)
-  }, [selectedRecommendation, sortedEntities])
+    setFilter(resEmployed)
+  }, [resEmployed])
 
   return (
     <Table

@@ -305,6 +305,7 @@ const Table = ({
                   selectEntityById,
                   properties,
                   TooltipDetails,
+                  filter,
                 })}
               </List>
             </>
@@ -315,10 +316,17 @@ const Table = ({
   )
 }
 
-const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
+const Row = ({
+  selectedId,
+  selectEntityById,
+  properties,
+  TooltipDetails,
+  filter,
+}) =>
   memo(({ index, style, data }) => {
     const entity = useSelector(selectEntityById(data[index]))
     const { id } = entity
+    const color = (filter && filter[id]) || 'inherit'
     const fields = map({ entity, properties })
 
     // const { light } = useMode()
@@ -343,7 +351,7 @@ const Row = ({ selectedId, selectEntityById, properties, TooltipDetails }) =>
         style={style}
       >
         {fields.map(({ name, value, icon, rowStyle }) => (
-          <Cell {...{ value, icon, cellStyle: rowStyle, key: name }} />
+          <Cell {...{ value, icon, cellStyle: rowStyle, key: name, color }} />
         ))}
 
         <Tooltip
@@ -378,10 +386,18 @@ const Header = ({ properties, style }) => {
   )
 }
 
-const Cell = ({ value, icon, cellStyle }) => {
+const Cell = ({ value, icon, cellStyle, color }) => {
   const alignment = typeof value === 'number' ? { textAlign: 'right' } : {}
   return (
-    <div style={{ ...styles.cell, ...cellStyle, ...alignment }} title={value}>
+    <div
+      style={{
+        ...styles.cell,
+        ...cellStyle,
+        ...alignment,
+        color: icon ? color : 'inherit',
+      }}
+      title={value}
+    >
       {icon || value}
     </div>
   )

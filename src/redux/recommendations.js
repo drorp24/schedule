@@ -25,7 +25,6 @@ export const fetchRecommendations = createAsyncThunk(
   async ({ runId, recommendationFields, buildTimeline }, thunkAPI) => {
     try {
       const response = await recommendationsApi(runId)
-      console.log('current response: ', response)
       const recommendations = response.map(recommendationFields)
       const timeline = buildTimeline({ recommendations })
       return { runId, recommendations }
@@ -51,7 +50,7 @@ export const fetchRecommendations = createAsyncThunk(
 // * reducers / actions
 const initialState = recommendationsAdapter.getInitialState({
   loading: 'idle',
-  selectedId: null,
+  selectedIds: [],
   meta: null,
 })
 
@@ -63,7 +62,14 @@ const recommendationsSlice = createSlice({
     add: recommendationsAdapter.addOne,
     update: recommendationsAdapter.updateOne,
     select: (state, { payload }) => {
-      state.selectedId = payload
+      state.selectedIds = [payload]
+    },
+    addToSelection: (state, { payload }) => {
+      const currentSelectionSet = new Set(state.selectedIds)
+      state.selectedIds = [...currentSelectionSet.add(payload)]
+    },
+    updateSelection: (state, { payload }) => {
+      state.selectedIds = payload
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -103,6 +109,7 @@ const recommendationsSlice = createSlice({
 })
 
 // * selectors (partly memoized)
+// Using createEntityAdapter's so-called simple selectors to gain access to more than one store slice
 const recommendationsSelectors = recommendationsAdapter.getSelectors()
 
 // combine all aspects of entities:
@@ -113,52 +120,132 @@ export const selectEntities = ({ recommendations }) => {
   const sortedEntities = recommendationsSelectors.selectAll(recommendations)
   const keyedEntities = recommendations.entities
   const ids = recommendationsSelectors.selectIds(recommendations)
-  const { loading, error, selectedId } = recommendations
+  const { loading, error, selectedIds } = recommendations
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedId,
+    selectedIds,
     loading,
     error,
     loaded,
   }
 }
 
-export const selectEntityById = id => ({ recommendations }) =>
-  recommendationsSelectors.selectById(recommendations, id)
+export const selectIds = ({ recommendations }) =>
+  recommendationsSelectors.selectIds(recommendations)
 
-export const selectSelectedId = ({ recommendations: { selectedId } }) =>
-  selectedId
+export const selectEntityById =
+  id =>
+  ({ recommendations }) =>
+    recommendationsSelectors.selectById(recommendations, id)
 
-export const selectSelectedEntity = ({ recommendations }) => {
-  const { selectedId } = recommendations
-  if (!selectedId) return null
+export const selectLocationsById =
+  id =>
+  ({ recommendations, requests }) => {
+    const entity = recommendationsSelectors.selectById(recommendations, id)
+    if (!entity) return console.error('No entity for id ', id)
 
-  const selectedEntity = selectEntityById(selectedId)({ recommendations })
+    const locations = []
+    const { fulfills } = entity
+    if (!fulfills?.length) return null
 
-  return selectedEntity
-}
+    fulfills.forEach(({ delivery_request_id }) => {
+      locations.push(requests.entities[delivery_request_id]?.location)
+    })
 
-export const selectSelectedLocations = ({ recommendations, requests }) => {
-  const { selectedId } = recommendations
-  if (!selectedId) return null
+    return locations
+  }
 
-  const selectedEntity = selectEntityById(selectedId)({ recommendations })
+export const selectSelectedIds = ({ recommendations: { selectedIds } }) =>
+  selectedIds
 
-  const locations = []
-  const { fulfills } = selectedEntity
-  if (!fulfills?.length) return null
+export const selectSelectedEntities = ({
+  recommendations,
+  requests,
+  resources,
+}) => {
+  const { selectedIds } = recommendations
+  if (!selectedIds?.length) return { selectedIds }
 
-  fulfills.forEach(({ delivery_request_id }) => {
-    locations.push(requests.entities[delivery_request_id]?.location)
+  const selectedRecs = recommendationsSelectors
+    .selectAll(recommendations)
+    .filter(({ id }) => selectedIds.includes(id))
+
+  // ToDo: Acquire foreign key from recommendation into employed resource, this is fake
+  const resEmployed = {}
+
+  selectedRecs.forEach(({ employs, color }) => {
+    if (!employs) return
+    const { platform_id } = employs
+    if (!platform_id) return
+    Object.values(resources.entities).forEach(({ id, drone_loading_dock }) => {
+      if (!drone_loading_dock) return
+      const { name, drone_type } = drone_loading_dock
+      // ToDo: Remove. Demo only
+      const fake_platform_id = 'drone_loading_dock_2-drone_type_4'
+      // ToDo: Remove. Demo only
+      if (`${name}-${drone_type}` === fake_platform_id) resEmployed[id] = color
+    })
   })
 
-  return locations
+  const reqFulfilled = {}
+  const reqLocations = []
+  const reqDropPoints = []
+
+  selectedRecs.forEach(({ fulfills, color }) => {
+    fulfills?.length &&
+      fulfills.forEach(({ delivery_request_id }) => {
+        reqFulfilled[delivery_request_id] = color
+        const request = requests.entities[delivery_request_id]
+        if (!request) return console.error('No request ', delivery_request_id)
+        if (request.location?.type)
+          reqLocations.push({ ...request.location, color })
+        if (request.dropPoints?.length)
+          request.dropPoints.forEach(point =>
+            reqDropPoints.push({ ...point, color })
+          )
+      })
+  })
+
+  return {
+    selectedIds,
+    selectedRecs,
+    resEmployed,
+    reqFulfilled,
+    reqLocations,
+    reqDropPoints,
+  }
 }
 
+// export const selectSelectedLocations = ({ recommendations, requests }) => {
+//   const { selectedId } = recommendations
+//   if (!selectedId) return null
+
+//   const selectedEntity = selectEntityById(selectedId)({ recommendations })
+//   if (!selectedEntity) return null
+
+//   const locations = []
+//   const { fulfills } = selectedEntity
+//   if (!fulfills?.length) return null
+
+//   fulfills.forEach(({ delivery_request_id }) => {
+//     locations.push(requests.entities[delivery_request_id]?.location)
+//   })
+
+//   return locations
+// }
+
 const { reducer, actions } = recommendationsSlice
-export const { clear, add, update, select, error } = actions
+export const {
+  clear,
+  add,
+  update,
+  select,
+  addToSelection,
+  updateSelection,
+  error,
+} = actions
 
 export default reducer

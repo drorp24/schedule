@@ -7,6 +7,8 @@ import EndIcon from '@material-ui/icons/TimerOff'
 import PlatformIcon from '@material-ui/icons/FlightTakeoffOutlined'
 import PackageIcon from '@material-ui/icons/GroupWorkOutlined'
 import FormationIcon from '@material-ui/icons/Inventory2Outlined'
+import RecIcon from '@material-ui/icons/SettingsSuggestOutlined'
+import Divider from '@material-ui/core/Divider'
 
 const styles = {
   root: theme => ({
@@ -31,6 +33,14 @@ const styles = {
   }),
   line: {
     width: '100%',
+  },
+  divider: {
+    paddingRight: '0.5rem',
+    '& hr': {
+      color: 'white',
+      borderBottomColor: 'rgba(256, 256, 256, 0.4)',
+      borderWidth: '1px',
+    },
   },
 }
 
@@ -75,6 +85,7 @@ export const useRecDetails = ({ setHovered, noneHovered }) => {
 }
 
 const RecDetails = ({
+  id,
   start,
   end,
   platform_id,
@@ -83,6 +94,16 @@ const RecDetails = ({
   classname,
 }) => (
   <div css={styles.root} id="recDetails" className={classname}>
+    <div>
+      <RecIcon />
+    </div>
+    <div>{id}</div>
+
+    <div></div>
+    <div css={styles.divider}>
+      <Divider />
+    </div>
+
     <div>
       <StartIcon />
     </div>

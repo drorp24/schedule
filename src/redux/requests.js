@@ -113,8 +113,12 @@ export const selectEntities = ({ requests }) => {
   }
 }
 
-export const selectEntityById = id => ({ requests }) =>
-  requestsSelectors.selectById(requests, id)
+export const selectIds = ({ requests }) => requestsSelectors.selectIds(requests)
+
+export const selectEntityById =
+  id =>
+  ({ requests }) =>
+    requestsSelectors.selectById(requests, id)
 
 export const selectSelectedId = ({ requests: { selectedId } }) => selectedId
 
@@ -125,6 +129,16 @@ export const selectSelectedEntity = ({ requests }) => {
   const selectedEntity = selectEntityById(selectedId)({ requests })
 
   return { selectedEntity }
+}
+
+export const selectLocations = ({ requests }) => {
+  const allRequests = requestsSelectors.selectAll(requests)
+  if (!allRequests.length) return null
+  const locations = []
+  allRequests.forEach(({ location }) => {
+    if (location.type) locations.push(location)
+  })
+  return locations
 }
 
 const { reducer, actions } = requestsSlice

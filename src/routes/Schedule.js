@@ -102,14 +102,14 @@ const Schedule = () => {
     results: {
       display: 'grid',
       gridTemplateRows: '60% 40%',
-      gap: '0.2rem',
+      gap: '0.35rem',
       backgroundColor: 'white',
       overflow: 'hidden',
     },
     gantt: theme => ({
       overflow: 'scroll',
       ...noScrollBar,
-      border: '1px solid rgba(0, 0, 0, 0.3)',
+      border: '1px solid rgba(0, 0, 0, 0.5)',
       // paddingRight: '2px',
     }),
     map: {},

@@ -58,6 +58,7 @@ import en from '../i18n/en.json'
 
 export const timelineOptions = ({ locale, rtl }) => ({
   editable: true,
+  selectable: true,
   groupEditable: true,
   dataAttributes: 'all',
   locales: {
@@ -67,6 +68,7 @@ export const timelineOptions = ({ locale, rtl }) => ({
   locale,
   rtl,
   snap: null,
+  multiselect: true,
   // template: itemTemplate,
   // tooltip: {
   //   followMouse: true,
@@ -77,7 +79,7 @@ export const timelineOptions = ({ locale, rtl }) => ({
   onMove: (item, callback) => {
     console.log('onMove called')
     console.log('item: ', item)
-    callback(item)
+    // callback(item)
   },
   onAdd: (item, callback) => {
     console.log('onAdd called')

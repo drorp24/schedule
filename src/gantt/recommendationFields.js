@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
+import color from '../styling/color'
+import pickNext from '../utility/pickNext'
 
 const recommendationFields = ({
   id,
@@ -27,6 +29,7 @@ const recommendationFields = ({
   },
   // ToDo: fake data; replace with new Api
   formation_id: uuidv4(),
+  color: pickNext(color),
 })
 
 export default recommendationFields
