@@ -1,30 +1,30 @@
 import * as L from 'leaflet'
 
 import shadow from '../assets/marker-shadow.png'
-import amber from './markers/amber.svg'
+import gold from './markers/gold.svg'
 import blue from './markers/blue.svg'
-import indigo from './markers/indigo.svg'
+import deepskyblue from './markers/deepskyblue.svg'
 import lightgreen from './markers/lightgreen.svg'
 import orange from './markers/orange.svg'
-import purple from './markers/purple.svg'
+import mediumpurple from './markers/mediumpurple.svg'
 import red from './markers/red.svg'
 import teal from './markers/teal.svg'
 import defaultIcon from './markers/default.png'
 
 const icons = {
-  amber,
-  blue,
-  indigo,
-  lightgreen,
-  orange,
-  purple,
   red,
+  blue,
+  orange,
+  mediumpurple,
+  deepskyblue,
   teal,
+  lightgreen,
+  gold,
 }
 
 export const dropIcon = color =>
   new L.Icon({
-    iconUrl: color ? icons[color] : defaultIcon,
+    iconUrl: color && icons[color] ? icons[color] : defaultIcon,
     shadowUrl: shadow,
     iconSize: [20, 25],
     shadowSize: [20, 20],

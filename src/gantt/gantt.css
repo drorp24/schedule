@@ -63,22 +63,22 @@
   background-color: rgb(219, 132, 0);
 }
 
-.purple .vis-item,
-.purple.vis-label,
-#recDetails.purple {
-  background-color: #9c27b0;
+.mediumpurple .vis-item,
+.mediumpurple.vis-label,
+#recDetails.mediumpurple {
+  background-color: #9370db;
 }
 
-.indigo .vis-item,
-.indigo.vis-label,
-#recDetails.indigo {
-  background-color: #3f51b5;
+.deepskyblue .vis-item,
+.deepskyblue.vis-label,
+#recDetails.deepskyblue {
+  background-color: #00bfff;
 }
 
 .teal .vis-item,
 .teal.vis-label,
 #recDetails.teal {
-  background-color: #1de9b6;
+  background-color: #008080;
 }
 
 .lightgreen .vis-item,
@@ -87,10 +87,10 @@
   background-color: #8bc34a;
 }
 
-.amber .vis-item,
-.amber.vis-label,
-#recDetails.amber {
-  background-color: #ffc107;
+.gold .vis-item,
+.gold.vis-label,
+#recDetails.gold {
+  background-color: #ffd700;
 }
 
 @keyframes highlight {

@@ -2,11 +2,11 @@ const color = [
   'red',
   'blue',
   'orange',
-  'purple',
-  'indigo',
+  'mediumpurple',
+  'deepskyblue',
   'teal',
   'lightgreen',
-  'amber',
+  'gold',
 ]
 
 export default color

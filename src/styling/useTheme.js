@@ -28,8 +28,8 @@ const useTheme = ({ mode, direction } = {}) => {
       dark: {
         primary: '#D5DDF6',
         paper: '#3b3b3b',
-        backdrop: 'rgba(256, 256, 256, 0.03)',
-        darkerBackdrop: 'rgba(0, 0, 0, 0.65)',
+        backdrop: '#363636',
+        darkerBackdrop: 'rgba(0, 0, 0, 0.7)',
         prominent: 'rgba(0, 0, 0, 0.7)',
         border: 'rgba(256, 256, 256, 0.15)',
         text: '#9e9e9e',
