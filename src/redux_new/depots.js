@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
-import depotsApi from '../api/depotsApi'
+import depotsApi from '../api_new/depotsApi'
 
 // * normalization
 const depotsAdapter = createEntityAdapter({

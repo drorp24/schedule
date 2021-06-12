@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
-import workplanApi from '../api/workplanApi'
+import workplanApi from '../api_new/workplanApi'
 
 // * normalization
 const workplanAdapter = createEntityAdapter({

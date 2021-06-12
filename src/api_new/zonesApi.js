@@ -1,4 +1,5 @@
 import axios from 'axios'
+import sampleZones from './sampleData/zones.json'
 
 const zonesApi = async runId => {
   const zones = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_ZONES_ENDPOINT}`
@@ -8,7 +9,7 @@ const zonesApi = async runId => {
     if (response.error) throw new Error(response.error.message?.toString())
     return response.data
   } catch (error) {
-    console.error('error: ', error)
+    console.error('api error: ', error)
     // eslint-disable-next-line no-throw-literal
     throw {
       api: 'zones',
@@ -18,4 +19,8 @@ const zonesApi = async runId => {
   }
 }
 
-export default zonesApi
+// test data
+const sampleZonesApi = runId => Promise.resolve(sampleZones)
+
+// export default zonesApi
+export default sampleZonesApi

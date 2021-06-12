@@ -7,6 +7,7 @@ import requests from './requests'
 import resources from './resources'
 import directives from './directives'
 import recommendations from './recommendations'
+import zones from './zones'
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     resources,
     directives,
     recommendations,
+    zones,
   },
 })
 

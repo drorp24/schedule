@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import SelectedGeo from './SelectedGeo'
+import ZonesControl from './ZonesControl'
 
 import 'leaflet/dist/leaflet.css'
 import {
@@ -39,6 +40,7 @@ const Map = () => {
           </LayersControl.BaseLayer>
         ))}
       </LayersControl>
+      <ZonesControl />
       <ZoomControl position="bottomleft" />
       <SelectedGeo />
     </MapContainer>

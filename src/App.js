@@ -11,9 +11,9 @@ import { Helmet } from 'react-helmet'
 import { IntlProvider } from 'react-intl'
 import he from './i18n/he.json'
 import en from './i18n/en.json'
-import { useDirection } from './utility/appUtilities'
+import { useLocale } from './utility/appUtilities'
 
-import ProtectedRoute from './auth/ProtectedRoute'
+// import ProtectedRoute from './auth/ProtectedRoute'
 import Login from './auth/Login'
 import Home from './routes/Home'
 
@@ -29,7 +29,7 @@ import useTheme from './styling/useTheme'
 
 export default function App() {
   const { mode, locale } = useSelector(store => store.app)
-  const direction = useDirection()
+  const { direction } = useLocale()
   const theme = useTheme({ mode, direction })
   const messages = { he, en }
 

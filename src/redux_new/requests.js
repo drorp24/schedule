@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from '@reduxjs/toolkit'
 
-import requestsApi from '../api/requestsApi'
+import requestsApi from '../api_new/requestsApi'
 
 // * normalization
 const requestsAdapter = createEntityAdapter({

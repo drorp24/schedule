@@ -265,7 +265,7 @@ const Table = ({
 
   const itemCount = ids.length
   const itemSize = usePixels(3)
-  const direction = useDirection()
+  const { direction } = useLocale()
   const outerRef = useRef()
 
   useEffect(() => {

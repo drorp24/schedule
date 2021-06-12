@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { select } from '../../redux/requests'
 
 import useTheme from '../../styling/useTheme'
-import { useDirection, useMode, useLocalDate } from '../../utility/appUtilities'
+import { useLocale, useMode, useLocalDate } from '../../utility/appUtilities'
 
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
@@ -30,7 +30,7 @@ const RequestDetails = ({
     options,
   },
 }) => {
-  const direction = useDirection()
+  const { direction } = useLocale()
   const { otherMode } = useMode()
   const theme = useTheme({ mode: otherMode, direction })
   const dispatch = useDispatch(0)

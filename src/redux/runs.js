@@ -104,8 +104,10 @@ export const selectEntities = ({ runs }) => {
   }
 }
 
-export const selectEntityById = id => ({ runs }) =>
-  runsSelectors.selectById(runs, id)
+export const selectEntityById =
+  id =>
+  ({ runs }) =>
+    runsSelectors.selectById(runs, id)
 
 export const selectSelectedId = ({ runs: { selectedId } }) => selectedId
 

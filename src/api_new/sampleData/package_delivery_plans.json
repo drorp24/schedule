@@ -1,0 +1,372 @@
+{
+  "6e3f0bbd-7efa-4099-a324-136e67f7ef47": {
+    "package_delivery_plan_id": "6e3f0bbd-7efa-4099-a324-136e67f7ef47",
+    "drop_point": [35.20466146348169, 33.26491423171958],
+    "package_type": "PackageType.LARGE"
+  },
+  "029d2406-8d8c-4b8a-8dac-4ef21c893b48": {
+    "package_delivery_plan_id": "029d2406-8d8c-4b8a-8dac-4ef21c893b48",
+    "drop_point": [35.56912820230772, 33.19400215770866],
+    "package_type": "PackageType.LARGE"
+  },
+  "c2bb28f5-23a3-4a13-9d14-5b966004d768": {
+    "package_delivery_plan_id": "c2bb28f5-23a3-4a13-9d14-5b966004d768",
+    "drop_point": [35.63954007286908, 33.05552815303988],
+    "package_type": "PackageType.LARGE"
+  },
+  "bb068266-762c-4e6e-b73b-620dd1bfdbc8": {
+    "package_delivery_plan_id": "bb068266-762c-4e6e-b73b-620dd1bfdbc8",
+    "drop_point": [35.610229618883245, 32.955208076002535],
+    "package_type": "PackageType.LARGE"
+  },
+  "b727f659-68e4-4d2f-b2e6-1418d457ab94": {
+    "package_delivery_plan_id": "b727f659-68e4-4d2f-b2e6-1418d457ab94",
+    "drop_point": [35.450528308649936, 32.678495206487575],
+    "package_type": "PackageType.LARGE"
+  },
+  "d196e5bc-2597-4698-ae5a-28b168c9a054": {
+    "package_delivery_plan_id": "d196e5bc-2597-4698-ae5a-28b168c9a054",
+    "drop_point": [35.517253580946836, 32.8972495896844],
+    "package_type": "PackageType.LARGE"
+  },
+  "afd2ca18-e0b5-40e5-923d-1b7948783a7c": {
+    "package_delivery_plan_id": "afd2ca18-e0b5-40e5-923d-1b7948783a7c",
+    "drop_point": [35.57710731204186, 32.940851039940426],
+    "package_type": "PackageType.LARGE"
+  },
+  "3bc5a0a7-76aa-4380-be7d-8d4552aa1316": {
+    "package_delivery_plan_id": "3bc5a0a7-76aa-4380-be7d-8d4552aa1316",
+    "drop_point": [35.44955235461672, 33.13466772107773],
+    "package_type": "PackageType.LARGE"
+  },
+  "1337eeb7-5eaf-4db8-88e6-581e20256049": {
+    "package_delivery_plan_id": "1337eeb7-5eaf-4db8-88e6-581e20256049",
+    "drop_point": [35.740950565046134, 32.911233897242745],
+    "package_type": "PackageType.LARGE"
+  },
+  "d8463443-39ed-4e7d-a1f0-c559f9cae855": {
+    "package_delivery_plan_id": "d8463443-39ed-4e7d-a1f0-c559f9cae855",
+    "drop_point": [35.47336361647443, 33.37833752619027],
+    "package_type": "PackageType.LARGE"
+  },
+  "6c03bded-95e2-438a-bb08-ef2334db39a9": {
+    "package_delivery_plan_id": "6c03bded-95e2-438a-bb08-ef2334db39a9",
+    "drop_point": [35.59562355138475, 33.40834266231055],
+    "package_type": "PackageType.LARGE"
+  },
+  "23ba2068-89a2-469b-8a53-a88f032fea64": {
+    "package_delivery_plan_id": "23ba2068-89a2-469b-8a53-a88f032fea64",
+    "drop_point": [35.155996532129386, 33.19007733235395],
+    "package_type": "PackageType.LARGE"
+  },
+  "6047bf3b-876a-4c3c-b0bd-272fd697215a": {
+    "package_delivery_plan_id": "6047bf3b-876a-4c3c-b0bd-272fd697215a",
+    "drop_point": [35.394229400779516, 32.94155736218977],
+    "package_type": "PackageType.LARGE"
+  },
+  "8a629db6-600b-43c3-831d-8ac0cb24cfef": {
+    "package_delivery_plan_id": "8a629db6-600b-43c3-831d-8ac0cb24cfef",
+    "drop_point": [35.38492227022093, 33.26738187146512],
+    "package_type": "PackageType.LARGE"
+  },
+  "170f45a9-f084-4891-ba2e-1baa551ece05": {
+    "package_delivery_plan_id": "170f45a9-f084-4891-ba2e-1baa551ece05",
+    "drop_point": [35.508969127557904, 33.22342277525497],
+    "package_type": "PackageType.LARGE"
+  },
+  "a8482e54-9510-43ff-a9ad-0ee5fd6d45aa": {
+    "package_delivery_plan_id": "a8482e54-9510-43ff-a9ad-0ee5fd6d45aa",
+    "drop_point": [35.463508324771425, 33.27329210180136],
+    "package_type": "PackageType.LARGE"
+  },
+  "01ab5ef7-0bc5-408f-af44-8b7756f94eb8": {
+    "package_delivery_plan_id": "01ab5ef7-0bc5-408f-af44-8b7756f94eb8",
+    "drop_point": [35.557232788251476, 33.7167764309568],
+    "package_type": "PackageType.LARGE"
+  },
+  "2ed2371d-c66d-4a09-9cc8-00ef2decb17d": {
+    "package_delivery_plan_id": "2ed2371d-c66d-4a09-9cc8-00ef2decb17d",
+    "drop_point": [35.402170994919885, 33.818852304459476],
+    "package_type": "PackageType.LARGE"
+  },
+  "eb138cf0-9979-4ecd-9b6c-efb95bd9dd26": {
+    "package_delivery_plan_id": "eb138cf0-9979-4ecd-9b6c-efb95bd9dd26",
+    "drop_point": [35.43119428094612, 33.62580930071106],
+    "package_type": "PackageType.LARGE"
+  },
+  "7e8bcc94-5fb4-460e-9527-c668f6579d32": {
+    "package_delivery_plan_id": "7e8bcc94-5fb4-460e-9527-c668f6579d32",
+    "drop_point": [35.521610173136985, 33.549485172965866],
+    "package_type": "PackageType.LARGE"
+  },
+  "27cbd23c-8213-401c-b220-578328e87e46": {
+    "package_delivery_plan_id": "27cbd23c-8213-401c-b220-578328e87e46",
+    "drop_point": [35.3936903173404, 33.183627844425516],
+    "package_type": "PackageType.LARGE"
+  },
+  "6bfba3de-57ac-44ee-91bc-aa7ac40e5c9a": {
+    "package_delivery_plan_id": "6bfba3de-57ac-44ee-91bc-aa7ac40e5c9a",
+    "drop_point": [35.53840640347772, 33.48567928184834],
+    "package_type": "PackageType.LARGE"
+  },
+  "ca7f1bdf-30a6-497d-a338-ac3bf2be11d8": {
+    "package_delivery_plan_id": "ca7f1bdf-30a6-497d-a338-ac3bf2be11d8",
+    "drop_point": [35.51618504102059, 33.79673475028122],
+    "package_type": "PackageType.LARGE"
+  },
+  "7a84e7a1-77c1-4cac-8e8d-d12a8254bb88": {
+    "package_delivery_plan_id": "7a84e7a1-77c1-4cac-8e8d-d12a8254bb88",
+    "drop_point": [35.489799613308804, 33.92574712383951],
+    "package_type": "PackageType.LARGE"
+  },
+  "f128adfe-62c3-4d61-84dd-ec6b3aff3ad3": {
+    "package_delivery_plan_id": "f128adfe-62c3-4d61-84dd-ec6b3aff3ad3",
+    "drop_point": [35.78039347594478, 33.01382688054127],
+    "package_type": "PackageType.LARGE"
+  },
+  "47a6138e-02f6-4325-9071-6dc7e81c54b8": {
+    "package_delivery_plan_id": "47a6138e-02f6-4325-9071-6dc7e81c54b8",
+    "drop_point": [35.707958088781915, 33.13232589260416],
+    "package_type": "PackageType.LARGE"
+  },
+  "0ce1b6b4-9c38-4f21-af4c-845051897913": {
+    "package_delivery_plan_id": "0ce1b6b4-9c38-4f21-af4c-845051897913",
+    "drop_point": [35.63816257905544, 33.14957190142578],
+    "package_type": "PackageType.LARGE"
+  },
+  "ab52c46e-1107-485f-8538-18ded640b7d5": {
+    "package_delivery_plan_id": "ab52c46e-1107-485f-8538-18ded640b7d5",
+    "drop_point": [35.53929949552083, 33.258794516181204],
+    "package_type": "PackageType.LARGE"
+  },
+  "b15bce19-3ed7-42dc-8c3a-3252ba1e5ff2": {
+    "package_delivery_plan_id": "b15bce19-3ed7-42dc-8c3a-3252ba1e5ff2",
+    "drop_point": [35.63807017437722, 33.03681522687927],
+    "package_type": "PackageType.LARGE"
+  },
+  "34e72925-01f1-4cc7-8a7a-2cf0dfc8c7c4": {
+    "package_delivery_plan_id": "34e72925-01f1-4cc7-8a7a-2cf0dfc8c7c4",
+    "drop_point": [35.48600817244474, 33.55785581679475],
+    "package_type": "PackageType.LARGE"
+  },
+  "bebeba09-9b46-47e4-9a20-163a506cfe32": {
+    "package_delivery_plan_id": "bebeba09-9b46-47e4-9a20-163a506cfe32",
+    "drop_point": [35.52404725666742, 33.53746087784474],
+    "package_type": "PackageType.LARGE"
+  },
+  "4f1c48fe-5c10-4d5c-8ffc-1c822b8a260d": {
+    "package_delivery_plan_id": "4f1c48fe-5c10-4d5c-8ffc-1c822b8a260d",
+    "drop_point": [35.477340618842796, 33.166069179040306],
+    "package_type": "PackageType.LARGE"
+  },
+  "21d28d43-71ca-48d7-9ad1-077620b3bc4e": {
+    "package_delivery_plan_id": "21d28d43-71ca-48d7-9ad1-077620b3bc4e",
+    "drop_point": [35.416335890578196, 33.218741202521144],
+    "package_type": "PackageType.LARGE"
+  },
+  "b40ac1f8-8a64-46e8-967a-63e038505de4": {
+    "package_delivery_plan_id": "b40ac1f8-8a64-46e8-967a-63e038505de4",
+    "drop_point": [35.420901360550936, 33.453783025223146],
+    "package_type": "PackageType.LARGE"
+  },
+  "60eb46bc-982a-4db7-9a22-9140a5567638": {
+    "package_delivery_plan_id": "60eb46bc-982a-4db7-9a22-9140a5567638",
+    "drop_point": [35.29888646713899, 33.55704806284721],
+    "package_type": "PackageType.LARGE"
+  },
+  "82b00a63-0c1d-49ee-a1d6-de55b5d9cb08": {
+    "package_delivery_plan_id": "82b00a63-0c1d-49ee-a1d6-de55b5d9cb08",
+    "drop_point": [35.29397221704206, 33.89099993866194],
+    "package_type": "PackageType.LARGE"
+  },
+  "92412bb4-b610-47ad-a474-8d1dcb529531": {
+    "package_delivery_plan_id": "92412bb4-b610-47ad-a474-8d1dcb529531",
+    "drop_point": [35.778909082565384, 32.80285838807397],
+    "package_type": "PackageType.LARGE"
+  },
+  "c142f376-eaf6-4919-a65d-9bb2f2629ecb": {
+    "package_delivery_plan_id": "c142f376-eaf6-4919-a65d-9bb2f2629ecb",
+    "drop_point": [35.58665238607204, 33.41955713403728],
+    "package_type": "PackageType.LARGE"
+  },
+  "12ccd700-cc2b-42ae-9505-aa5fafca6dd7": {
+    "package_delivery_plan_id": "12ccd700-cc2b-42ae-9505-aa5fafca6dd7",
+    "drop_point": [35.398500328087074, 33.17404937861803],
+    "package_type": "PackageType.LARGE"
+  },
+  "31eaa056-f901-432e-aba9-7c91d41c8595": {
+    "package_delivery_plan_id": "31eaa056-f901-432e-aba9-7c91d41c8595",
+    "drop_point": [35.22012120519806, 33.20924811512772],
+    "package_type": "PackageType.LARGE"
+  },
+  "076e66fe-2ecc-4603-adf8-60bd2b706f16": {
+    "package_delivery_plan_id": "076e66fe-2ecc-4603-adf8-60bd2b706f16",
+    "drop_point": [35.429593810732996, 32.926233443526876],
+    "package_type": "PackageType.LARGE"
+  },
+  "8875f3a4-67f0-491a-bf6b-e81149959a3e": {
+    "package_delivery_plan_id": "8875f3a4-67f0-491a-bf6b-e81149959a3e",
+    "drop_point": [35.39266104151509, 33.06246049643007],
+    "package_type": "PackageType.LARGE"
+  },
+  "621cea7b-b4e8-495e-8731-4ac47ba090c2": {
+    "package_delivery_plan_id": "621cea7b-b4e8-495e-8731-4ac47ba090c2",
+    "drop_point": [35.41285050655638, 33.05586833830305],
+    "package_type": "PackageType.LARGE"
+  },
+  "efc1e9e0-d9b0-4a2e-9853-df725db3f032": {
+    "package_delivery_plan_id": "efc1e9e0-d9b0-4a2e-9853-df725db3f032",
+    "drop_point": [35.425075892055816, 33.054067976685786],
+    "package_type": "PackageType.LARGE"
+  },
+  "1aed4304-0fc1-4faf-b0e2-042c9b11aee3": {
+    "package_delivery_plan_id": "1aed4304-0fc1-4faf-b0e2-042c9b11aee3",
+    "drop_point": [35.89697810426262, 33.32488466066313],
+    "package_type": "PackageType.LARGE"
+  },
+  "0c19e6e8-05bf-4910-9b37-39ffcc65dc06": {
+    "package_delivery_plan_id": "0c19e6e8-05bf-4910-9b37-39ffcc65dc06",
+    "drop_point": [35.22339695170091, 33.51235367402918],
+    "package_type": "PackageType.LARGE"
+  },
+  "d0c8b887-fb78-455c-ad5d-491aa003db0a": {
+    "package_delivery_plan_id": "d0c8b887-fb78-455c-ad5d-491aa003db0a",
+    "drop_point": [35.422451291839735, 33.46914513855271],
+    "package_type": "PackageType.LARGE"
+  },
+  "819a27c9-d457-43c9-b70e-c0c251fee00d": {
+    "package_delivery_plan_id": "819a27c9-d457-43c9-b70e-c0c251fee00d",
+    "drop_point": [35.32777045745866, 33.27808553420987],
+    "package_type": "PackageType.LARGE"
+  },
+  "b25ae825-e6c0-4e22-a09b-cbc450a9e50a": {
+    "package_delivery_plan_id": "b25ae825-e6c0-4e22-a09b-cbc450a9e50a",
+    "drop_point": [35.43748606400849, 33.35959363935929],
+    "package_type": "PackageType.LARGE"
+  },
+  "b565392e-9514-4556-ad2a-1b34381fe9d8": {
+    "package_delivery_plan_id": "b565392e-9514-4556-ad2a-1b34381fe9d8",
+    "drop_point": [35.734963850108585, 33.36871266701942],
+    "package_type": "PackageType.LARGE"
+  },
+  "d8de618e-a383-404d-b241-bc388af0c354": {
+    "package_delivery_plan_id": "d8de618e-a383-404d-b241-bc388af0c354",
+    "drop_point": [35.65926506807069, 33.330071948209806],
+    "package_type": "PackageType.LARGE"
+  },
+  "4854bb2a-ba27-46ca-abc0-fe1f6f676e7a": {
+    "package_delivery_plan_id": "4854bb2a-ba27-46ca-abc0-fe1f6f676e7a",
+    "drop_point": [35.734362722541945, 33.16247916000659],
+    "package_type": "PackageType.LARGE"
+  },
+  "099ccca5-24e4-432d-8c0b-a8f09c5c38b5": {
+    "package_delivery_plan_id": "099ccca5-24e4-432d-8c0b-a8f09c5c38b5",
+    "drop_point": [35.17223498617605, 33.17656676339759],
+    "package_type": "PackageType.LARGE"
+  },
+  "5c5a5cec-9cd7-45b1-ab96-0378315eef58": {
+    "package_delivery_plan_id": "5c5a5cec-9cd7-45b1-ab96-0378315eef58",
+    "drop_point": [35.23696566414145, 33.277150812981915],
+    "package_type": "PackageType.LARGE"
+  },
+  "d5feb06d-e8f2-4879-8cdd-57da557b263a": {
+    "package_delivery_plan_id": "d5feb06d-e8f2-4879-8cdd-57da557b263a",
+    "drop_point": [35.23158842493554, 33.3291024021758],
+    "package_type": "PackageType.LARGE"
+  },
+  "3cfd4d6e-474e-4dd4-9cae-63640f0c1278": {
+    "package_delivery_plan_id": "3cfd4d6e-474e-4dd4-9cae-63640f0c1278",
+    "drop_point": [35.216791833398084, 33.37152045411073],
+    "package_type": "PackageType.LARGE"
+  },
+  "b52b2539-3f69-437e-9f10-a88913636a81": {
+    "package_delivery_plan_id": "b52b2539-3f69-437e-9f10-a88913636a81",
+    "drop_point": [35.18226478814233, 33.12492281822847],
+    "package_type": "PackageType.LARGE"
+  },
+  "7732eefb-894f-4f61-9591-552e2a508874": {
+    "package_delivery_plan_id": "7732eefb-894f-4f61-9591-552e2a508874",
+    "drop_point": [35.13273035583267, 33.410244670070874],
+    "package_type": "PackageType.LARGE"
+  },
+  "c81bed37-f511-449d-ba2d-e1343ab368b1": {
+    "package_delivery_plan_id": "c81bed37-f511-449d-ba2d-e1343ab368b1",
+    "drop_point": [35.25525577286009, 33.53251025363387],
+    "package_type": "PackageType.LARGE"
+  },
+  "c1e32921-378f-41b0-bb76-64887845ee57": {
+    "package_delivery_plan_id": "c1e32921-378f-41b0-bb76-64887845ee57",
+    "drop_point": [35.25474367819396, 33.801144259198225],
+    "package_type": "PackageType.LARGE"
+  },
+  "a871e4a4-9d12-4433-b17b-21ae0cf084a1": {
+    "package_delivery_plan_id": "a871e4a4-9d12-4433-b17b-21ae0cf084a1",
+    "drop_point": [35.437791948881234, 32.967541127788074],
+    "package_type": "PackageType.LARGE"
+  },
+  "4f5f8fa1-e998-4446-9bda-c89566a058f9": {
+    "package_delivery_plan_id": "4f5f8fa1-e998-4446-9bda-c89566a058f9",
+    "drop_point": [35.38121087594855, 32.87975104106832],
+    "package_type": "PackageType.LARGE"
+  },
+  "497c0e3e-dd43-4728-8fd0-841990ed65a0": {
+    "package_delivery_plan_id": "497c0e3e-dd43-4728-8fd0-841990ed65a0",
+    "drop_point": [35.100747242124456, 33.597598969787754],
+    "package_type": "PackageType.LARGE"
+  },
+  "0d71ca10-4f83-420d-a558-6d36a676ef5a": {
+    "package_delivery_plan_id": "0d71ca10-4f83-420d-a558-6d36a676ef5a",
+    "drop_point": [35.59994103140605, 32.71753878004375],
+    "package_type": "PackageType.LARGE"
+  },
+  "43e1e1a5-3901-476a-95dd-25c511fc4f3e": {
+    "package_delivery_plan_id": "43e1e1a5-3901-476a-95dd-25c511fc4f3e",
+    "drop_point": [35.353288369924776, 32.87940178555678],
+    "package_type": "PackageType.LARGE"
+  },
+  "95a5de14-5ee1-4d49-93bc-81b94974455c": {
+    "package_delivery_plan_id": "95a5de14-5ee1-4d49-93bc-81b94974455c",
+    "drop_point": [35.333638935991594, 32.94916851988576],
+    "package_type": "PackageType.LARGE"
+  },
+  "3de91a29-277a-43e5-8d0f-93bc2d2f0869": {
+    "package_delivery_plan_id": "3de91a29-277a-43e5-8d0f-93bc2d2f0869",
+    "drop_point": [35.33959880010686, 33.067275454087834],
+    "package_type": "PackageType.LARGE"
+  },
+  "b4d6c0f9-138e-4cf0-9be9-da5da405f4cd": {
+    "package_delivery_plan_id": "b4d6c0f9-138e-4cf0-9be9-da5da405f4cd",
+    "drop_point": [35.41727614487661, 33.05388111548915],
+    "package_type": "PackageType.LARGE"
+  },
+  "7ea0db66-0d50-4454-82b4-817aa748530d": {
+    "package_delivery_plan_id": "7ea0db66-0d50-4454-82b4-817aa748530d",
+    "drop_point": [35.351718557236666, 33.15826812203398],
+    "package_type": "PackageType.LARGE"
+  },
+  "959a155f-dff5-4138-925a-a6cb7393e44f": {
+    "package_delivery_plan_id": "959a155f-dff5-4138-925a-a6cb7393e44f",
+    "drop_point": [35.437908871308046, 33.415558244498165],
+    "package_type": "PackageType.LARGE"
+  },
+  "44efc217-4737-4423-aa7b-4d8a85a92adf": {
+    "package_delivery_plan_id": "44efc217-4737-4423-aa7b-4d8a85a92adf",
+    "drop_point": [35.47279957976281, 33.54723352089426],
+    "package_type": "PackageType.LARGE"
+  },
+  "2d37aa99-3a7d-4bf6-8a1d-a417ea581d3f": {
+    "package_delivery_plan_id": "2d37aa99-3a7d-4bf6-8a1d-a417ea581d3f",
+    "drop_point": [35.40402537836577, 33.89896442277571],
+    "package_type": "PackageType.LARGE"
+  },
+  "8dd02d57-b88d-439b-aeba-c9a2b9e76e4f": {
+    "package_delivery_plan_id": "8dd02d57-b88d-439b-aeba-c9a2b9e76e4f",
+    "drop_point": [35.14437673106322, 33.3128338580568],
+    "package_type": "PackageType.LARGE"
+  },
+  "46f040e9-0804-4092-910a-e13d54dbffa2": {
+    "package_delivery_plan_id": "46f040e9-0804-4092-910a-e13d54dbffa2",
+    "drop_point": [35.16620697385507, 33.58007930532317],
+    "package_type": "PackageType.LARGE"
+  }
+}

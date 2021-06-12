@@ -7,7 +7,7 @@ import EndIcon from '@material-ui/icons/TimerOff'
 import PlatformIcon from '@material-ui/icons/FlightTakeoffOutlined'
 import PackageIcon from '@material-ui/icons/GroupWorkOutlined'
 import FormationIcon from '@material-ui/icons/Inventory2Outlined'
-import RecIcon from '@material-ui/icons/SettingsSuggestOutlined'
+import RecIcon from '@material-ui/icons/DateRangeOutlined'
 import Divider from '@material-ui/core/Divider'
 
 const styles = {
@@ -24,8 +24,8 @@ const styles = {
     color: 'white',
     fontWeight: 100,
     fontSize: '0.8rem',
-    right: '1rem',
-    top: '1rem',
+    right: '10px',
+    top: '10px',
     borderRadius: '5px',
     padding: '0.5rem',
     textAlign: 'left',
@@ -97,7 +97,7 @@ const RecDetails = ({
     <div>
       <RecIcon />
     </div>
-    <div>{id}</div>
+    <div style={{ width: 'calc(100% - 50px)' }}>{id}</div>
 
     <div></div>
     <div css={styles.divider}>

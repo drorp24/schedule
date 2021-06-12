@@ -1,24 +1,17 @@
 import { useSelector } from 'react-redux'
 
-export const capitalize = s => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-export const humanize = s => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase().replace(/_/g, ' ')
-}
-
-export const useDirection = () => {
-  const locale = useSelector(store => store.app.locale)
-  return locale === 'he' ? 'rtl' : 'ltr'
+export const useMode = () => {
+  const mode = useSelector(store => store.app.mode)
+  const otherMode = mode === 'light' ? 'dark' : 'light'
+  const light = mode === 'light'
+  return { mode, otherMode, light }
 }
 
 export const useLocale = () => {
   const locale = useSelector(store => store.app.locale)
   const direction = locale === 'he' ? 'rtl' : 'ltr'
   const rtl = direction === 'rtl'
+  const ltr = direction === 'ltr'
   const placement = rtl ? 'left' : 'right'
   const antiPlacement = rtl ? 'right' : 'left'
   const capitalPlacement = capitalize(placement)
@@ -27,6 +20,7 @@ export const useLocale = () => {
     locale,
     direction,
     rtl,
+    ltr,
     placement,
     antiPlacement,
     capitalPlacement,
@@ -34,22 +28,7 @@ export const useLocale = () => {
   }
 }
 
-export const useOtherDirection = () => {
-  const locale = useSelector(store => store.app.locale)
-  return locale === 'he' ? 'ltr' : 'trl'
-}
-
-export const useOtherMode = () => {
-  const mode = useSelector(store => store.app.mode)
-  return mode === 'light' ? 'dark' : 'light'
-}
-
-export const useMode = () => {
-  const mode = useSelector(store => store.app.mode)
-  const otherMode = mode === 'light' ? 'dark' : 'light'
-  const light = mode === 'light'
-  return { mode, otherMode, light }
-}
+export const useDrawer = () => useSelector(store => store.app.drawerOpen)
 
 const dateOptions = {
   weekday: 'long',
@@ -64,36 +43,33 @@ const timeOptions = {
   hour12: false,
 }
 
-export const useLocalDate = date => {
+export const useLocaleDate = date => {
   const locale = useSelector(store => store.app.locale)
   const dateFormat = new Date(date)
 
   return dateFormat.toLocaleDateString(locale, dateOptions)
 }
 
-export const useLocalDateTime = date => {
-  const locale = useSelector(store => store.app.locale)
-  const dateFormat = new Date(date)
-
-  return dateFormat.toLocaleDateString(locale, {
-    ...dateOptions,
-    ...timeOptions,
-  })
+export const useUser = () => {
+  let username = useSelector(store => store.users.loggedIn?.username)
+  username = username || ''
+  return { username }
 }
 
-// unlike useLocalDate, which returns a hook, hence cannot be invoked inside a callback (e.g., 'map'),
-// useLocaleDate returns a function. which can be invoked inside a callback
-// so you would do something like const d = useLocaleDate(), then you can use the 'd' function anywhere you like.
-export const useLocaleDate = () => useLocalDate
-
-// following is yet another version, which is not hook based and requires locale as input
-// since the hook-based version don't always work, for some unknown reason
-export const localeDate = locale => date => {
-  if (!locale || !date) return
-  const dateFormat = new Date(date)
-  return dateFormat.toLocaleDateString(locale, dateOptions)
+export const useRunId = () => {
+  const runId = useSelector(store => store.runs.selectedId)
+  return runId
 }
 
+export const capitalize = s => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+export const humanize = s => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase().replace(/_/g, ' ')
+}
 export const localeDateTime = locale => date => {
   if (!locale || !date) return
   const dateFormat = new Date(date)
@@ -102,21 +78,18 @@ export const localeDateTime = locale => date => {
     ...timeOptions,
   })
 }
+export const useLocalDate = date => {
+  const locale = useSelector(store => store.app.locale)
+  const dateFormat = new Date(date)
 
-// assumption: element is smaller than box
-export const inside = (box, element) => {
-  if (!Object.values(element).length) return false
+  return dateFormat.toLocaleDateString(locale, dateOptions)
+}
+export const useLocalDateTime = date => {
+  const locale = useSelector(store => store.app.locale)
+  const dateFormat = new Date(date)
 
-  const elementX1 = element.x + element.width
-  const elementY1 = element.y + element.height
-  const boxX1 = box.x + box.width
-  const boxY1 = box.y + box.height
-
-  const result =
-    ((elementX1 < boxX1 && elementX1 > box.x) ||
-      (element.x < boxX1 && element.x > box.x)) &&
-    ((elementY1 < boxY1 && elementY1 > box.y) ||
-      (element.y < boxY1 && element.y > box.y))
-
-  return result
+  return dateFormat.toLocaleDateString(locale, {
+    ...dateOptions,
+    ...timeOptions,
+  })
 }
