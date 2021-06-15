@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { memo, useState, useRef, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { memo, useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import get from 'lodash.get'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import { useDirection, useLocale, useMode } from '../utility/appUtilities'
+import { useLocale } from '../utility/appUtilities'
 import useTranslation from '../i18n/useTranslation'
 import usePixels from '../utility/usePixels'
+import TooltipContent from './TooltipContent'
 import noScrollbar from '../styling/noScrollbar'
 
 import Tooltip from '@material-ui/core/Tooltip'
@@ -17,12 +18,12 @@ import Info from '@material-ui/icons/InfoOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import Progress from '../layout/Progress'
 import FilterIcon from '@material-ui/icons/FilterListRounded'
-
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import TableRowsIcon from '@material-ui/icons/TableRows'
 
-const map = ({ entity, properties }) =>
+const getFields = ({ entity, properties }) =>
   properties.map(({ name, rowStyle, icon }) => ({
     name,
     value: get(entity, name),
@@ -185,25 +186,49 @@ const styles = {
   },
   filterIcon: {
     paddingTop: '0 !important',
-    top: '0.35rem',
     '& svg': {
       fontSize: '1.2rem',
     },
   },
+  tooltip: {
+    padding: '0.5rem',
+  },
 }
 
-const Toolbar = ({ conf, filterResults, setFilterResults, filter }) => {
+const Toolbar = ({
+  conf,
+  filterResults,
+  setFilterResults,
+  filter,
+  multi,
+  setMulti,
+}) => {
   const t = useTranslation()
   const { name, icon, filters, color } = conf
 
   const filterToggle = () => setFilterResults(value => !value)
+  const toggleMulti = () => setMulti(value => !value)
+
+  const toolbarStyles = {
+    multi: {
+      marginRight: 'auto',
+      padding: '1rem',
+      '& svg': {
+        fontSize: '1rem',
+        color: multi ? 'white' : '#bdbdbd',
+      },
+    },
+  }
 
   return (
     <div css={styles.toolbar}>
-      <div css={styles.entity}>
+      <div css={styles.entity} style={{ color }}>
         {icon}
         {t(name)}
       </div>
+      <IconButton css={toolbarStyles.multi} onClick={toggleMulti}>
+        <TableRowsIcon />
+      </IconButton>
       {filters && filterResults && filter ? <Filter {...{ filters }} /> : ''}
       <IconButton
         css={styles.filterIcon}
@@ -234,50 +259,65 @@ const Filter = ({ filters }) => {
     )
 }
 
-// ! Table is a generic implementation of react-window that accepts any entity type
-//   provided that entity type passes the following props:
+// # Table
+// ? Dynamic implementation of react-window that will render any entity regardless of properties
+// ? as long as it gets the following props:
 //
-// - its own implementation of 'selectEntities' redux selector
-//   which exposes an { isLoading, ids, selectedId },
-// - its own implementation of 'selectEntityById' redux selector,
-// - properties - an array of { name, rowStyle, headStyle, icon } (last 3 optional)
-//   where name is a path in the entity object, as deep as needed (can include array positions too),
-// - filter - an optional object whose key is the entity's id value (value doesn't matter)
-//   It is assumed that every entity has one,
-// - TooltipDetails - a react component that accepts 'entity' as prop
-//   and renders the specific content to be displayed by the tooltip that shows upon hovering Info.
-// - conf - a configuration object with properties specific to that entity, such as styling.
+// ~ selectOne
+//   dispatched when a row is selected
+// ~ selectMulti
+//   dispatched when a row is selected if toolbar so indicates
+// ~ selectEntities
+//   entity's own selectEntities selector that exposes { isLoading, ids, selectedIds }
+// ~ selectEntityById
+//   entity's own selectEntityById selector
+// ~ properties
+//   an array with the properties to be displayed. Each property is an object with:
+//      ~ name (mandatory)
+//        a path in the entity object, as deep as needed. It can include array positions.
+//      ~ rowStyle, headStyle, icon
+//        (all optional) how to style that field in the row and in the header
+// ~ filter
+//  an optional object whose key is the entity's id value and value doesn't matter.
+//  (It is assumed that every entity instance has its own unique id value).
+// ~ conf
+//   a configuration object with any property that is specific for the given entity.
+//   Currently the properties are relvant for the toolbar, and include
+//   name, color and icon, with an optional 'filters' prop that has a list of filter names.
 //
 const Table = ({
+  selectOne,
+  selectMulti,
   selectEntities,
   selectEntityById,
   properties,
   filter = null,
-  TooltipDetails,
   conf,
 }) => {
-  let { isLoading, ids, selectedId } = useSelector(selectEntities)
+  let { isLoading, ids, selectedIds } = useSelector(selectEntities)
 
   const [filterResults, setFilterResults] = useState(true)
   if (filterResults && filter) {
     ids = ids.filter(id => filter[id])
   }
 
+  const [multi, setMulti] = useState(false)
+
   const itemCount = ids.length
   const itemSize = usePixels(3)
   const { direction } = useLocale()
   const outerRef = useRef()
 
-  useEffect(() => {
-    const scrollTo = entityId => {
-      if (!outerRef || !outerRef.current) return
+  // useEffect(() => {
+  //   const scrollTo = entityId => {
+  //     if (!outerRef || !outerRef.current) return
 
-      const index = ids.findIndex(id => id === entityId)
-      const top = index * itemSize
-      outerRef.current.scrollTo({ top, behavior: 'smooth' })
-    }
-    if (selectedId) scrollTo(selectedId)
-  }, [ids, itemSize, selectedId])
+  //     const index = ids.findIndex(id => id === entityId)
+  //     const top = index * itemSize
+  //     outerRef.current.scrollTo({ top, behavior: 'smooth' })
+  //   }
+  //   if (selectedId) scrollTo(selectedId)
+  // }, [ids, itemSize, selectedId])
 
   if (isLoading) return <Progress />
 
@@ -288,7 +328,16 @@ const Table = ({
           height -= itemSize
           return (
             <>
-              <Toolbar {...{ conf, filterResults, setFilterResults, filter }} />
+              <Toolbar
+                {...{
+                  conf,
+                  filterResults,
+                  setFilterResults,
+                  filter,
+                  multi,
+                  setMulti,
+                }}
+              />
               <Header
                 properties={properties}
                 style={{ ...styles.row, ...styles.header, height: itemSize }}
@@ -301,11 +350,14 @@ const Table = ({
                 {...{ height, width, itemCount, itemSize, direction }}
               >
                 {Row({
-                  selectedId,
+                  selectOne,
+                  selectMulti,
+                  selectedIds,
                   selectEntityById,
                   properties,
-                  TooltipDetails,
                   filter,
+                  conf,
+                  multi,
                 })}
               </List>
             </>
@@ -317,17 +369,24 @@ const Table = ({
 }
 
 const Row = ({
-  selectedId,
+  selectOne,
+  selectMulti,
+  selectedIds,
   selectEntityById,
   properties,
-  TooltipDetails,
   filter,
+  conf,
+  multi,
 }) =>
   memo(({ index, style, data }) => {
     const entity = useSelector(selectEntityById(data[index]))
     const { id } = entity
     const color = (filter && filter[id]) || 'inherit'
-    const fields = map({ entity, properties })
+    const fields = getFields({ entity, properties })
+    const dispatch = useDispatch()
+
+    const select = multi ? selectMulti : selectOne
+    const addSelection = id => () => dispatch(select(id))
 
     // const { light } = useMode()
     const { placement } = useLocale()
@@ -336,8 +395,8 @@ const Row = ({
     //   index % 2 ? styles.odd : light ? styles.lightEven : styles.darkEven
     const line = { lineHeight: `${style.height}px` }
 
-    const selectedRow = id === selectedId ? styles.selected : {}
-    const selectedInfo = id === selectedId ? styles.selectedInfo : {}
+    const selectedRow = selectedIds.includes(id) ? styles.selected : {}
+    const selectedInfo = selectedIds.includes(id) ? styles.selectedInfo : {}
 
     return (
       <div
@@ -349,18 +408,20 @@ const Row = ({
           ...selectedRow,
         }}
         style={style}
+        onClick={addSelection(id)}
       >
         {fields.map(({ name, value, icon, rowStyle }) => (
           <Cell {...{ value, icon, cellStyle: rowStyle, key: name, color }} />
         ))}
 
         <Tooltip
-          // open={id === 'sup_cat_1'}
-          title={<TooltipDetails {...{ entity }} />}
+          // open={id === 'b39e0de1-41ab-4e1f-9e2a-c82aecfa511b'}
+          title={<TooltipContent {...{ entity, conf }} />}
           arrow
           TransitionComponent={Zoom}
           disableFocusListener={true}
           placement={placement}
+          PopperProps={{ css: styles.tooltip }}
         >
           <IconButton
             style={{ ...styles.icon, ...selectedInfo, ...styles.dimText }}

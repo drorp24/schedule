@@ -37,7 +37,7 @@ export const fetchDirectives = createAsyncThunk(
 // * reducers / actions
 const initialState = directivesAdapter.getInitialState({
   loading: 'idle',
-  selectedId: null,
+  selectedIds: null,
   meta: null,
 })
 
@@ -48,9 +48,14 @@ const directivesSlice = createSlice({
     clear: () => initialState,
     add: directivesAdapter.addOne,
     update: directivesAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
-    },
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: [payload],
+    }),
+    selectMulti: (state, { payload }) => ({
+      ...state,
+      selectedIds: [...state.selectedIds, payload],
+    }),
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -113,8 +118,10 @@ export const selectEntities = ({ directives }) => {
   }
 }
 
-export const selectEntityById = id => ({ directives }) =>
-  directivesSelectors.selectById(directives, id)
+export const selectEntityById =
+  id =>
+  ({ directives }) =>
+    directivesSelectors.selectById(directives, id)
 
 export const selectSelectedId = ({ directives: { selectedId } }) => selectedId
 
@@ -128,6 +135,6 @@ export const selectSelectedEntity = ({ directives }) => {
 }
 
 const { reducer, actions } = directivesSlice
-export const { clear, add, update, select, error } = actions
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

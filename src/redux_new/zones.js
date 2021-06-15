@@ -2,6 +2,7 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
+  current,
 } from '@reduxjs/toolkit'
 
 import zonesApi from '../api_new/zonesApi'
@@ -74,10 +75,10 @@ export const fetchZones = createAsyncThunk(
 
 // * reducers / actions
 const initialState = zonesAdapter.getInitialState({
-  loading: 'idle',
-  selectedId: null,
   meta: null,
+  loading: 'idle',
   issues: [],
+  selectedIds: [],
 })
 
 const zonesSlice = createSlice({
@@ -87,8 +88,18 @@ const zonesSlice = createSlice({
     clear: () => initialState,
     add: zonesAdapter.addOne,
     update: zonesAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: current(state).selectedIds.includes(payload)
+        ? []
+        : [payload],
+    }),
+    selectMulti: (state, { payload }) => {
+      const currentIds = new Set(current(state).selectedIds)
+      currentIds.has(payload)
+        ? currentIds.delete(payload)
+        : currentIds.add(payload)
+      state.selectedIds = [...currentIds]
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -115,8 +126,9 @@ const zonesSlice = createSlice({
       }
     },
 
-    [fetchZones.rejected]: (state, { meta: { requestId }, payload }) => {
-      console.log('[fetchx.rejected] reached. payload:', payload)
+    [fetchZones.rejected]: (state, { meta: { requestId }, payload, error }) => {
+      console.error('fetchZones Rejected:')
+      if (error?.message) console.error(error.message)
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
@@ -137,16 +149,16 @@ export const selectEntities = ({ zones }) => {
   const sortedEntities = zonesSelectors.selectAll(zones)
   const keyedEntities = zones.entities
   const ids = zonesSelectors.selectIds(zones)
-  const { loading, error, selectedId } = zones
-  const selectedEntity = keyedEntities[selectedId]
+  const { loading, error, selectedIds } = zones
+  const selectedEntities = selectedIds.map(id => keyedEntities[id])
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedId,
-    selectedEntity,
+    selectedIds,
+    selectedEntities,
     loading,
     isLoading,
     loaded,
@@ -172,17 +184,20 @@ export const selectSelectedEntity = ({ zones }) => {
   return { selectedEntity }
 }
 
-export const selectLocations = ({ zones }) => {
-  const allZones = zonesSelectors.selectAll(zones)
-  if (!allZones.length) return null
-  const locations = []
-  allZones.forEach(({ location }) => {
-    if (location.type) locations.push(location)
-  })
-  return locations
+export const selectSelectedEntities = ({ zones }) => {
+  if (!zones.ids?.length || !zones.selectedIds?.length) return {}
+
+  const { selectedIds } = zones
+  const locations = selectedIds.map(zoneId => ({
+    zoneId,
+    geolocation: zones.entities[zoneId].geolocation,
+  }))
+
+  const selectedEntities = selectedIds.map(id => zones.entities[id])
+  return { selectedEntities, locations }
 }
 
 const { reducer, actions } = zonesSlice
-export const { clear, add, update, select, error } = actions
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { useState, memo, useEffect, useMemo, useRef } from 'react'
+import { useState, memo, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 // import useTranslation from '../i18n/useTranslation'
-import { useLocale } from '../utility/appUtilities'
 
 import Select from '../lists/Select'
-import Requests from '../lists/requests/Requests'
-import Resources from '../lists/resources/Resources'
-import Directives from '../lists/directives/Directives'
+import Requests from '../lists/Requests'
+import Depots from '../lists/Depots'
+import Zones from '../lists/Zones'
 import Map from '../map/Map'
 import Gantt from '../gantt/Gantt'
 import RecDetails, { useRecDetails } from '../gantt/RecDetails'
@@ -65,14 +64,14 @@ const Schedule = () => {
       overflow: 'scroll',
       ...noScrollBar,
     }),
-    resources: theme => ({
+    depots: theme => ({
       height: noListSelected
         ? `${heights.list}%`
-        : list === 'resources'
+        : list === 'depots'
         ? '100%'
         : 0,
-      padding: noListSelected || list === 'resources' ? '1rem' : '0 1rem',
-      border: noListSelected || list === 'resources' ? '1px solid' : 'none',
+      padding: noListSelected || list === 'depots' ? '1rem' : '0 1rem',
+      border: noListSelected || list === 'depots' ? '1px solid' : 'none',
       borderColor:
         mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
       borderRadius: '4px',
@@ -82,14 +81,14 @@ const Schedule = () => {
       overflow: 'scroll',
       ...noScrollBar,
     }),
-    directives: theme => ({
+    zones: theme => ({
       height: noListSelected
         ? `${heights.list}%`
-        : list === 'directives'
+        : list === 'zones'
         ? '100%'
         : 0,
-      padding: noListSelected || list === 'directives' ? '1rem' : '0 1rem',
-      border: noListSelected || list === 'directives' ? '1px solid' : 'none',
+      padding: noListSelected || list === 'zones' ? '1rem' : '0 1rem',
+      border: noListSelected || list === 'zones' ? '1px solid' : 'none',
       borderColor:
         mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
       borderRadius: '4px',
@@ -147,11 +146,11 @@ const Schedule = () => {
         <div css={styles.requests}>
           <Requests />
         </div>
-        <div css={styles.resources}>
-          <Resources />
+        <div css={styles.depots}>
+          <Depots />
         </div>
-        <div css={styles.directives}>
-          <Directives />
+        <div css={styles.zones}>
+          <Zones />
         </div>
       </Paper>
       <div css={styles.results}>

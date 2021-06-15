@@ -2,9 +2,11 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
+  current,
 } from '@reduxjs/toolkit'
 
 import depotsApi from '../api_new/depotsApi'
+import depotsFields from '../api_new/conversions/depotsFields'
 
 // * normalization
 const depotsAdapter = createEntityAdapter({
@@ -38,13 +40,14 @@ const depotsAdapter = createEntityAdapter({
 // * thunk
 export const fetchDepots = createAsyncThunk(
   'depots/fetch',
-  async ({ runId, depotsFields }, { rejectWithValue }) => {
+  async ({ runId }, { rejectWithValue }) => {
     try {
       const response = await depotsApi(runId)
-      const depots = response.map(depotsFields)
+      const depots = Object.values(response).map(depotsFields)
       return { runId, depots }
     } catch (error) {
-      return rejectWithValue(error)
+      const message = error instanceof Error ? error.message : error
+      return rejectWithValue(message)
     }
   },
   {
@@ -68,10 +71,10 @@ export const fetchDepots = createAsyncThunk(
 
 // * reducers / actions
 const initialState = depotsAdapter.getInitialState({
-  loading: 'idle',
-  selectedId: null,
   meta: null,
+  loading: 'idle',
   issues: [],
+  selectedIds: [],
 })
 
 const depotsSlice = createSlice({
@@ -81,8 +84,18 @@ const depotsSlice = createSlice({
     clear: () => initialState,
     add: depotsAdapter.addOne,
     update: depotsAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: current(state).selectedIds.includes(payload)
+        ? []
+        : [payload],
+    }),
+    selectMulti: (state, { payload }) => {
+      const currentIds = new Set(current(state).selectedIds)
+      currentIds.has(payload)
+        ? currentIds.delete(payload)
+        : currentIds.add(payload)
+      state.selectedIds = [...currentIds]
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -109,7 +122,12 @@ const depotsSlice = createSlice({
       }
     },
 
-    [fetchDepots.rejected]: (state, { meta: { requestId }, payload }) => {
+    [fetchDepots.rejected]: (
+      state,
+      { meta: { requestId }, payload, error }
+    ) => {
+      console.error('fetchDepots Rejected:')
+      if (error?.message) console.error(error.message)
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
@@ -130,16 +148,16 @@ export const selectEntities = ({ depots }) => {
   const sortedEntities = depotsSelectors.selectAll(depots)
   const keyedEntities = depots.entities
   const ids = depotsSelectors.selectIds(depots)
-  const { loading, error, selectedId } = depots
-  const selectedEntity = keyedEntities[selectedId]
+  const { loading, error, selectedIds } = depots
+  const selectedEntities = selectedIds.map(id => keyedEntities[id])
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedId,
-    selectedEntity,
+    selectedIds,
+    selectedEntities,
     loading,
     isLoading,
     loaded,
@@ -165,17 +183,20 @@ export const selectSelectedEntity = ({ depots }) => {
   return { selectedEntity }
 }
 
-export const selectLocations = ({ depots }) => {
-  const allDepots = depotsSelectors.selectAll(depots)
-  if (!allDepots.length) return null
-  const locations = []
-  allDepots.forEach(({ location }) => {
-    if (location.type) locations.push(location)
-  })
-  return locations
+export const selectSelectedEntities = ({ depots }) => {
+  if (!depots.ids?.length || !depots.selectedIds?.length) return {}
+
+  const { selectedIds } = depots
+  const locations = selectedIds.map(depotId => ({
+    depotId,
+    geolocation: depots.entities[depotId].geolocation,
+  }))
+
+  const selectedEntities = selectedIds.map(id => depots.entities[id])
+  return { selectedEntities, locations }
 }
 
 const { reducer, actions } = depotsSlice
-export const { clear, add, update, select, error } = actions
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

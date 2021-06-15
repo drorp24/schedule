@@ -1,6 +1,12 @@
-const zonesFields = ({ zone_id, points }) => ({
+const zonesFields = ({ zone_id, points, ...rest }) => ({
   id: zone_id,
-  positions: points,
+  geolocation: {
+    geometry: {
+      type: 'Polygon',
+      coordinates: points,
+    },
+  },
+  ...rest,
 })
 
 export default zonesFields

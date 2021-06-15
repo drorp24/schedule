@@ -5,9 +5,9 @@ import RunSelection from './runs/RunSelection'
 import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup'
 import ToggleButton from '@material-ui/core/ToggleButton'
 
-import RequestsIcon from '@material-ui/icons/ListAltOutlined'
-import ResourcesIcon from '@material-ui/icons/ArtTrackOutlined'
-import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
+import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
+import DepotsIcon from '@material-ui/icons/HomeWorkOutlined'
+import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
 
 const styles = {
   sectionTitle: {
@@ -36,8 +36,11 @@ const styles = {
   requestsIcon: {
     fontSize: '1.2rem !important',
   },
-  resourcesIcon: {
-    fontSize: '1.7rem !important',
+  depotsIcon: {
+    fontSize: '1.2rem !important',
+  },
+  zonesIcon: {
+    fontSize: '1.2rem !important',
   },
 }
 
@@ -58,11 +61,11 @@ const ListSelection = memo(({ list, setList }) => {
         <ToggleButton value="requests" css={styles.button}>
           <RequestsIcon css={styles.requestsIcon} />
         </ToggleButton>
-        <ToggleButton value="resources" css={styles.button}>
-          <ResourcesIcon css={styles.resourcesIcon} />
+        <ToggleButton value="depots" css={styles.button}>
+          <DepotsIcon css={styles.depotsIcon} />
         </ToggleButton>
-        <ToggleButton value="directives" css={styles.button}>
-          <DirectivesIcon />
+        <ToggleButton value="zones" css={styles.button}>
+          <ZonesIcon css={styles.zonesIcon} />
         </ToggleButton>
       </ToggleButtonGroup>
     </div>

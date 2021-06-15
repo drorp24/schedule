@@ -2,6 +2,9 @@
 
 import SelectedGeo from './SelectedGeo'
 import ZonesControl from './ZonesControl'
+import { selectSelectedEntities as selectSelectedRequests } from '../redux_new/requests'
+import { selectSelectedEntities as selectSelectedDepots } from '../redux_new/depots'
+import { selectSelectedEntities as selectSelectedZones } from '../redux_new/zones'
 
 import 'leaflet/dist/leaflet.css'
 import {
@@ -42,7 +45,9 @@ const Map = () => {
       </LayersControl>
       <ZonesControl />
       <ZoomControl position="bottomleft" />
-      <SelectedGeo />
+      <SelectedGeo fetchPlans selectSelectedEntities={selectSelectedRequests} />
+      <SelectedGeo selectSelectedEntities={selectSelectedDepots} />
+      <SelectedGeo selectSelectedEntities={selectSelectedZones} />
     </MapContainer>
   )
 }

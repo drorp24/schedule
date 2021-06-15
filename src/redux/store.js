@@ -1,13 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit'
 
+// unchanged
 import app from './app'
 import users from './users'
 import runs from './runs'
-import requests from './requests'
-import resources from './resources'
-import directives from './directives'
+
+// old
 import recommendations from './recommendations'
-import zones from './zones'
+
+// new
+import requests from '../redux_new/requests'
+import depots from '../redux_new/depots'
+import zones from '../redux_new/zones'
+import deliveryPlans from '../redux_new/deliveryPlans'
 
 const store = configureStore({
   reducer: {
@@ -15,10 +20,10 @@ const store = configureStore({
     users,
     runs,
     requests,
-    resources,
-    directives,
-    recommendations,
+    depots,
     zones,
+    recommendations,
+    deliveryPlans,
   },
 })
 

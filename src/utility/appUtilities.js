@@ -66,7 +66,7 @@ export const capitalize = s => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export const humanize = s => {
+export const snake2human = s => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase().replace(/_/g, ' ')
 }

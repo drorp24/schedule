@@ -2,15 +2,14 @@
 import { memo, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  fetchResources,
+  fetchRequests,
   selectEntities,
   selectEntityById,
-} from '../../redux/resources'
+} from '../../redux_new/requests'
 import { selectSelectedEntities } from '../../redux/recommendations'
 import { selectEntities as selectRuns } from '../../redux/runs'
 
-import resourcesFields from '../resources/resourcesFields'
-import TooltipDetails from '../resources/ResourceDetails'
+import TooltipDetails from './RequestDetails'
 import config from '../config'
 
 import Table from '../Table'
@@ -24,7 +23,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 12px',
-    // color: config.resources.color,
+    // color: config.requests.color,
   },
   centered: {
     textAlign: 'center',
@@ -38,27 +37,27 @@ const properties = [
     icon: <PinDropOutlinedIcon />,
   },
   { name: 'id' },
-  { name: 'name' },
-  { name: 'drone_type' },
+  { name: 'suppliers_category_id' },
+  { name: 'score' },
 ]
 
-const { resources: conf } = config
+const { requests: conf } = config
 
-const Resources = () => {
+const Requests = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-  const { resEmployed } = useSelector(selectSelectedEntities)
+  const { reqFulfilled } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (runId) dispatch(fetchResources({ runId, resourcesFields }))
+    if (runId) dispatch(fetchRequests({ runId }))
   }, [dispatch, runId])
 
   useEffect(() => {
-    setFilter(resEmployed)
-  }, [resEmployed])
+    setFilter(reqFulfilled)
+  }, [reqFulfilled])
 
   return (
     <Table
@@ -74,4 +73,4 @@ const Resources = () => {
   )
 }
 
-export default memo(Resources)
+export default memo(Requests)

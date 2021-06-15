@@ -1,28 +1,36 @@
 import blue from '@material-ui/core/colors/blue'
 import orange from '@material-ui/core/colors/orange'
 import red from '@material-ui/core/colors/red'
-import RequestsIcon from '@material-ui/icons/ListAltOutlined'
-import ResourcesIcon from '@material-ui/icons/ArtTrackOutlined'
-import DirectivesIcon from '@material-ui/icons/LandscapeOutlined'
+import lime from '@material-ui/core/colors/lime'
+import lightBlue from '@material-ui/core/colors/lightBlue'
+import deepOrange from '@material-ui/core/colors/deepOrange'
+import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
+import DepotsIcon from '@material-ui/icons/HomeWorkOutlined'
+import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
 
 const config = {
   requests: {
     name: 'requests',
-    color: orange[500],
+    color: lime['A400'],
     filters: ['fulfilledBySelected', 'fulfilled', 'unfulfilled'],
-    icon: <RequestsIcon style={{ fontSize: '1.2rem' }} />,
+    icon: <RequestsIcon />,
+    avatar: <RequestsIcon />,
   },
-  resources: {
-    name: 'resources',
-    color: blue[500],
+  depots: {
+    name: 'depots',
+    color: lightBlue['A200'],
     filters: ['emplyedBySelected', 'employed', 'unemployed'],
-    icon: <ResourcesIcon />,
+    icon: <DepotsIcon />,
+    exclude: ['location'],
+    avatar: <DepotsIcon />,
   },
-  directives: {
-    name: 'directives',
-    color: red[500],
+  zones: {
+    name: 'zones',
+    color: deepOrange[500],
     filters: null,
-    icon: <DirectivesIcon />,
+    icon: <ZonesIcon />,
+    exclude: ['positions'],
+    avatar: <ZonesIcon />,
   },
 }
 

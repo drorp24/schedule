@@ -1,4 +1,5 @@
 import axios from 'axios'
+import sampleRequests from './sampleData/requests.json'
 
 const requestsApi = async runId => {
   const requests = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_REQUESTS_ENDPOINT}`
@@ -18,4 +19,8 @@ const requestsApi = async runId => {
   }
 }
 
-export default requestsApi
+// test data
+const sampleRequestsApi = runId => Promise.resolve(sampleRequests)
+
+// export default requestsApi
+export default sampleRequestsApi

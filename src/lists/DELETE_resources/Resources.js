@@ -2,15 +2,16 @@
 import { memo, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  fetchRequests,
+  fetchResources,
   selectEntities,
   selectEntityById,
-} from '../../redux/requests'
+} from '../../redux/resources'
+import { selectMulti } from '../../redux/resources'
 import { selectSelectedEntities } from '../../redux/recommendations'
 import { selectEntities as selectRuns } from '../../redux/runs'
 
-import requestsFields from './requestsFields'
-import TooltipDetails from './RequestDetails'
+import resourcesFields from '../resources/resourcesFields'
+import TooltipDetails from '../resources/ResourceDetails'
 import config from '../config'
 
 import Table from '../Table'
@@ -24,7 +25,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: '0 12px',
-    // color: config.requests.color,
+    // color: config.resources.color,
   },
   centered: {
     textAlign: 'center',
@@ -38,31 +39,32 @@ const properties = [
     icon: <PinDropOutlinedIcon />,
   },
   { name: 'id' },
-  { name: 'suppliers_category_id' },
-  { name: 'score' },
+  { name: 'name' },
+  { name: 'drone_type' },
 ]
 
-const { requests: conf } = config
+const { resources: conf } = config
 
-const Requests = () => {
+const Resources = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-  const { reqFulfilled } = useSelector(selectSelectedEntities)
+  const { resEmployed } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (runId) dispatch(fetchRequests({ runId, requestsFields }))
+    if (runId) dispatch(fetchResources({ runId, resourcesFields }))
   }, [dispatch, runId])
 
   useEffect(() => {
-    setFilter(reqFulfilled)
-  }, [reqFulfilled])
+    setFilter(resEmployed)
+  }, [resEmployed])
 
   return (
     <Table
       {...{
+        selectMulti,
         selectEntities,
         selectEntityById,
         properties,
@@ -74,4 +76,4 @@ const Requests = () => {
   )
 }
 
-export default memo(Requests)
+export default memo(Resources)

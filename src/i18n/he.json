@@ -1,4 +1,8 @@
 {
+  "depots": "מחסנים",
+  "zones": "אזורים",
+  "details": "נתונים",
+  "priority": "עדיפות",
   "emplyedBySelected": "נוצלו ע\"י ההמלצה",
   "employed": "נוצלו",
   "unemployed": "לא נוצלו",

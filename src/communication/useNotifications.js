@@ -8,8 +8,8 @@ const useNotifications = setOpen => {
   const userError = useSelector(store => store.users.error)
   const runsError = useSelector(store => store.runs.error)
   const requestsError = useSelector(store => store.requests.error)
-  const resourcesError = useSelector(store => store.resources.error)
-  const directivesError = useSelector(store => store.directives.error)
+  const depotsError = useSelector(store => store.depots.error)
+  const zonesError = useSelector(store => store.zones.error)
   const recommendationsError = useSelector(store => store.recommendations.error)
 
   useEffect(() => {
@@ -32,17 +32,17 @@ const useNotifications = setOpen => {
       )
       setSeverity('error')
     }
-    if (resourcesError) {
+    if (depotsError) {
       setOpen(true)
       setMessage(
-        'There are issues with the resources api. Check log for more details'
+        'There are issues with the depots api. Check log for more details'
       )
       setSeverity('error')
     }
-    if (directivesError) {
+    if (zonesError) {
       setOpen(true)
       setMessage(
-        'There are issues with the directives api. Check log for more details'
+        'There are issues with the zones api. Check log for more details'
       )
       setSeverity('error')
     }
@@ -58,8 +58,8 @@ const useNotifications = setOpen => {
     userError,
     recommendationsError,
     requestsError,
-    resourcesError,
-    directivesError,
+    depotsError,
+    zonesError,
     runsError,
   ])
 

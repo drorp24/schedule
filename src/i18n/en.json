@@ -1,4 +1,8 @@
 {
+  "depots": "Depots",
+  "zones": "Zones",
+  "priority": "Priority",
+  "details": "Details",
   "emplyedBySelected": "Employed by match",
   "employed": "Employed",
   "unemployed": "Unemployed",

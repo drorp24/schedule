@@ -172,7 +172,10 @@
     "start_time": "01/01/2021 00:00:00",
     "end_time": "01/01/2021 20:00:00",
     "priority": 1,
-    "package_delivery_plan_ids": ["f128adfe-62c3-4d61-84dd-ec6b3aff3ad3"]
+    "package_delivery_plan_ids": [
+      "f128adfe-62c3-4d61-84dd-ec6b3aff3ad3",
+      "029d2406-8d8c-4b8a-8dac-4ef21c893b48"
+    ]
   },
   "4b747735-c53c-418d-8f97-ffd92afc5875": {
     "request_id": "4b747735-c53c-418d-8f97-ffd92afc5875",

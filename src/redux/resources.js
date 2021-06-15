@@ -36,9 +36,10 @@ export const fetchResources = createAsyncThunk(
 
 // * reducers / actions
 const initialState = resourcesAdapter.getInitialState({
-  loading: 'idle',
-  selectedId: null,
   meta: null,
+  loading: 'idle',
+  issues: [],
+  selectedIds: [],
 })
 
 const resourcesSlice = createSlice({
@@ -48,9 +49,14 @@ const resourcesSlice = createSlice({
     clear: () => initialState,
     add: resourcesAdapter.addOne,
     update: resourcesAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
-    },
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: [payload],
+    }),
+    selectMulti: (state, { payload }) => ({
+      ...state,
+      selectedIds: [...state.selectedIds, payload],
+    }),
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -113,8 +119,10 @@ export const selectEntities = ({ resources }) => {
   }
 }
 
-export const selectEntityById = id => ({ resources }) =>
-  resourcesSelectors.selectById(resources, id)
+export const selectEntityById =
+  id =>
+  ({ resources }) =>
+    resourcesSelectors.selectById(resources, id)
 
 export const selectSelectedId = ({ resources: { selectedId } }) => selectedId
 
@@ -128,6 +136,6 @@ export const selectSelectedEntity = ({ resources }) => {
 }
 
 const { reducer, actions } = resourcesSlice
-export const { clear, add, update, select, error } = actions
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

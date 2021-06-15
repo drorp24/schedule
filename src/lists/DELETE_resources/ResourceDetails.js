@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useDispatch } from 'react-redux'
-import { select } from '../../redux/requests'
+import { selectOne as select } from '../../redux/requests'
 
 import useTheme from '../../styling/useTheme'
 import { useMode, useLocalDate } from '../../utility/appUtilities'
@@ -14,19 +14,18 @@ import CardActions from '@material-ui/core/CardActions'
 import IconButton from '@material-ui/core/IconButton'
 import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
-// import RequestsIcon from '@material-ui/icons/ListAltOutlined'
 import PinDropOutlinedIcon from '@material-ui/icons/PinDropOutlined'
 import config from '../config'
 import useTranslation from '../../i18n/useTranslation'
 
-const DirectiveDetails = ({
+const ResourceDetails = ({
   entity: {
     id,
-    name,
-    customer_delivery_unit,
-    supplier_category_id,
-    danger_zones,
-    flight_districts,
+    suppliers_category_id,
+    drone_count,
+    availability: { start, end },
+    drone_loading_dock: { name, drone_type, max_usage },
+    packages,
   },
 }) => {
   const { otherMode } = useMode()
@@ -36,8 +35,7 @@ const DirectiveDetails = ({
 
   const handleDelete = () => {}
 
-  const color = config.directives.color
-  // const icon = <RequestsIcon />
+  const color = config.resources.color
 
   const useStyles = makeStyles(theme => ({
     icon: {
@@ -124,23 +122,23 @@ const DirectiveDetails = ({
     <ThemeProvider theme={theme}>
       <Card elevation={0} css={styles.root}>
         <CardHeader
-          // avatar={<Avatar css={styles.avatar}>{}</Avatar>}
-          title={name}
-          subheader={customer_delivery_unit}
+          avatar={<Avatar css={styles.avatar}>{drone_count}</Avatar>}
+          title={id}
+          subheader={name}
           classes={{ title, content, subheader }}
         />
         <Divider css={styles.divider} />
         <div css={styles.subTypes}>
-          {danger_zones &&
-            danger_zones.map(
-              ({ type }) =>
-                type && (
+          {packages &&
+            packages.map(
+              ({ name }) =>
+                name && (
                   <Chip
                     size="small"
-                    label={type}
+                    label={name}
                     css={styles.entityType}
                     onDelete={handleDelete}
-                    key={type}
+                    key={name}
                     classes={{
                       icon: classes.icon,
                       label: classes.label,
@@ -152,7 +150,7 @@ const DirectiveDetails = ({
         </div>
         <CardContent>
           <Divider css={{ ...styles.modeColor, ...styles.dividerSplitLine }}>
-            {t('flightDistricts')}
+            {t('location')}
           </Divider>
           <div css={styles.explainer}></div>
         </CardContent>
@@ -172,4 +170,4 @@ const DirectiveDetails = ({
   )
 }
 
-export default DirectiveDetails
+export default ResourceDetails

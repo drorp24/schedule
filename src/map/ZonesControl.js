@@ -19,13 +19,20 @@ const ZonesControl = () => {
 
   return (
     <LayersControl>
-      {sortedEntities.map(({ id, positions }) => (
-        <LayersControl.Overlay name={id}>
-          <Polygon {...{ positions }}>
-            <Popup>{id}</Popup>
-          </Polygon>
-        </LayersControl.Overlay>
-      ))}
+      {sortedEntities.map(
+        ({
+          id,
+          geolocation: {
+            geometry: { coordinates: positions },
+          },
+        }) => (
+          <LayersControl.Overlay name={id} key={id}>
+            <Polygon {...{ positions }}>
+              <Popup>{id}</Popup>
+            </Polygon>
+          </LayersControl.Overlay>
+        )
+      )}
     </LayersControl>
   )
 }

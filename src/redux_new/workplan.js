@@ -2,12 +2,13 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
+  current,
 } from '@reduxjs/toolkit'
 
-import workplanApi from '../api_new/workplanApi'
+import workPlanApi from '../api_new/workPlanApi'
 
 // * normalization
-const workplanAdapter = createEntityAdapter({
+const workPlanAdapter = createEntityAdapter({
   selectId: ({ id }) => id,
   sortComparer: (a, b) => {},
 })
@@ -37,14 +38,15 @@ const workplanAdapter = createEntityAdapter({
 
 // * thunk
 export const fetchWorkplan = createAsyncThunk(
-  'workplan/fetch',
-  async ({ runId, workplanFields }, { rejectWithValue }) => {
+  'workPlan/fetch',
+  async ({ runId, workPlanFields }, { rejectWithValue }) => {
     try {
-      const response = await workplanApi(runId)
-      const workplan = response.map(workplanFields)
-      return { runId, workplan }
+      const response = await workPlanApi(runId)
+      const workPlan = response.map(workPlanFields)
+      return { runId, workPlan }
     } catch (error) {
-      return rejectWithValue(error)
+      const message = error instanceof Error ? error.message : error
+      return rejectWithValue(message)
     }
   },
   {
@@ -53,13 +55,13 @@ export const fetchWorkplan = createAsyncThunk(
     // 'meta' holds info that uniquely identifies a specific fetched data (here: its run_id).
     //
     // The code below will prevent re-fetching of data if it already exists,
-    // by comparing the workplan' runId param with the recorded runId of last succesful fetch.
+    // by comparing the workPlan' runId param with the recorded runId of last succesful fetch.
     //
     // Redundant fetching would otherwise happen if component is re-rendered
     // for reasons such as locale change that trigger an overall rerender.
     condition: ({ runId }, { getState }) => {
       const {
-        workplan: { meta },
+        workPlan: { meta },
       } = getState()
       if (meta?.runId === runId) return false
     },
@@ -67,22 +69,32 @@ export const fetchWorkplan = createAsyncThunk(
 )
 
 // * reducers / actions
-const initialState = workplanAdapter.getInitialState({
-  loading: 'idle',
-  selectedId: null,
+const initialState = workPlanAdapter.getInitialState({
   meta: null,
+  loading: 'idle',
   issues: [],
+  selectedIds: [],
 })
 
-const workplanSlice = createSlice({
-  name: 'workplan',
+const workPlanSlice = createSlice({
+  name: 'workPlan',
   initialState,
   reducers: {
     clear: () => initialState,
-    add: workplanAdapter.addOne,
-    update: workplanAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
+    add: workPlanAdapter.addOne,
+    update: workPlanAdapter.updateOne,
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: current(state).selectedIds.includes(payload)
+        ? []
+        : [payload],
+    }),
+    selectMulti: (state, { payload }) => {
+      const currentIds = new Set(current(state).selectedIds)
+      currentIds.has(payload)
+        ? currentIds.delete(payload)
+        : currentIds.add(payload)
+      state.selectedIds = [...currentIds]
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -97,7 +109,7 @@ const workplanSlice = createSlice({
 
     [fetchWorkplan.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { runId, workplan, issues } }
+      { meta: { requestId }, payload: { runId, workPlan, issues } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
@@ -105,11 +117,16 @@ const workplanSlice = createSlice({
         state.error = null
         if (issues) state.issues = issues
         state.meta = { runId }
-        workplanAdapter.setAll(state, workplan)
+        workPlanAdapter.setAll(state, workPlan)
       }
     },
 
-    [fetchWorkplan.rejected]: (state, { meta: { requestId }, payload }) => {
+    [fetchWorkplan.rejected]: (
+      state,
+      { meta: { requestId }, payload, error }
+    ) => {
+      console.error('fetchWorkPlan Rejected:')
+      if (error?.message) console.error(error.message)
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
@@ -120,26 +137,26 @@ const workplanSlice = createSlice({
 })
 
 // * selectors (partly memoized)
-const workplanSelectors = workplanAdapter.getSelectors()
+const workPlanSelectors = workPlanAdapter.getSelectors()
 
 // combine together:
 // - createEntityAdapter's memoized sorted entities
 // - keyed entities
 // - createAsyncThunk's loading/error states as well as my own 'loaded' state
-export const selectEntities = ({ workplan }) => {
-  const sortedEntities = workplanSelectors.selectAll(workplan)
-  const keyedEntities = workplan.entities
-  const ids = workplanSelectors.selectIds(workplan)
-  const { loading, error, selectedId } = workplan
-  const selectedEntity = keyedEntities[selectedId]
+export const selectEntities = ({ workPlan }) => {
+  const sortedEntities = workPlanSelectors.selectAll(workPlan)
+  const keyedEntities = workPlan.entities
+  const ids = workPlanSelectors.selectIds(workPlan)
+  const { loading, error, selectedIds } = workPlan
+  const selectedEntities = selectedIds.map(id => keyedEntities[id])
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
     sortedEntities,
     keyedEntities,
     ids,
-    selectedId,
-    selectedEntity,
+    selectedIds,
+    selectedEntities,
     loading,
     isLoading,
     loaded,
@@ -147,26 +164,26 @@ export const selectEntities = ({ workplan }) => {
   }
 }
 
-export const selectIds = ({ workplan }) => workplanSelectors.selectIds(workplan)
+export const selectIds = ({ workPlan }) => workPlanSelectors.selectIds(workPlan)
 
 export const selectEntityById =
   id =>
-  ({ workplan }) =>
-    workplanSelectors.selectById(workplan, id)
+  ({ workPlan }) =>
+    workPlanSelectors.selectById(workPlan, id)
 
-export const selectSelectedId = ({ workplan: { selectedId } }) => selectedId
+export const selectSelectedId = ({ workPlan: { selectedId } }) => selectedId
 
-export const selectSelectedEntity = ({ workplan }) => {
-  const { selectedId } = workplan
+export const selectSelectedEntity = ({ workPlan }) => {
+  const { selectedId } = workPlan
   if (!selectedId) return null
 
-  const selectedEntity = selectEntityById(selectedId)({ workplan })
+  const selectedEntity = selectEntityById(selectedId)({ workPlan })
 
   return { selectedEntity }
 }
 
-export const selectLocations = ({ workplan }) => {
-  const allWorkplan = workplanSelectors.selectAll(workplan)
+export const selectLocations = ({ workPlan }) => {
+  const allWorkplan = workPlanSelectors.selectAll(workPlan)
   if (!allWorkplan.length) return null
   const locations = []
   allWorkplan.forEach(({ location }) => {
@@ -175,7 +192,7 @@ export const selectLocations = ({ workplan }) => {
   return locations
 }
 
-const { reducer, actions } = workplanSlice
-export const { clear, add, update, select, error } = actions
+const { reducer, actions } = workPlanSlice
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

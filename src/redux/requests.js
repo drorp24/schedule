@@ -17,6 +17,7 @@ export const fetchRequests = createAsyncThunk(
   'requests/fetch',
   async ({ runId, requestsFields }, { rejectWithValue, getState }) => {
     try {
+      console.log('inside old requests')
       const response = await requestsApi(runId)
       const requests = response.map(requestsFields)
       return { runId, requests }
@@ -37,7 +38,7 @@ export const fetchRequests = createAsyncThunk(
 // * reducers / actions
 const initialState = requestsAdapter.getInitialState({
   loading: 'idle',
-  selectedId: null,
+  selectedIds: [],
   meta: null,
 })
 
@@ -48,10 +49,15 @@ const requestsSlice = createSlice({
     clear: () => initialState,
     add: requestsAdapter.addOne,
     update: requestsAdapter.updateOne,
-    select: (state, { payload }) => {
-      state.selectedId = payload
-    },
-    error: (state, { payload: error }) => ({ ...state, error }),
+    selectOne: (state, { payload }) => ({
+      ...state,
+      selectedIds: [payload],
+    }),
+    selectMulti: (state, { payload }) => ({
+      ...state,
+      selectedIds: [...state.selectedIds, payload],
+      error: (state, { payload: error }) => ({ ...state, error }),
+    }),
   },
   extraReducers: {
     [fetchRequests.pending]: (state, { meta: { requestId } }) => {
@@ -142,6 +148,6 @@ export const selectLocations = ({ requests }) => {
 }
 
 const { reducer, actions } = requestsSlice
-export const { clear, add, update, select, error } = actions
+export const { clear, add, update, selectOne, selectMulti, error } = actions
 
 export default reducer

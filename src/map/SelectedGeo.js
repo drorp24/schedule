@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useRef, memo } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectSelectedEntities } from '../redux/recommendations'
-import { selectLocations as selectReqLocations } from '../redux/requests'
+
+import { fetchDeliveryPlans } from '../redux_new/deliveryPlans'
+import { useRunId } from '../utility/appUtilities'
 
 import { useMap, Polygon, Polyline, Marker, FeatureGroup } from 'react-leaflet'
 import isEqual from 'lodash.isequal'
@@ -19,39 +21,52 @@ const styles = {
   pathOptions: { color: 'deepskyblue' },
 }
 
-// ! Preventing unnecessary flyTo's with nasty shake effect
-// This should be the go-to solution for the nasty shaking effect that's the result of flyingTo the same location:
-// use a ref to keep previous selectedId and coordinates to supress flyTo when
+// ! Preventing flyTo's trembling effect
+// Previous selectedId and coordinates (kept in ref) are compared to the current ones to prevent flyTo when:
 // - repetitively selecting the same entity
-// - selecting a different entity that has the very same coordinates (lodash isEqual to the rescue)
-// If there are multiple reqLocations (e.g., polygon) whose bounds center happens to equal that of different ones,
-// then nasty shaking is inevitable.
-//
+// - selecting a different entity with identical coordinates (lodash isEqual to the rescue)
+// - not yet handled: multiple reqLocations (e.g., polygon) whose bounds center is similar (not necessarily identical)
+//   to the previous one.
 
-const SelectedGeo = () => {
+// ToDo:
+// - create 'selectSelectedEntities' for depots, zones and workPlan too
+// - Map - call SelectedGeo 4 times: for requests, depots, zones and workPlan (rename it)
+// - accept selectSelectedEntities from caller Map and extract drop poinhts or locations accordingly
+const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
+  console.log('SelectedGeo is rendered')
   const map = useMap()
-  const { selectedIds, reqDropPoints } = useSelector(selectSelectedEntities)
-  const reqLocations = useSelector(selectReqLocations)
   const selectedRef = useRef()
-
-  const locations = reqDropPoints?.length ? reqDropPoints : reqLocations
-
-  const selectedId = selectedIds.length === 1 && selectedIds[0]
-  const sameId = selectedId && selectedId === selectedRef.current?.selectedId
-  const sameCoordinates =
-    locations?.length < 3 && isEqual(locations, selectedRef.current?.locations)
+  const runId = useRunId()
+  const dispatch = useDispatch()
+  const { locations } = useSelector(selectSelectedEntities)
 
   useEffect(() => {
-    if (!map || !locations || !locations?.length || sameId || sameCoordinates)
-      return
+    if (fetchPlans) dispatch(fetchDeliveryPlans({ runId }))
+  }, [dispatch, fetchPlans, runId])
 
-    selectedRef.current = { selectedId, locations }
+  // const locations = reqDropPoints?.length ? reqDropPoints : reqLocations
 
-    const locationPoints = locations.map(({ coordinates }) => [...coordinates])
-    const locationBounds = L.latLngBounds(locationPoints)
+  // const selectedId = selectedIds.length === 1 && selectedIds[0]
+  // const sameId = selectedId && selectedId === selectedRef.current?.selectedId
+  // const sameCoordinates = false
+  // locations?.length < 5 && isEqual(locations, selectedRef.current?.locations)
 
-    map.flyToBounds(locationBounds, flyToOptions)
-  }, [map, locations, sameId, sameCoordinates, selectedId, selectedRef])
+  // useEffect(() => {
+  //   if (
+  //     !map ||
+  //     /* !locations ||  !locations?.length ||*/
+  //     sameId ||
+  //     sameCoordinates
+  //   )
+  //     return
+
+  //   // selectedRef.current = { selectedId, locations }
+
+  //   // const locationPoints = locations.map(({ coordinates }) => [...coordinates])
+  //   // const locationBounds = L.latLngBounds(locationPoints)
+
+  //   // map.flyToBounds(locationBounds, flyToOptions)
+  // }, [map, /* locations,  */ sameId, sameCoordinates, selectedId, selectedRef])
 
   const eventHandlers = {
     click: () => {
@@ -62,41 +77,53 @@ const SelectedGeo = () => {
 
   if (!locations?.length) return null
 
+  console.log('locations: ', locations)
+
   return (
     <FeatureGroup>
-      {locations.map(({ type, coordinates: positions, color }, index) => {
-        switch (type) {
-          case 'Polygon':
-            return (
-              <Polygon
-                {...{ positions, eventHandlers, pathOptions }}
-                key={`${selectedId}-${index}`}
-              />
-            )
-          case 'Point':
-            return (
-              <Marker
-                {...{ position: positions, eventHandlers, pathOptions }}
-                key={`${selectedId}-${index}`}
-                icon={dropIcon(color)}
-              />
-            )
-          case 'LineString':
-            return (
-              <Polyline
-                {...{ positions, eventHandlers, pathOptions }}
-                key={`${selectedId}-${index}`}
-              />
-            )
-          default:
-            return (
-              <Polygon
-                {...{ positions, eventHandlers, pathOptions }}
-                key={`${selectedId}-${index}`}
-              />
-            )
+      {locations.map(
+        (
+          {
+            geolocation: {
+              geometry: { type, coordinates: positions, color },
+            },
+          },
+          index
+        ) => {
+          switch (type) {
+            case 'Polygon':
+              return (
+                <Polygon
+                  {...{ positions, eventHandlers, pathOptions }}
+                  key={index}
+                />
+              )
+            case 'Point':
+              console.log('Point. positions: ', positions)
+              return (
+                <Marker
+                  {...{ position: positions, eventHandlers, pathOptions }}
+                  key={index}
+                  icon={dropIcon(color)}
+                />
+              )
+            // case 'LineString':
+            //   return (
+            //     <Polyline
+            //       {...{ positions, eventHandlers, pathOptions }}
+            //       // key={`${selectedId}-${index}`}
+            //     />
+            //   )
+            default:
+              return (
+                <Polygon
+                  {...{ positions, eventHandlers, pathOptions }}
+                  key={index}
+                />
+              )
+          }
         }
-      })}
+      )}
     </FeatureGroup>
   )
 }
