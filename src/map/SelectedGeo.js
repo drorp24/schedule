@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef, memo } from 'react'
+import { useEffect, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectSelectedEntities } from '../redux/recommendations'
 
 import { fetchDeliveryPlans } from '../redux_new/deliveryPlans'
 import { useRunId } from '../utility/appUtilities'
 
-import { useMap, Polygon, Polyline, Marker, FeatureGroup } from 'react-leaflet'
-import isEqual from 'lodash.isequal'
+import { useMap, Polygon, Marker, FeatureGroup } from 'react-leaflet'
+import farEnough from '../utility/farEnough'
 
 import { flyToOptions, dropIcon } from './config'
 
@@ -21,21 +21,9 @@ const styles = {
   pathOptions: { color: 'deepskyblue' },
 }
 
-// ! Preventing flyTo's trembling effect
-// Previous selectedId and coordinates (kept in ref) are compared to the current ones to prevent flyTo when:
-// - repetitively selecting the same entity
-// - selecting a different entity with identical coordinates (lodash isEqual to the rescue)
-// - not yet handled: multiple reqLocations (e.g., polygon) whose bounds center is similar (not necessarily identical)
-//   to the previous one.
-
-// ToDo:
-// - create 'selectSelectedEntities' for depots, zones and workPlan too
-// - Map - call SelectedGeo 4 times: for requests, depots, zones and workPlan (rename it)
-// - accept selectSelectedEntities from caller Map and extract drop poinhts or locations accordingly
 const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
   console.log('SelectedGeo is rendered')
   const map = useMap()
-  const selectedRef = useRef()
   const runId = useRunId()
   const dispatch = useDispatch()
   const { locations } = useSelector(selectSelectedEntities)
@@ -44,29 +32,22 @@ const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
     if (fetchPlans) dispatch(fetchDeliveryPlans({ runId }))
   }, [dispatch, fetchPlans, runId])
 
-  // const locations = reqDropPoints?.length ? reqDropPoints : reqLocations
+  useEffect(() => {
+    if (!map || !locations?.length) return
 
-  // const selectedId = selectedIds.length === 1 && selectedIds[0]
-  // const sameId = selectedId && selectedId === selectedRef.current?.selectedId
-  // const sameCoordinates = false
-  // locations?.length < 5 && isEqual(locations, selectedRef.current?.locations)
+    const locationPoints = locations.map(
+      ({
+        geolocation: {
+          geometry: { coordinates },
+        },
+      }) => [...coordinates]
+    )
+    const locationBounds = L.latLngBounds(locationPoints)
+    const mapBounds = map.getBounds()
 
-  // useEffect(() => {
-  //   if (
-  //     !map ||
-  //     /* !locations ||  !locations?.length ||*/
-  //     sameId ||
-  //     sameCoordinates
-  //   )
-  //     return
-
-  //   // selectedRef.current = { selectedId, locations }
-
-  //   // const locationPoints = locations.map(({ coordinates }) => [...coordinates])
-  //   // const locationBounds = L.latLngBounds(locationPoints)
-
-  //   // map.flyToBounds(locationBounds, flyToOptions)
-  // }, [map, /* locations,  */ sameId, sameCoordinates, selectedId, selectedRef])
+    if (farEnough(locationBounds, mapBounds))
+      map.flyToBounds(locationBounds, flyToOptions)
+  }, [map, locations])
 
   const eventHandlers = {
     click: () => {
@@ -76,8 +57,6 @@ const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
   const { pathOptions } = styles
 
   if (!locations?.length) return null
-
-  console.log('locations: ', locations)
 
   return (
     <FeatureGroup>
@@ -107,13 +86,6 @@ const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
                   icon={dropIcon(color)}
                 />
               )
-            // case 'LineString':
-            //   return (
-            //     <Polyline
-            //       {...{ positions, eventHandlers, pathOptions }}
-            //       // key={`${selectedId}-${index}`}
-            //     />
-            //   )
             default:
               return (
                 <Polygon

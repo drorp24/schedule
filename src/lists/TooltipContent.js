@@ -3,6 +3,7 @@ import useTheme from '../styling/useTheme'
 import { useLocale, useMode, snake2human } from '../utility/appUtilities'
 import excludeKeys from '../utility/excludeKeys'
 import useTranslation from '../i18n/useTranslation'
+import jsStringify from '../utility/jsStringify'
 
 import { ThemeProvider, makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -159,7 +160,9 @@ const TooltipContent = ({
                 }}
               >
                 <span>{snake2human(key)}:</span>
-                <span css={styles.explainer.value}>{value}</span>
+                <span css={styles.explainer.value}>
+                  {typeof value === 'object' ? jsStringify(value) : value}
+                </span>
               </div>
             ))}
           </div>

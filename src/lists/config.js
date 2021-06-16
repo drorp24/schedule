@@ -1,6 +1,3 @@
-import blue from '@material-ui/core/colors/blue'
-import orange from '@material-ui/core/colors/orange'
-import red from '@material-ui/core/colors/red'
 import lime from '@material-ui/core/colors/lime'
 import lightBlue from '@material-ui/core/colors/lightBlue'
 import deepOrange from '@material-ui/core/colors/deepOrange'
@@ -21,7 +18,7 @@ const config = {
     color: lightBlue['A200'],
     filters: ['emplyedBySelected', 'employed', 'unemployed'],
     icon: <DepotsIcon />,
-    exclude: ['location'],
+    exclude: ['geolocation'],
     avatar: <DepotsIcon />,
   },
   zones: {
@@ -29,7 +26,7 @@ const config = {
     color: deepOrange[500],
     filters: null,
     icon: <ZonesIcon />,
-    exclude: ['positions'],
+    exclude: ['geolocation'],
     avatar: <ZonesIcon />,
   },
 }

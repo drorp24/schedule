@@ -57,7 +57,6 @@ export const tileProviders = [
     },
   },
   {
-    bestFor: 'light',
     name: 'cartoDbVoyager',
     args: {
       url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -82,6 +81,7 @@ export const tileProviders = [
   //   },
   // },
   {
+    bestFor: 'light',
     name: 'osmBright',
     args: {
       url: 'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png',

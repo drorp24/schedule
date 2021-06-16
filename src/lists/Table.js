@@ -6,7 +6,7 @@ import get from 'lodash.get'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import { useLocale } from '../utility/appUtilities'
+import { useLocale, useMode } from '../utility/appUtilities'
 import useTranslation from '../i18n/useTranslation'
 import usePixels from '../utility/usePixels'
 import TooltipContent from './TooltipContent'
@@ -49,7 +49,25 @@ const styles = {
     justifyContent: 'space-between',
     boxSizing: 'border-box',
     cursor: 'pointer',
-    borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+    borderBottom: '1px solid',
+    padding: '0 0.5rem',
+    borderColor: 'white',
+    even: {
+      light: {
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+      },
+      dark: {
+        borderColor: 'rgba(256, 256, 256, 0.1)',
+      },
+    },
+    odd: {
+      light: {
+        borderColor: 'white',
+      },
+      dark: {
+        borderColor: 'rgba(0, 0, 0, 0.25)',
+      },
+    },
   },
   lightEven: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -388,7 +406,7 @@ const Row = ({
     const select = multi ? selectMulti : selectOne
     const addSelection = id => () => dispatch(select(id))
 
-    // const { light } = useMode()
+    const { mode } = useMode()
     const { placement } = useLocale()
 
     // const bg =
@@ -403,7 +421,7 @@ const Row = ({
         css={{
           ...style,
           ...styles.row,
-          // ...bg,
+          ...(index % 2 ? styles.row.odd[mode] : styles.row.even[mode]),
           ...line,
           ...selectedRow,
         }}
