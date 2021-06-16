@@ -44,7 +44,11 @@ export const fetchRequests = createAsyncThunk(
     try {
       const response = await requestsApi(runId)
       const requests = Object.values(response).map(requestsFields)
-      return { runId, requests }
+      const planIds = {}
+      requests.forEach(({ id, package_delivery_plan_ids }) => {
+        planIds[package_delivery_plan_ids[0]] = id
+      })
+      return { runId, requests, planIds }
     } catch (error) {
       console.error('fetch catch error:', error)
       // xApi throws a POJO, which redux can serialize and I want to record in the error key
@@ -113,7 +117,7 @@ const requestsSlice = createSlice({
 
     [fetchRequests.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { runId, requests, issues } }
+      { meta: { requestId }, payload: { runId, requests, planIds, issues } }
     ) => {
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
@@ -122,6 +126,7 @@ const requestsSlice = createSlice({
         if (issues) state.issues = issues
         state.meta = { runId }
         requestsAdapter.setAll(state, requests)
+        state.planIds = planIds
       }
     },
 

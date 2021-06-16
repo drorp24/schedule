@@ -26,7 +26,7 @@ export const fetchRecommendations = createAsyncThunk(
     try {
       const response = await recommendationsApi(runId)
       const recommendations = response.map(recommendationFields)
-      const timeline = buildTimeline({ recommendations })
+      /* const timeline = */ buildTimeline({ recommendations })
       return { runId, recommendations }
     } catch (error) {
       console.log('error: ', error)

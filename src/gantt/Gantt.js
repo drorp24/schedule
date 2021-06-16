@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchRecommendations } from '../redux/recommendations'
+import { fetchDeliveries } from '../redux_new/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css'
 import createTimeline from './createTimeline'
-import recommendationFields from './recommendationFields'
 
 import { useLocale } from '../utility/appUtilities'
 import { timelineOptions } from './options'
@@ -15,11 +14,6 @@ import Progress from '../layout/Progress'
 import flight from '../assets/flight.png'
 
 import './gantt.css'
-// ToDo next:
-// - create a React template for the tooltip (mui's Tooltip)
-// - in it, display the volleys hierarchy with mui's Tree, created recursively as in their 'rich' example
-// - insert action icons, as in puzzle, one with thumbs-up icon for approval.
-// ! - important: redux-persist
 
 const Gantt = () => {
   const ref = useRef()
@@ -54,7 +48,9 @@ const Gantt = () => {
       },
       '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text':
         {
-          color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
+          color:
+            /* mode === 'light' ? theme.palette.text.primary : '#9e9e9e' */ 'white',
+          fontWeight: 100,
         },
       '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor':
         {
@@ -113,9 +109,8 @@ const Gantt = () => {
       if (ref.current) ref.current.innerHTML = ''
 
       dispatch(
-        fetchRecommendations({
+        fetchDeliveries({
           runId,
-          recommendationFields,
           buildTimeline,
         })
       ).then(() => {

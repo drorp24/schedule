@@ -8,7 +8,6 @@ import {
   selectOne,
   selectMulti,
 } from '../redux_new/depots'
-import { selectSelectedEntities } from '../redux/recommendations'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -21,7 +20,6 @@ const { depots: conf } = config
 
 const Depots = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-  const { reqFulfilled } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
@@ -30,10 +28,6 @@ const Depots = () => {
   useEffect(() => {
     if (runId) dispatch(fetchDepots({ runId }))
   }, [dispatch, runId])
-
-  useEffect(() => {
-    setFilter(reqFulfilled)
-  }, [reqFulfilled])
 
   return (
     <Table

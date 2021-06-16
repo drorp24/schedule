@@ -5,58 +5,53 @@ import { updateSelected } from './timelineEvents'
 
 const createTimeline =
   ({ container, options, dispatch }) =>
-  ({ recommendations }) => {
-    let groupsObj = {}
-    let recommendationsObj = {}
+  ({ deliveries }) => {
+    const groupsObj = {}
+    const deliveryItems = []
 
-    const items = new DataSet(
-      recommendations.map(
-        ({
+    deliveries.forEach(
+      ({
+        id,
+        drone_formation,
+        drone_type,
+        package_type_amounts,
+        max_session_time,
+        depart_depot_id,
+        arrive_depot_id,
+        drone_deliveries,
+        color,
+      }) => {
+        const className = color
+        groupsObj[id] = {
           id,
-          estimated_start_activity: start,
-          estimated_end_activity: end,
-          start_date,
-          platform_id,
-          drone_formation,
-          drone_package_config_id,
-          fulfills,
-          formation_id,
-          color,
-        }) => {
-          const className = color
-          groupsObj[formation_id] = {
-            id: formation_id,
-            content: 'Abc',
-            title: formation_id,
-            className,
-          }
-          recommendationsObj[id] = {
-            id,
-            estimated_start_activity: start,
-            estimated_end_activity: end,
-            start_date,
-            platform_id,
-            drone_formation,
-            drone_package_config_id,
-            fulfills,
-            formation_id,
-          }
-          return {
-            id,
-            // template: itemTemplate,
-            start,
-            end,
-            group: formation_id,
-            formation_id,
-            platform_id,
-            drone_formation,
-            drone_package_config_id,
-            fulfills,
-            className,
-          }
+          title: id,
+          className,
         }
-      )
+        drone_deliveries.forEach(
+          ({ depart_time, arrive_time, package_delivery_plan_ids }) => {
+            deliveryItems.push({
+              delivering_drones_id: id,
+              start: depart_time,
+              end: arrive_time,
+              package_delivery_plan_ids,
+              drone_formation,
+              drone_type,
+              package_type_amounts,
+              max_session_time,
+              depart_depot_id,
+              arrive_depot_id,
+              drone_deliveries,
+              color,
+              className,
+              group: id,
+              // template: itemTemplate,
+            })
+          }
+        )
+      }
     )
+
+    const items = new DataSet(deliveryItems)
 
     const groups = new DataSet(Object.values(groupsObj))
 

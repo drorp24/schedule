@@ -21,7 +21,6 @@ const { zones: conf } = config
 
 const Zones = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-  const { reqFulfilled } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
@@ -30,10 +29,6 @@ const Zones = () => {
   useEffect(() => {
     if (runId) dispatch(fetchZones({ runId }))
   }, [dispatch, runId])
-
-  useEffect(() => {
-    setFilter(reqFulfilled)
-  }, [reqFulfilled])
 
   return (
     <Table

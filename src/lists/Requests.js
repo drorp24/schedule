@@ -21,7 +21,6 @@ const { requests: conf } = config
 
 const Requests = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-  const { reqFulfilled } = useSelector(selectSelectedEntities)
 
   const [filter, setFilter] = useState(null)
 
@@ -30,10 +29,6 @@ const Requests = () => {
   useEffect(() => {
     if (runId) dispatch(fetchRequests({ runId }))
   }, [dispatch, runId])
-
-  useEffect(() => {
-    setFilter(reqFulfilled)
-  }, [reqFulfilled])
 
   return (
     <Table

@@ -44,7 +44,6 @@ export const fetchZones = createAsyncThunk(
     try {
       const response = await zonesApi(runId)
       const zones = Object.values(response).map(zonesFields)
-      console.log('zones: ', zones)
       return { runId, zones }
     } catch (error) {
       console.error('fetch catch error:', error)

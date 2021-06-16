@@ -1,5 +1,5 @@
 // Find if two map bounds are close enough
-const proximity = 0.3
+const proximity = 0.05
 
 const closeEnough = (bounds1, bounds2) =>
   Math.abs(bounds1._northEast?.lat - bounds2._northEast?.lat) < proximity &&

@@ -24,6 +24,7 @@ const styles = {
 }
 
 const Map = () => {
+  console.log('Map is rendered')
   const { mode } = useMode()
   return (
     <MapContainer

@@ -2,7 +2,7 @@ import axios from 'axios'
 import sampleDeliveryPlans from './sampleData/package_delivery_plans.json'
 
 const deliveryPlansApi = async runId => {
-  const deliveryPlans = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_REQUESTS_ENDPOINT}`
+  const deliveryPlans = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_DELIVERYPLANS_ENDPOINT}`
   try {
     const response = await axios.get(deliveryPlans)
     if (!response) throw new Error('No response')
@@ -21,7 +21,8 @@ const deliveryPlansApi = async runId => {
 
 // test data
 const sampleDeliveryPlansApi = runId => {
-  console.log('sampleDeliveryPlansApi called')
+  console.log('3. sampleDeliveryPlansApi called')
+  console.groupEnd()
   return Promise.resolve(sampleDeliveryPlans)
 }
 

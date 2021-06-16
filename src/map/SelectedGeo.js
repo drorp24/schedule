@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectSelectedEntities } from '../redux/recommendations'
 
 import { fetchDeliveryPlans } from '../redux_new/deliveryPlans'
 import { useRunId } from '../utility/appUtilities'
@@ -49,11 +48,6 @@ const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
       map.flyToBounds(locationBounds, flyToOptions)
   }, [map, locations])
 
-  const eventHandlers = {
-    click: () => {
-      // console.log(`${id} clicked`)
-    },
-  }
   const { pathOptions } = styles
 
   if (!locations?.length) return null
@@ -71,28 +65,17 @@ const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
         ) => {
           switch (type) {
             case 'Polygon':
-              return (
-                <Polygon
-                  {...{ positions, eventHandlers, pathOptions }}
-                  key={index}
-                />
-              )
+              return <Polygon {...{ positions, pathOptions }} key={index} />
             case 'Point':
-              console.log('Point. positions: ', positions)
               return (
                 <Marker
-                  {...{ position: positions, eventHandlers, pathOptions }}
+                  {...{ position: positions, pathOptions }}
                   key={index}
                   icon={dropIcon(color)}
                 />
               )
             default:
-              return (
-                <Polygon
-                  {...{ positions, eventHandlers, pathOptions }}
-                  key={index}
-                />
-              )
+              return <Polygon {...{ positions, pathOptions }} key={index} />
           }
         }
       )}

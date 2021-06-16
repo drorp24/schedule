@@ -29,7 +29,7 @@ const Schedule = () => {
   const styles = {
     root: theme => ({
       display: 'grid',
-      gridTemplateColumns: '30fr 70fr',
+      gridTemplateColumns: '30% 70%',
       backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {

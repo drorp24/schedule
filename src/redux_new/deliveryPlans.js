@@ -42,9 +42,8 @@ export const fetchDeliveryPlans = createAsyncThunk(
   'deliveryPlans/fetch',
   async ({ runId }, { rejectWithValue }) => {
     try {
-      console.log('fetchDeliveryPlans entered')
+      console.log('2. fetchDeliveryPlans entered')
       const response = await deliveryPlansApi(runId)
-      console.log('fetchDeliveryPlans response: ', response)
       const deliveryPlans = Object.values(response).map(deliveryPlansFields)
       return { runId, deliveryPlans }
     } catch (error) {
@@ -69,7 +68,8 @@ export const fetchDeliveryPlans = createAsyncThunk(
       const {
         deliveryPlans: { meta },
       } = getState()
-      console.log('meta?.runId, runId: ', meta?.runId, runId)
+      console.group('dup fetch prevention')
+      console.log('1. condition: meta?.runId, runId: ', meta?.runId, runId)
       if (meta?.runId === runId) return false
     },
   }

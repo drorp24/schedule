@@ -12,6 +12,7 @@ import recommendations from './recommendations'
 import requests from '../redux_new/requests'
 import depots from '../redux_new/depots'
 import zones from '../redux_new/zones'
+import deliveries from '../redux_new/deliveries'
 import deliveryPlans from '../redux_new/deliveryPlans'
 
 const store = configureStore({
@@ -22,6 +23,7 @@ const store = configureStore({
     requests,
     depots,
     zones,
+    deliveries,
     recommendations,
     deliveryPlans,
   },
