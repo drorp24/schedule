@@ -1,13 +1,11 @@
-import { select } from '../redux/recommendations'
-// import itemTemplate from './itemTemplate'
-import { updateSelection } from '../redux/recommendations'
+import { selectOne, updateSelection } from '../redux/deliveries'
 
 export const selectRecommendation =
   ({ dispatch, timeline }) =>
   ({ items }) => {
     const selectedId = items[0]
     // const selected = timeline.getSelection()
-    dispatch(select(selectedId))
+    dispatch(selectOne(selectedId))
   }
 
 export const updateSelected =

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchDeliveries } from '../redux_new/deliveries'
+import { fetchDeliveries } from '../redux/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css'

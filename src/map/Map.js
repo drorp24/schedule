@@ -2,9 +2,9 @@
 
 import SelectedGeo from './SelectedGeo'
 import ZonesControl from './ZonesControl'
-import { selectSelectedEntities as selectSelectedRequests } from '../redux_new/requests'
-import { selectSelectedEntities as selectSelectedDepots } from '../redux_new/depots'
-import { selectSelectedEntities as selectSelectedZones } from '../redux_new/zones'
+import { selectSelectedEntities as selectSelectedRequests } from '../redux/requests'
+import { selectSelectedEntities as selectSelectedDepots } from '../redux/depots'
+import { selectSelectedEntities as selectSelectedZones } from '../redux/zones'
 
 import 'leaflet/dist/leaflet.css'
 import {

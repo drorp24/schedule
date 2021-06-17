@@ -7,7 +7,7 @@ import {
   selectEntityById,
   selectOne,
   selectMulti,
-} from '../redux_new/depots'
+} from '../redux/depots'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'

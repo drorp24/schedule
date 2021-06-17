@@ -2,7 +2,7 @@
 import { useEffect, memo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { fetchDeliveryPlans } from '../redux_new/deliveryPlans'
+import { fetchDeliveryPlans } from '../redux/deliveryPlans'
 import { useRunId } from '../utility/appUtilities'
 
 import { useMap, Polygon, Marker, FeatureGroup } from 'react-leaflet'

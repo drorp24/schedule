@@ -10,7 +10,7 @@ const useNotifications = setOpen => {
   const requestsError = useSelector(store => store.requests.error)
   const depotsError = useSelector(store => store.depots.error)
   const zonesError = useSelector(store => store.zones.error)
-  const recommendationsError = useSelector(store => store.recommendations.error)
+  const deliveriesError = useSelector(store => store.deliveries.error)
 
   useEffect(() => {
     if (userError) {
@@ -46,21 +46,21 @@ const useNotifications = setOpen => {
       )
       setSeverity('error')
     }
-    if (recommendationsError) {
+    if (deliveriesError) {
       setOpen(true)
       setMessage(
-        'There are issues with the recommendations api. Check log for more details'
+        'There are issues with the deliveries api. Check log for more details'
       )
       setSeverity('error')
     }
   }, [
     setOpen,
     userError,
-    recommendationsError,
+    runsError,
     requestsError,
     depotsError,
     zonesError,
-    runsError,
+    deliveriesError,
   ])
 
   return { message, severity }

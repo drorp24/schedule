@@ -71,7 +71,7 @@ const createTimeline =
 
     // timeline.on(
     //   'rangechanged',
-    //   changeDetailsLevel({ timeline, recommendationsObj })
+    //   changeDetailsLevel({ timeline, deliveriesObj })
     // )
     return timeline
   }

@@ -7,8 +7,7 @@ import {
   selectEntityById,
   selectOne,
   selectMulti,
-} from '../redux_new/requests'
-import { selectSelectedEntities } from '../redux/recommendations'
+} from '../redux/requests'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'

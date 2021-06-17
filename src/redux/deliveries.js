@@ -5,13 +5,13 @@ import {
   current,
 } from '@reduxjs/toolkit'
 
-import zonesApi from '../api_new/zonesApi'
-import zonesFields from '../api_new/conversions/zonesFields'
+import deliveriesApi from '../api/deliveriesApi'
+import deliveriesFields from '../api/conversions/deliveriesFields'
 
 // * normalization
-const zonesAdapter = createEntityAdapter({
+const deliveriesAdapter = createEntityAdapter({
   selectId: ({ id }) => id,
-  sortComparer: (a, b) => a.id.localeCompare(b.id),
+  sortComparer: (a, b) => {},
 })
 
 // !Error handling
@@ -35,16 +35,17 @@ const zonesAdapter = createEntityAdapter({
 //  - can be set either in xApi, the fetchx below or the[fetchx.fulfilled].
 //  - either way, they should be one of [fetchx.fullfilled]'s arguments,
 //    so it can add them to the list of issues on the entity's issues key.
-//  - unlike api failures, issues don't require user's attention or developer's bugfix.
+//  - unlike api failures, issues don't require user's attention nor any bugfix.
 
 // * thunk
-export const fetchZones = createAsyncThunk(
-  'zones/fetch',
-  async ({ runId }, { rejectWithValue }) => {
+export const fetchDeliveries = createAsyncThunk(
+  'deliveries/fetch',
+  async ({ runId, buildTimeline }, { rejectWithValue }) => {
     try {
-      const response = await zonesApi(runId)
-      const zones = Object.values(response).map(zonesFields)
-      return { runId, zones }
+      const response = await deliveriesApi(runId)
+      const deliveries = Object.values(response).map(deliveriesFields)
+      buildTimeline({ deliveries })
+      return { runId, deliveries }
     } catch (error) {
       console.error('fetch catch error:', error)
       // xApi throws a POJO, which redux can serialize and I want to record in the error key
@@ -59,13 +60,13 @@ export const fetchZones = createAsyncThunk(
     // 'meta' holds info that uniquely identifies a specific fetched data (here: its run_id).
     //
     // The code below will prevent re-fetching of data if it already exists,
-    // by comparing the zones' runId param with the recorded runId of last succesful fetch.
+    // by comparing the deliveries' runId param with the recorded runId of last succesful fetch.
     //
     // Redundant fetching would otherwise happen if component is re-rendered
     // for reasons such as locale change that trigger an overall rerender.
     condition: ({ runId }, { getState }) => {
       const {
-        zones: { meta },
+        deliveries: { meta },
       } = getState()
       if (meta?.runId === runId) return false
     },
@@ -73,20 +74,20 @@ export const fetchZones = createAsyncThunk(
 )
 
 // * reducers / actions
-const initialState = zonesAdapter.getInitialState({
+const initialState = deliveriesAdapter.getInitialState({
   meta: null,
   loading: 'idle',
   issues: [],
   selectedIds: [],
 })
 
-const zonesSlice = createSlice({
-  name: 'zones',
+const deliveriesSlice = createSlice({
+  name: 'deliveries',
   initialState,
   reducers: {
     clear: () => initialState,
-    add: zonesAdapter.addOne,
-    update: zonesAdapter.updateOne,
+    add: deliveriesAdapter.addOne,
+    update: deliveriesAdapter.updateOne,
     selectOne: (state, { payload }) => ({
       ...state,
       selectedIds: current(state).selectedIds.includes(payload)
@@ -100,55 +101,67 @@ const zonesSlice = createSlice({
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
     },
+    updateSelection: (state, { payload }) => {
+      state.selectedIds = payload
+    },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
-    [fetchZones.pending]: (state, { meta: { requestId } }) => {
+    [fetchDeliveries.pending]: (state, { meta: { deliveryId } }) => {
       if (state.loading === 'idle') {
-        state.currentRequestId = requestId
+        state.currentDeliveryId = deliveryId
         state.loading = 'pending'
         state.error = null
       }
     },
 
-    [fetchZones.fulfilled]: (
+    [fetchDeliveries.fulfilled]: (
       state,
-      { meta: { requestId }, payload: { runId, zones, issues } }
+      { meta: { deliveryId }, payload: { runId, deliveries, issues } }
     ) => {
-      if (state.loading === 'pending' && state.currentRequestId === requestId) {
-        state.currentRequestId = undefined
+      if (
+        state.loading === 'pending' &&
+        state.currentDeliveryId === deliveryId
+      ) {
+        state.currentDeliveryId = undefined
         state.loading = 'idle'
         state.error = null
         if (issues) state.issues = issues
         state.meta = { runId }
-        zonesAdapter.setAll(state, zones)
+        deliveriesAdapter.setAll(state, deliveries)
       }
     },
 
-    [fetchZones.rejected]: (state, { meta: { requestId }, payload, error }) => {
-      console.error('fetchZones Rejected:')
+    [fetchDeliveries.rejected]: (
+      state,
+      { meta: { deliveryId }, payload, error }
+    ) => {
+      console.error('fetchDeliveries Rejected:')
       if (error?.message) console.error(error.message)
-      if (state.loading === 'pending' && state.currentRequestId === requestId) {
-        state.currentRequestId = undefined
+      if (
+        state.loading === 'pending' &&
+        state.currentDeliveryId === deliveryId
+      ) {
+        state.currentDeliveryId = undefined
         state.loading = 'idle'
-        state.error = payload.toString()
+        state.error = payload
       }
     },
   },
 })
 
 // * selectors (partly memoized)
-const zonesSelectors = zonesAdapter.getSelectors()
+const deliveriesSelectors = deliveriesAdapter.getSelectors()
 
 // combine together:
 // - createEntityAdapter's memoized sorted entities
 // - keyed entities
 // - createAsyncThunk's loading/error states as well as my own 'loaded' state
-export const selectEntities = ({ zones }) => {
-  const sortedEntities = zonesSelectors.selectAll(zones)
-  const keyedEntities = zones.entities
-  const ids = zonesSelectors.selectIds(zones)
-  const { loading, error, selectedIds } = zones
+export const selectEntities = ({ deliveries }) => {
+  const sortedEntities = deliveriesSelectors.selectAll(deliveries)
+  const keyedEntities = deliveries.entities
+  const ids = deliveriesSelectors.selectIds(deliveries)
+  const { loading, error, selectedIds } = deliveries
   const selectedEntities = selectedIds.map(id => keyedEntities[id])
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
@@ -165,38 +178,62 @@ export const selectEntities = ({ zones }) => {
   }
 }
 
-export const selectIds = ({ zones }) => zonesSelectors.selectIds(zones)
+export const selectIds = ({ deliveries }) =>
+  deliveriesSelectors.selectIds(deliveries)
 
 export const selectEntityById =
   id =>
-  ({ zones }) =>
-    zonesSelectors.selectById(zones, id)
+  ({ deliveries }) =>
+    deliveriesSelectors.selectById(deliveries, id)
 
-export const selectSelectedId = ({ zones: { selectedId } }) => selectedId
+export const selectSelectedEntities = ({ deliveries, deliveryPlans }) => {
+  if (
+    !deliveries.ids?.length ||
+    !deliveryPlans.ids?.length ||
+    !deliveries.selectedIds?.length
+  )
+    return {}
 
-export const selectSelectedEntity = ({ zones }) => {
-  const { selectedId } = zones
+  const { selectedIds } = deliveries
+  const locations = []
+  selectedIds
+    .map(deliveryId => ({
+      deliveryId,
+      deliveryPlanIds:
+        deliveries.entities[deliveryId].package_delivery_plan_ids,
+    }))
+    .forEach(({ deliveryId, deliveryPlanIds = [] }) => {
+      deliveryPlanIds.forEach(deliveryPlanId => {
+        const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
+        const { geolocation } = deliveryPlan
+        locations.push({ deliveryId, deliveryPlanId, geolocation })
+      })
+    })
+  const selectedEntities = selectedIds.map(id => deliveries.entities[id])
+  return { selectedEntities, locations }
+}
+
+// ToDo: remove
+export const selectSelectedId = ({ deliveries: { selectedId } }) => selectedId
+
+export const selectSelectedEntity = ({ deliveries }) => {
+  const { selectedId } = deliveries
   if (!selectedId) return null
 
-  const selectedEntity = selectEntityById(selectedId)({ zones })
+  const selectedEntity = selectEntityById(selectedId)({ deliveries })
 
   return { selectedEntity }
 }
 
-export const selectSelectedEntities = ({ zones }) => {
-  if (!zones.ids?.length || !zones.selectedIds?.length) return {}
-
-  const { selectedIds } = zones
-  const locations = selectedIds.map(zoneId => ({
-    zoneId,
-    geolocation: zones.entities[zoneId].geolocation,
-  }))
-
-  const selectedEntities = selectedIds.map(id => zones.entities[id])
-  return { selectedEntities, locations }
-}
-
-const { reducer, actions } = zonesSlice
-export const { clear, add, update, selectOne, selectMulti, error } = actions
+const { reducer, actions } = deliveriesSlice
+export const {
+  clear,
+  add,
+  update,
+  selectOne,
+  selectMulti,
+  updateSelection,
+  error,
+} = actions
 
 export default reducer
