@@ -101,15 +101,16 @@ const Schedule = () => {
     results: {
       display: 'grid',
       gridTemplateRows: '60% 40%',
-      gap: '0.35rem',
       backgroundColor: 'white',
       overflow: 'hidden',
     },
     gantt: theme => ({
+      paddingTop: '2rem',
+      backgroundColor:
+        mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0.8)',
       overflow: 'scroll',
       ...noScrollBar,
-      border: '1px solid rgba(0, 0, 0, 0.5)',
-      // paddingRight: '2px',
+      borderTop: theme.palette.border,
     }),
     map: {},
     sectionTitle: {

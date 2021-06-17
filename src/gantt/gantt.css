@@ -4,13 +4,11 @@
 
 .vis-time-axis.vis-foreground {
   position: fixed;
-  top: calc(60vh - 2rem);
-  right: calc(4rem + 0.3 * (100vw - 4rem));
-  width: calc(100vw - 4rem - 0.3 * (100vw - 4rem));
+  top: 60vh;
+  right: calc(4rem + 0.3 * (100vw - 4rem) - 5px);
+  width: calc(100vw - 4rem - 0.3 * (100vw - 4rem) + 5px);
   padding-right: 2rem;
   z-index: 401;
-  background-color: rgba(0, 0, 0, 0.7);
-  /* border: 5px solid; */
   height: 2rem !important;
   display: flex;
   align-items: center;

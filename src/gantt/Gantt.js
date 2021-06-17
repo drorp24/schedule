@@ -27,7 +27,6 @@ const Gantt = () => {
   const styles = {
     root: theme => ({
       height: '100%',
-      backgroundColor: theme.palette.background.darkerBackdrop,
       overflow: 'scroll',
       ...noScrollbar,
       '& .vis-delete-rtl': {
@@ -48,9 +47,8 @@ const Gantt = () => {
       },
       '& .vis-labelset .vis-label, .vis-time-axis .vis-text, .vis-time-axis .vis-text':
         {
-          color:
-            /* mode === 'light' ? theme.palette.text.primary : '#9e9e9e' */ 'white',
-          fontWeight: 100,
+          color: mode === 'light' ? theme.palette.text.primary : '#9e9e9e',
+          fontWeight: 400,
         },
       '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom, .vis-time-axis .vis-grid.vis-minor':
         {
