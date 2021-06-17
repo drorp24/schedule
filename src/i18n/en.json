@@ -19,8 +19,6 @@
   "supplier": "Supplier",
   "suppliers_category_id": "Supplier",
   "requests": "Requests",
-  "resources": "Resources",
-  "directives": "Directives",
   "routes": "Routes",
   "appName": "Schedule",
   "schedule": "Schedule",
