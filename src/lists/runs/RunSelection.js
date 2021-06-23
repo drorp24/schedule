@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, memo, useMemo } from 'react'
+import { useEffect, memo, useMemo, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRuns, selectEntities, select } from '../../redux/runs'
-import runsFields from './runsFields'
 
 import { useLocale, localeDateTime } from '../../utility/appUtilities'
 
@@ -44,7 +43,9 @@ const RunSelection = () => {
   const { locale } = useLocale()
   const dispatch = useDispatch()
 
-  const d = localeDateTime(locale)
+  const d = useCallback(() => {
+    localeDateTime(locale)
+  }, [locale])
   const selectRun = ({ target: { value } }) => {
     if (value !== selectedId) dispatch(select(value))
   }
@@ -54,18 +55,19 @@ const RunSelection = () => {
       locale &&
       loaded &&
       sortedEntities.length &&
-      sortedEntities.map(({ id, publish_time }) => ({
+      sortedEntities.map(({ id, date }) => ({
         id,
-        date: d(publish_time),
+        date: d(date),
       })),
     [d, loaded, locale, sortedEntities]
   )
 
   useEffect(() => {
-    dispatch(fetchRuns({ runsFields }))
+    dispatch(fetchRuns())
   }, [dispatch])
 
   if (!runs || !runs.length) return null
+  console.log('RunSelection. runs: ', runs)
 
   return (
     <FormControl fullWidth>

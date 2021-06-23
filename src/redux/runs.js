@@ -5,23 +5,30 @@ import {
 } from '@reduxjs/toolkit'
 
 import runsApi from '../api/runsApi'
+import runsFields from '../api/conversions/runsFields'
 
 // * normalization
 const runsAdapter = createEntityAdapter({
-  selectId: ({ publish_time }) => publish_time,
+  selectId: ({ id }) => id,
   sortComparer: (a, b) => {},
 })
 
 // * thunk
 export const fetchRuns = createAsyncThunk(
   'runs/fetch',
-  async ({ runsFields }, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await runsApi()
-      const runs = response.map(runsFields)
+      console.log('response: ', response)
+      const runs = Object.values(response).map(runsFields)
+      console.log('runs: ', runs)
       return { runs }
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.toString())
+      console.error('fetch catch error:', error)
+      // xApi throws a POJO, which redux can serialize and I want to record in the error key
+      // but failures in the above code will generate an Error type, which redux cannot serialize
+      const message = error instanceof Error ? error.message : error
+      return rejectWithValue(message)
     }
   }
 )

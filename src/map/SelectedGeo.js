@@ -1,9 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, memo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
-import { fetchDeliveryPlans } from '../redux/deliveryPlans'
-import { useRunId } from '../utility/appUtilities'
+import { useSelector } from 'react-redux'
 
 import { useMap, Polygon, Marker, FeatureGroup } from 'react-leaflet'
 import farEnough from '../utility/farEnough'
@@ -20,16 +17,10 @@ const styles = {
   pathOptions: { color: 'deepskyblue' },
 }
 
-const SelectedGeo = ({ fetchPlans = false, selectSelectedEntities }) => {
+const SelectedGeo = ({ selectSelectedEntities }) => {
   console.log('SelectedGeo is rendered')
   const map = useMap()
-  const runId = useRunId()
-  const dispatch = useDispatch()
   const { locations } = useSelector(selectSelectedEntities)
-
-  useEffect(() => {
-    if (fetchPlans) dispatch(fetchDeliveryPlans({ runId }))
-  }, [dispatch, fetchPlans, runId])
 
   useEffect(() => {
     if (!map || !locations?.length) return

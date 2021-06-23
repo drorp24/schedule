@@ -45,6 +45,7 @@ const styles = {
 }
 
 const ListSelection = memo(({ list, setList }) => {
+  console.log('ListSelection is rendered')
   const handleListSelection = (event, newList) => {
     setList(newList)
   }
@@ -72,11 +73,16 @@ const ListSelection = memo(({ list, setList }) => {
   )
 })
 
-const Select = ({ list, setList }) => (
-  <div css={styles.header}>
-    <RunSelection />
-    <ListSelection {...{ list, setList }} />
-  </div>
-)
+const Select = ({ list, setList }) => {
+  console.log(
+    'Select is rendered, that includes RunSelection and ListSelection'
+  )
+  return (
+    <div css={styles.header}>
+      <RunSelection />
+      <ListSelection {...{ list, setList }} />
+    </div>
+  )
+}
 
 export default memo(Select)

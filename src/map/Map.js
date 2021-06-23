@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import SelectedGeo from './SelectedGeo'
 import ZonesControl from './ZonesControl'
 import { selectSelectedEntities as selectSelectedRequests } from '../redux/requests'
 import { selectSelectedEntities as selectSelectedDepots } from '../redux/depots'
 import { selectSelectedEntities as selectSelectedZones } from '../redux/zones'
+import { fetchDeliveryPlans } from '../redux/deliveryPlans'
 
 import 'leaflet/dist/leaflet.css'
 import {
@@ -14,7 +17,9 @@ import {
   ZoomControl,
 } from 'react-leaflet'
 import { tileProviders, locations } from './config'
+
 import { useMode } from '../utility/appUtilities'
+import { useRunId } from '../utility/appUtilities'
 
 const styles = {
   map: {
@@ -26,6 +31,14 @@ const styles = {
 const Map = () => {
   console.log('Map is rendered')
   const { mode } = useMode()
+
+  const runId = useRunId()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchDeliveryPlans({ runId }))
+  }, [dispatch, runId])
+
   return (
     <MapContainer
       center={locations.home}
@@ -46,7 +59,7 @@ const Map = () => {
       </LayersControl>
       <ZonesControl />
       <ZoomControl position="bottomleft" />
-      <SelectedGeo fetchPlans selectSelectedEntities={selectSelectedRequests} />
+      <SelectedGeo selectSelectedEntities={selectSelectedRequests} />
       <SelectedGeo selectSelectedEntities={selectSelectedDepots} />
       <SelectedGeo selectSelectedEntities={selectSelectedZones} />
     </MapContainer>

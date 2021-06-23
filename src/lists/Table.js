@@ -296,7 +296,7 @@ const Filter = ({ filters }) => {
 //      ~ rowStyle, headStyle, icon
 //        (all optional) how to style that field in the row and in the header
 // ~ filter
-//  an optional object whose key is the entity's id value and value doesn't matter.
+//  an optional object whose key is an entity's id value and value doesn't matter.
 //  (It is assumed that every entity instance has its own unique id value).
 // ~ conf
 //   a configuration object with any property that is specific for the given entity.
