@@ -165,6 +165,7 @@ export const selectEntities = ({ deliveryPlans }) => {
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
+    deliveryPlans,
     sortedEntities,
     keyedEntities,
     ids,

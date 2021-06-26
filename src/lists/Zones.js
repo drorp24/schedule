@@ -8,6 +8,7 @@ import {
   selectOne,
   selectMulti,
 } from '../redux/zones'
+import { selectSelectedEntities } from '../redux/zones'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -35,6 +36,7 @@ const Zones = () => {
         selectOne,
         selectMulti,
         selectEntities,
+        selectSelectedEntities,
         selectEntityById,
         properties,
         filter,

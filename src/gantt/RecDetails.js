@@ -6,9 +6,9 @@ import StartIcon from '@material-ui/icons/Timer'
 import EndIcon from '@material-ui/icons/TimerOff'
 import PlatformIcon from '@material-ui/icons/FlightTakeoffOutlined'
 import PackageIcon from '@material-ui/icons/GroupWorkOutlined'
-import FormationIcon from '@material-ui/icons/Inventory2Outlined'
 import RecIcon from '@material-ui/icons/DateRangeOutlined'
 import Divider from '@material-ui/core/Divider'
+import FormationIcon from '@material-ui/icons/DoneAllOutlined'
 
 const styles = {
   root: theme => ({
@@ -88,9 +88,9 @@ const RecDetails = ({
   id,
   start,
   end,
-  platform_id,
-  drone_package_config_id,
   drone_formation,
+  drone_type,
+  package_type_amounts,
   classname,
 }) => (
   <div css={styles.root} id="recDetails" className={classname}>
@@ -117,17 +117,17 @@ const RecDetails = ({
     <div>
       <PlatformIcon />
     </div>
-    <div>{platform_id}</div>
-
-    <div>
-      <PackageIcon />
-    </div>
-    <div>{drone_package_config_id}</div>
+    <div>{drone_type}</div>
 
     <div>
       <FormationIcon />
     </div>
     <div>{drone_formation}</div>
+
+    <div>
+      <PackageIcon />
+    </div>
+    <div>{package_type_amounts}</div>
   </div>
 )
 

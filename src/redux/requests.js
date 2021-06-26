@@ -82,6 +82,11 @@ const initialState = requestsAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
+  criteria: {
+    type: null,
+    userMapCriteria: null,
+    ids: [],
+  },
 })
 
 const requestsSlice = createSlice({
@@ -103,6 +108,9 @@ const requestsSlice = createSlice({
         ? currentIds.delete(payload)
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
+    },
+    setCriteria: (state, { payload }) => {
+      state.criteria.type = payload
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -161,6 +169,7 @@ export const selectEntities = ({ requests }) => {
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
+    requests,
     sortedEntities,
     keyedEntities,
     ids,
@@ -172,6 +181,9 @@ export const selectEntities = ({ requests }) => {
     error,
   }
 }
+
+export const selectLoaded = ({ requests: { ids, loading, error } }) =>
+  ids.length > 0 && loading === 'idle' && !error
 
 export const selectIds = ({ requests }) => requestsSelectors.selectIds(requests)
 
@@ -193,7 +205,7 @@ export const selectSelectedEntities = ({ requests, deliveryPlans }) => {
   selectedIds
     .map(requestId => ({
       requestId,
-      deliveryPlanIds: requests.entities[requestId].package_delivery_plan_ids,
+      deliveryPlanIds: requests.entities[requestId]?.package_delivery_plan_ids,
     }))
     .forEach(({ requestId, deliveryPlanIds = [] }) => {
       deliveryPlanIds.forEach(deliveryPlanId => {

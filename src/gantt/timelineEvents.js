@@ -13,7 +13,9 @@ export const updateSelected =
   ({ item }) => {
     setTimeout(() => {
       const selection = timeline.getSelection()
-      dispatch(updateSelection(selection))
+      console.log('selection: ', selection)
+      const ids = selection.map(item => item.split(':')[0])
+      dispatch(updateSelection(ids))
     }, 0)
   }
 

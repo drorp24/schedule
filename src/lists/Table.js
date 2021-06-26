@@ -22,11 +22,14 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import TableRowsIcon from '@material-ui/icons/TableRows'
+import CriteriaIcon from '@material-ui/icons/ManageSearchRounded'
+import Filter1Icon from '@material-ui/icons/FilterAltOutlined'
+import MapCriteriaIcon from '@material-ui/icons/ShareLocationOutlined'
 
 const getFields = ({ entity, properties }) =>
-  properties.map(({ name, rowStyle, icon }) => ({
+  properties.map(({ name, fn, rowStyle, icon }) => ({
     name,
-    value: get(entity, name),
+    value: fn ? fn(get(entity, name)) : get(entity, name),
     rowStyle,
     icon,
   }))
@@ -137,7 +140,7 @@ const styles = {
     borderTopRightRadius: '4px',
     margin: '0 -1rem',
     width: 'calc(100% + 2rem)',
-    height: '1.5rem',
+    height: '2rem',
     backgroundColor: theme.palette.background.prominent,
     color: '#fff',
     display: 'flex',
@@ -220,6 +223,8 @@ const Toolbar = ({
   filter,
   multi,
   setMulti,
+  restrict,
+  setRestrict,
 }) => {
   const t = useTranslation()
   const { name, icon, filters, color } = conf
@@ -227,22 +232,68 @@ const Toolbar = ({
   const filterToggle = () => setFilterResults(value => !value)
   const toggleMulti = () => setMulti(value => !value)
 
+  const colors = {
+    active: color,
+    inactive: '#bdbdbd',
+  }
+
   const toolbarStyles = {
     multi: {
       marginRight: 'auto',
       padding: '1rem',
       '& svg': {
         fontSize: '1rem',
-        color: multi ? 'white' : '#bdbdbd',
+        color: multi ? colors.active : colors.inactive,
       },
     },
+    filters: {
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'flex-end',
+      '& button': {
+        width: '2rem',
+      },
+    },
+    mapCriteriaIcon: {
+      fontSize: '1.2rem',
+    },
+    filterIcon: {
+      fontSize: '1.2rem',
+    },
+    criteriaIcon: {
+      fontSize: '1.5rem',
+    },
+    on: {
+      color: colors.active,
+    },
+    off: {
+      color: colors.inactive,
+    },
   }
+
+  const toggleRestrict = () => setRestrict(value => !value)
 
   return (
     <div css={styles.toolbar}>
       <div css={styles.entity} style={{ color }}>
         {icon}
         {t(name)}
+      </div>
+      <div css={toolbarStyles.filters}>
+        <IconButton>
+          <MapCriteriaIcon css={toolbarStyles.mapCriteriaIcon} />
+        </IconButton>
+        <IconButton onClick={toggleRestrict}>
+          <Filter1Icon
+            css={{
+              ...toolbarStyles.filterIcon,
+              ...(restrict ? toolbarStyles.on : toolbarStyles.off),
+            }}
+          />
+        </IconButton>
+        <IconButton>
+          <CriteriaIcon css={toolbarStyles.criteriaIcon} />
+        </IconButton>
       </div>
       <IconButton css={toolbarStyles.multi} onClick={toggleMulti}>
         <TableRowsIcon />
@@ -287,12 +338,17 @@ const Filter = ({ filters }) => {
 //   dispatched when a row is selected if toolbar so indicates
 // ~ selectEntities
 //   entity's own selectEntities selector that exposes { isLoading, ids, selectedIds }
+// ~ selectSelectedEntities
+//   a separate entity's selected entities which refer to some of this entity's rows and needs to be shown;
+//   currently it's 'deliveries' and the rows are requests satisfied / depots used by selected deliveries
 // ~ selectEntityById
 //   entity's own selectEntityById selector
 // ~ properties
 //   an array with the properties to be displayed. Each property is an object with:
 //      ~ name (mandatory)
 //        a path in the entity object, as deep as needed. It can include array positions.
+//      ~ fn
+//        an optional function to be run on the value
 //      ~ rowStyle, headStyle, icon
 //        (all optional) how to style that field in the row and in the header
 // ~ filter
@@ -307,12 +363,17 @@ const Table = ({
   selectOne,
   selectMulti,
   selectEntities,
+  selectSelectedEntities,
   selectEntityById,
   properties,
   filter = null,
   conf,
 }) => {
   let { isLoading, ids, selectedIds } = useSelector(selectEntities)
+  const { selectedDeliveriesByPlanId, selectedDeliveriesByDepotId } =
+    useSelector(selectSelectedEntities) || {}
+  console.log('selectedDeliveriesByPlanId: ', selectedDeliveriesByPlanId)
+  console.log('selectedDeliveriesByDepotId: ', selectedDeliveriesByDepotId)
 
   const [filterResults, setFilterResults] = useState(true)
   if (filterResults && filter) {
@@ -320,6 +381,7 @@ const Table = ({
   }
 
   const [multi, setMulti] = useState(false)
+  const [restrict, setRestrict] = useState(false)
 
   const itemCount = ids.length
   const itemSize = usePixels(3)
@@ -354,6 +416,8 @@ const Table = ({
                   filter,
                   multi,
                   setMulti,
+                  restrict,
+                  setRestrict,
                 }}
               />
               <Header
@@ -371,6 +435,7 @@ const Table = ({
                   selectOne,
                   selectMulti,
                   selectedIds,
+                  selectedDeliveriesByPlanId,
                   selectEntityById,
                   properties,
                   filter,
@@ -390,6 +455,7 @@ const Row = ({
   selectOne,
   selectMulti,
   selectedIds,
+  selectedDeliveriesByPlanId,
   selectEntityById,
   properties,
   filter,
@@ -398,7 +464,7 @@ const Row = ({
 }) =>
   memo(({ index, style, data }) => {
     const entity = useSelector(selectEntityById(data[index]))
-    const { id } = entity
+    const { id, package_delivery_plan_ids } = entity
     const color = (filter && filter[id]) || 'inherit'
     const fields = getFields({ entity, properties })
     const dispatch = useDispatch()
@@ -415,6 +481,9 @@ const Row = ({
 
     const selectedRow = selectedIds.includes(id) ? styles.selected : {}
     const selectedInfo = selectedIds.includes(id) ? styles.selectedInfo : {}
+    const selectedDelivery =
+      selectedDeliveriesByPlanId?.length &&
+      selectedDeliveriesByPlanId[package_delivery_plan_ids[0]]
 
     return (
       <div

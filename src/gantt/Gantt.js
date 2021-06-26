@@ -1,7 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchDeliveries } from '../redux/deliveries'
+import {
+  fetchDeliveries,
+  selectLoaded as selectDeliveriesLoaded,
+  updateDeliveryEffects,
+} from '../redux/deliveries'
+import { selectEntities as selectRequestsEntities } from '../redux/requests'
+import { selectEntities as selectDeliveryPlansEntities } from '../redux/deliveryPlans'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css'
@@ -93,6 +99,7 @@ const Gantt = () => {
     }),
   }
 
+  // fetch deliveries
   useEffect(() => {
     const container = ref.current
     const buildTimeline = createTimeline({
@@ -113,15 +120,38 @@ const Gantt = () => {
         })
       ).then(() => {
         setLoading(false)
-        setTimeout(() => {
-          ref.current.scrollTo({
-            top: ref.current.scrollHeight,
-            behavior: 'smooth',
-          })
-        }, 0)
+        // setTimeout(() => {
+        //   ref.current.scrollTo({
+        //     top: ref.current.scrollHeight,
+        //     behavior: 'smooth',
+        //   })
+        // }, 0)
       })
     }
   }, [dispatch, options, runId])
+
+  const deliveriesLoaded = useSelector(selectDeliveriesLoaded)
+
+  const { requests, loaded: requestsLoaded } = useSelector(
+    selectRequestsEntities
+  )
+  const { deliveryPlans, loaded: deliveryPlansLoaded } = useSelector(
+    selectDeliveryPlansEntities
+  )
+
+  // Update effects
+  useEffect(() => {
+    if (!deliveriesLoaded || !requestsLoaded || !deliveryPlansLoaded) return
+
+    dispatch(updateDeliveryEffects({ requests, deliveryPlans }))
+  }, [
+    deliveriesLoaded,
+    requestsLoaded,
+    deliveryPlansLoaded,
+    requests,
+    deliveryPlans,
+    dispatch,
+  ])
 
   if (loading)
     return (

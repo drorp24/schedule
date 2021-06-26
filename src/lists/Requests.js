@@ -8,13 +8,17 @@ import {
   selectOne,
   selectMulti,
 } from '../redux/requests'
+import { selectSelectedEntities } from '../redux/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
 
 import Table from './Table'
 
-const properties = [{ name: 'priority' }]
+const properties = [
+  { name: 'priority' },
+  { name: 'id', fn: id => id.slice(-7) },
+]
 
 const { requests: conf } = config
 
@@ -35,6 +39,7 @@ const Requests = () => {
         selectOne,
         selectMulti,
         selectEntities,
+        selectSelectedEntities,
         selectEntityById,
         properties,
         filter,

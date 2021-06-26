@@ -28,8 +28,9 @@ const createTimeline =
           className,
         }
         drone_deliveries.forEach(
-          ({ depart_time, arrive_time, package_delivery_plan_ids }) => {
+          ({ depart_time, arrive_time, package_delivery_plan_ids }, index) => {
             deliveryItems.push({
+              id: `${id}:${index}`,
               delivering_drones_id: id,
               start: depart_time,
               end: arrive_time,
@@ -65,7 +66,6 @@ const createTimeline =
     // unselecting the item clicked, rendering 'select' event completely unusable.
     // Therefore I am using 'click' and getSelection instead.
     //
-    // timeline.on('select', updateSelected(dispatch))
 
     timeline.on('click', updateSelected({ dispatch, timeline }))
 

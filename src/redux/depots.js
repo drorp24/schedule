@@ -75,6 +75,11 @@ const initialState = depotsAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
+  criteria: {
+    type: null,
+    userMapCriteria: null,
+    ids: [],
+  },
 })
 
 const depotsSlice = createSlice({
@@ -153,6 +158,7 @@ export const selectEntities = ({ depots }) => {
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
+    depots,
     sortedEntities,
     keyedEntities,
     ids,
@@ -165,6 +171,8 @@ export const selectEntities = ({ depots }) => {
   }
 }
 
+export const selectLoaded = ({ depots: { ids, loading, error } }) =>
+  ids.length > 0 && loading === 'idle' && !error
 export const selectIds = ({ depots }) => depotsSelectors.selectIds(depots)
 
 export const selectEntityById =

@@ -8,6 +8,7 @@ import {
   selectOne,
   selectMulti,
 } from '../redux/depots'
+import { selectSelectedEntities } from '../redux/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -36,6 +37,7 @@ const Depots = () => {
         selectMulti,
         selectEntities,
         selectEntityById,
+        selectSelectedEntities,
         properties,
         filter,
         conf,

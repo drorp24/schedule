@@ -7,7 +7,6 @@ import {
 
 import deliveriesApi from '../api/deliveriesApi'
 import deliveriesFields from '../api/conversions/deliveriesFields'
-import { updateEffects } from './updateEffects'
 
 // * normalization
 const deliveriesAdapter = createEntityAdapter({
@@ -105,7 +104,6 @@ const deliveriesSlice = createSlice({
     updateSelection: (state, { payload }) => {
       state.selectedIds = payload
     },
-    updateDeliveryEffects: updateEffects,
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -168,7 +166,6 @@ export const selectEntities = ({ deliveries }) => {
   const isLoading = loading === 'pending'
   const loaded = sortedEntities.length > 0 && loading === 'idle' && !error
   return {
-    deliveries,
     sortedEntities,
     keyedEntities,
     ids,
@@ -181,14 +178,9 @@ export const selectEntities = ({ deliveries }) => {
   }
 }
 
-export const selectLoaded = ({ deliveries: { ids, loading, error } }) =>
-  ids.length > 0 && loading === 'idle' && !error
-
 export const selectIds = ({ deliveries }) =>
   deliveriesSelectors.selectIds(deliveries)
 
-// ToDo: return locations and selectedEntities only; locations should be fetched from the entities
-// and be calculated upon first fetch (below)
 export const selectEntityById =
   id =>
   ({ deliveries }) =>
@@ -268,6 +260,18 @@ export const selectSelectedEntities = ({
   }
 }
 
+// ToDo: remove
+export const selectSelectedId = ({ deliveries: { selectedId } }) => selectedId
+
+export const selectSelectedEntity = ({ deliveries }) => {
+  const { selectedId } = deliveries
+  if (!selectedId) return null
+
+  const selectedEntity = selectEntityById(selectedId)({ deliveries })
+
+  return { selectedEntity }
+}
+
 const { reducer, actions } = deliveriesSlice
 export const {
   clear,
@@ -276,7 +280,6 @@ export const {
   selectOne,
   selectMulti,
   updateSelection,
-  updateDeliveryEffects,
   error,
 } = actions
 
