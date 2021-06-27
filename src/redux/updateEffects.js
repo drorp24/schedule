@@ -31,14 +31,12 @@ import { current } from '@reduxjs/toolkit'
 // Another reason is UX: while it is common to wait to the data from the server, when user selects a delivery, or
 // changes criteria, he expects an instant reaction.
 //
+
 export const updateEffects = (
   state,
   { payload: { deliveryPlans, requests } }
 ) => {
-  // console.log('requests: ', requests)
-  // console.log('deliveryPlans: ', deliveryPlans)
   const deliveries = current(state)
-  // console.log('deliveries: ', deliveries)
 
   if (
     !deliveries.ids?.length ||
@@ -48,10 +46,7 @@ export const updateEffects = (
     return {}
 
   state.fulfilledRequests = {}
-  // ToDo: employedDepots should be unique
   state.employedDepots = {}
-
-  console.log('current(state): ', current(state))
 
   Object.values(deliveries.entities).forEach(
     ({
@@ -61,47 +56,55 @@ export const updateEffects = (
       arrive_depot_id,
       color,
     }) => {
-      const delivery = deliveries.entities[deliveryId]
+      const delivery = state.entities[deliveryId]
 
-      state.entities[deliveryId].fulfilledRequests = []
-      state.entities[deliveryId].employedDepots = []
+      delivery.fulfilledRequests = []
+      delivery.employedDepots = []
+
+      const depotIds = []
+      depotIds[0] = depart_depot_id
+      if (depart_depot_id !== arrive_depot_id) depotIds.push(arrive_depot_id)
+
+      depotIds.forEach(depotId => {
+        state.employedDepots[depotId] = state.employedDepots[depotId] || {
+          deliveries: [],
+          locations: [],
+        }
+        state.employedDepots[depotId].deliveries.push({ id: deliveryId, color })
+      })
 
       drone_deliveries.forEach(({ package_delivery_plan_ids = [] }) => {
         package_delivery_plan_ids.forEach(deliveryPlanId => {
           const requestId = requests.planIds[deliveryPlanId]
           const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
-          const { geolocation } = deliveryPlan
-
-          // ToDo: use variable
-          state.fulfilledRequests[requestId] = state.fulfilledRequests[
-            requestId
-          ] || { locations: [], deliveryIds: [] }
-          state.fulfilledRequests[requestId].locations.push(geolocation)
-          state.fulfilledRequests[requestId].deliveryIds.push(deliveryId)
-          state.entities[deliveryId].fulfilledRequests =
-            state.fulfilledRequests[requestId]
-
-          if (state.fulfilledRequests[requestId].deliveryIds.length > 1) {
-            console.warn('more than 1 delivery fulfilled request:')
-            console.log('requestId: ', requestId)
-            console.log(
-              'fulfilled by these deliveryIds:',
-              state.fulfilledRequests[requestId].deliveryIds
-            )
+          const {
+            geolocation: { geometry, properties },
+          } = deliveryPlan
+          const extendedGeolocation = {
+            geometry,
+            properties: {
+              ...properties,
+              deliveryId,
+              deliveryPlanId,
+              requestId,
+            },
           }
 
-          const depotIds = []
-          depotIds[0] = depart_depot_id
-          if (depart_depot_id !== arrive_depot_id)
-            depotIds.push(arrive_depot_id)
+          state.fulfilledRequests[requestId] = state.fulfilledRequests[
+            requestId
+          ] || { locations: [], deliveries: [] }
+          let fulfilledRequest = state.fulfilledRequests[requestId]
+          fulfilledRequest.locations.push(extendedGeolocation)
+          fulfilledRequest.deliveries.push({ id: deliveryId, color })
+
+          delivery.fulfilledRequests = fulfilledRequest
+          delivery.employedDepots = depotIds
 
           depotIds.forEach(depotId => {
-            state.employedDepots[depotId] = state.employedDepots[depotId] || {
-              deliveryIds: [],
-            }
-            state.employedDepots[depotId].deliveryIds.push(deliveryId)
-            state.entities[deliveryId].employedDepots =
-              state.employedDepots[depotId].deliveryIds
+            state.employedDepots[depotId].locations.push({
+              geometry,
+              properties: { ...extendedGeolocation.properties, depotId },
+            })
           })
         })
       })
