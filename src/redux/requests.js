@@ -7,6 +7,7 @@ import {
 
 import requestsApi from '../api/requestsApi'
 import requestsFields from '../api/conversions/requestsFields'
+import { criteriaDefaults, initialCriteria } from '../redux/config'
 
 // * normalization
 const requestsAdapter = createEntityAdapter({
@@ -82,11 +83,7 @@ const initialState = requestsAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
-  criteria: {
-    type: null,
-    userMapCriteria: null,
-    ids: [],
-  },
+  criteria: initialCriteria,
 })
 
 const requestsSlice = createSlice({
@@ -110,7 +107,18 @@ const requestsSlice = createSlice({
       state.selectedIds = [...currentIds]
     },
     setCriteria: (state, { payload }) => {
-      state.criteria.type = payload
+      payload.forEach(({ prop, value }) => {
+        state.criteria[prop] = value
+        if (value && !criteriaDefaults[prop].map && !state.criteria.map.user)
+          state.criteria.map.value = false
+      })
+    },
+    toggleFilter: state => {
+      state.criteria.filter = !state.criteria.filter
+    },
+    toggleShowOnMap: state => {
+      state.criteria.map.value = !state.criteria.map.value
+      state.criteria.map.user = true
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -185,6 +193,10 @@ export const selectEntities = ({ requests }) => {
 export const selectLoaded = ({ requests: { ids, loading, error } }) =>
   ids.length > 0 && loading === 'idle' && !error
 
+export const selectCriteria = ({ requests }) => requests.criteria
+
+export const selectCriteriaEntities = ({ requests }) => ({ requests })
+
 export const selectIds = ({ requests }) => requestsSelectors.selectIds(requests)
 
 export const selectEntityById =
@@ -231,6 +243,16 @@ export const selectSelectedEntity = ({ requests }) => {
 }
 
 const { reducer, actions } = requestsSlice
-export const { clear, add, update, selectOne, selectMulti, error } = actions
+export const {
+  clear,
+  add,
+  update,
+  selectOne,
+  selectMulti,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
+  error,
+} = actions
 
 export default reducer

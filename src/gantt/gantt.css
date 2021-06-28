@@ -12,6 +12,8 @@
   height: 2rem !important;
   display: flex;
   align-items: center;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .vis-label[title]:hover::after {

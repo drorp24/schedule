@@ -7,8 +7,13 @@ import {
   selectEntityById,
   selectOne,
   selectMulti,
+  selectCriteria,
+  selectCriteriaEntities,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
 } from '../redux/zones'
-import { selectSelectedEntities } from '../redux/zones'
+
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -22,8 +27,6 @@ const { zones: conf } = config
 const Zones = () => {
   const { selectedId: runId } = useSelector(selectRuns)
 
-  const [filter, setFilter] = useState(null)
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -36,10 +39,13 @@ const Zones = () => {
         selectOne,
         selectMulti,
         selectEntities,
-        selectSelectedEntities,
+        selectCriteria,
+        selectCriteriaEntities,
+        setCriteria,
+        toggleFilter,
+        toggleShowOnMap,
         selectEntityById,
         properties,
-        filter,
         conf,
       }}
     />

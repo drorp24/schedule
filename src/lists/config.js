@@ -9,25 +9,25 @@ const config = {
   requests: {
     name: 'requests',
     color: lime['A400'],
-    filters: ['fulfilledBySelected', 'fulfilled', 'unfulfilled'],
     icon: <RequestsIcon />,
     avatar: <RequestsIcon />,
+    criteriaControls: true,
   },
   depots: {
     name: 'depots',
     color: lightBlue['A200'],
-    filters: ['emplyedBySelected', 'employed', 'unemployed'],
     icon: <DepotsIcon />,
     exclude: ['geolocation'],
     avatar: <DepotsIcon />,
+    criteriaControls: true,
   },
   zones: {
     name: 'zones',
     color: deepOrange[500],
-    filters: null,
     icon: <ZonesIcon />,
     exclude: ['geolocation'],
     avatar: <ZonesIcon />,
+    criteriaControls: false,
   },
 }
 

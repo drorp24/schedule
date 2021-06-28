@@ -7,8 +7,12 @@ import {
   selectEntityById,
   selectOne,
   selectMulti,
+  selectCriteria,
+  selectCriteriaEntities,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
 } from '../redux/depots'
-import { selectSelectedEntities } from '../redux/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -21,8 +25,6 @@ const { depots: conf } = config
 
 const Depots = () => {
   const { selectedId: runId } = useSelector(selectRuns)
-
-  const [filter, setFilter] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -37,9 +39,12 @@ const Depots = () => {
         selectMulti,
         selectEntities,
         selectEntityById,
-        selectSelectedEntities,
+        selectCriteria,
+        selectCriteriaEntities,
+        setCriteria,
+        toggleFilter,
+        toggleShowOnMap,
         properties,
-        filter,
         conf,
       }}
     />

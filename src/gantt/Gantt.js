@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchDeliveries,
   selectLoaded as selectDeliveriesLoaded,
+  selectEffectsRecorded,
   updateDeliveryEffects,
 } from '../redux/deliveries'
 import { selectEntities as selectRequestsEntities } from '../redux/requests'
@@ -139,15 +140,24 @@ const Gantt = () => {
     selectDeliveryPlansEntities
   )
 
+  const effectsRecorded = useSelector(selectEffectsRecorded)
+
   // Update effects
   useEffect(() => {
-    if (!deliveriesLoaded || !requestsLoaded || !deliveryPlansLoaded) return
+    if (
+      !deliveriesLoaded ||
+      !requestsLoaded ||
+      !deliveryPlansLoaded ||
+      effectsRecorded
+    )
+      return
 
     dispatch(updateDeliveryEffects({ requests, deliveryPlans }))
   }, [
     deliveriesLoaded,
     requestsLoaded,
     deliveryPlansLoaded,
+    effectsRecorded,
     requests,
     deliveryPlans,
     dispatch,

@@ -184,6 +184,9 @@ export const selectEntities = ({ deliveries }) => {
 export const selectLoaded = ({ deliveries: { ids, loading, error } }) =>
   ids.length > 0 && loading === 'idle' && !error
 
+export const selectEffectsRecorded = ({ deliveries: { fulfilledRequests } }) =>
+  fulfilledRequests && !!Object.keys(fulfilledRequests)?.length
+
 export const selectIds = ({ deliveries }) =>
   deliveriesSelectors.selectIds(deliveries)
 

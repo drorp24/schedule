@@ -1,24 +1,22 @@
-const criteria = [
-  {
-    type: 1,
-    name: 'selectedDeliveries',
-    mapCriteria: true,
+export const criteriaDefaults = {
+  selectedDeliveries: {
+    value: false,
+    map: true,
   },
-  {
-    type: 2,
-    name: 'matched',
-    mapCriteria: false,
+  matched: {
+    value: false,
+    map: false,
   },
-  {
-    type: 3,
-    name: 'unmatched',
-    mapCriteria: false,
+  unmatched: {
+    value: false,
+    map: false,
   },
-  {
-    type: 1,
-    name: 'all',
-    mapCriteria: false,
-  },
-]
+}
 
-export default criteria
+export const initialCriteria = {
+  selectedDeliveries: criteriaDefaults.selectedDeliveries.value,
+  matched: criteriaDefaults.matched.value,
+  unmatched: criteriaDefaults.unmatched.value,
+  filter: false,
+  map: { value: true, user: false },
+}

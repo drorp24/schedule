@@ -7,6 +7,7 @@ import {
 
 import depotsApi from '../api/depotsApi'
 import depotsFields from '../api/conversions/depotsFields'
+import { criteriaDefaults, initialCriteria } from '../redux/config'
 
 // * normalization
 const depotsAdapter = createEntityAdapter({
@@ -75,11 +76,7 @@ const initialState = depotsAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
-  criteria: {
-    type: null,
-    userMapCriteria: null,
-    ids: [],
-  },
+  criteria: initialCriteria,
 })
 
 const depotsSlice = createSlice({
@@ -101,6 +98,20 @@ const depotsSlice = createSlice({
         ? currentIds.delete(payload)
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
+    },
+    setCriteria: (state, { payload }) => {
+      payload.forEach(({ prop, value }) => {
+        state.criteria[prop] = value
+        if (value && !criteriaDefaults[prop].map && !state.criteria.map.user)
+          state.criteria.map.value = false
+      })
+    },
+    toggleFilter: state => {
+      state.criteria.filter = !state.criteria.filter
+    },
+    toggleShowOnMap: state => {
+      state.criteria.map.value = !state.criteria.map.values
+      state.criteria.map.user = true
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -173,6 +184,11 @@ export const selectEntities = ({ depots }) => {
 
 export const selectLoaded = ({ depots: { ids, loading, error } }) =>
   ids.length > 0 && loading === 'idle' && !error
+
+export const selectCriteria = ({ depots }) => depots.criteria
+
+export const selectCriteriaEntities = ({ depots }) => ({ depots })
+
 export const selectIds = ({ depots }) => depotsSelectors.selectIds(depots)
 
 export const selectEntityById =
@@ -205,6 +221,16 @@ export const selectSelectedEntities = ({ depots }) => {
 }
 
 const { reducer, actions } = depotsSlice
-export const { clear, add, update, selectOne, selectMulti, error } = actions
+export const {
+  clear,
+  add,
+  update,
+  selectOne,
+  selectMulti,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
+  error,
+} = actions
 
 export default reducer

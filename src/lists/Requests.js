@@ -7,8 +7,12 @@ import {
   selectEntityById,
   selectOne,
   selectMulti,
+  selectCriteria,
+  selectCriteriaEntities,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
 } from '../redux/requests'
-import { selectSelectedEntities } from '../redux/deliveries'
 import { selectEntities as selectRuns } from '../redux/runs'
 
 import config from './config'
@@ -25,8 +29,6 @@ const { requests: conf } = config
 const Requests = () => {
   const { selectedId: runId } = useSelector(selectRuns)
 
-  const [filter, setFilter] = useState(null)
-
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -39,10 +41,13 @@ const Requests = () => {
         selectOne,
         selectMulti,
         selectEntities,
-        selectSelectedEntities,
+        selectCriteria,
+        selectCriteriaEntities,
+        setCriteria,
+        toggleFilter,
+        toggleShowOnMap,
         selectEntityById,
         properties,
-        filter,
         conf,
       }}
     />

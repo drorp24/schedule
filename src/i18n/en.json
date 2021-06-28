@@ -1,9 +1,12 @@
 {
+  "showOnMap": "Show on map",
+  "multiSelect": "Multi-select",
+  "filter": "Filter",
   "depots": "Depots",
   "zones": "Zones",
   "priority": "Priority",
   "details": "Details",
-  "emplyedBySelected": "Employed by match",
+  "employedBySelected": "Employed by match",
   "employed": "Employed",
   "unemployed": "Unemployed",
   "fulfilledBySelected": "Fulfilled by match",

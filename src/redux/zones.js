@@ -7,6 +7,7 @@ import {
 
 import zonesApi from '../api/zonesApi'
 import zonesFields from '../api/conversions/zonesFields'
+import { criteriaDefaults, initialCriteria } from '../redux/config'
 
 // * normalization
 const zonesAdapter = createEntityAdapter({
@@ -78,6 +79,7 @@ const initialState = zonesAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
+  criteria: initialCriteria,
 })
 
 const zonesSlice = createSlice({
@@ -99,6 +101,20 @@ const zonesSlice = createSlice({
         ? currentIds.delete(payload)
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
+    },
+    setCriteria: (state, { payload }) => {
+      payload.forEach(({ prop, value }) => {
+        state.criteria[prop] = value
+        if (value && !criteriaDefaults[prop].map && !state.criteria.map.user)
+          state.criteria.map.value = false
+      })
+    },
+    toggleFilter: state => {
+      state.criteria.filter = !state.criteria.filter
+    },
+    toggleShowOnMap: state => {
+      state.criteria.map.value = !state.criteria.map.values
+      state.criteria.map.user = true
     },
     error: (state, { payload: error }) => ({ ...state, error }),
   },
@@ -167,6 +183,10 @@ export const selectEntities = ({ zones }) => {
 
 export const selectIds = ({ zones }) => zonesSelectors.selectIds(zones)
 
+export const selectCriteria = ({ zones }) => zones.criteria
+
+export const selectCriteriaEntities = ({ zones }) => zones
+
 export const selectEntityById =
   id =>
   ({ zones }) =>
@@ -197,6 +217,16 @@ export const selectSelectedEntities = ({ zones }) => {
 }
 
 const { reducer, actions } = zonesSlice
-export const { clear, add, update, selectOne, selectMulti, error } = actions
+export const {
+  clear,
+  add,
+  update,
+  selectOne,
+  selectMulti,
+  setCriteria,
+  toggleFilter,
+  toggleShowOnMap,
+  error,
+} = actions
 
 export default reducer
