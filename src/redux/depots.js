@@ -211,14 +211,25 @@ export const selectSelectedEntities = ({ depots }) => {
   if (!depots.ids?.length || !depots.selectedIds?.length) return {}
 
   const { selectedIds } = depots
-  const locations = selectedIds.map(depotId => ({
-    depotId,
-    geolocation: depots.entities[depotId].geolocation,
-  }))
+  const locations = selectedIds.map(depotId => {
+    const {
+      geolocation: { geometry },
+      drone_type,
+    } = depots.entities[depotId]
+    const properties = { depotId, drone_type }
+    return { geometry, properties }
+  })
 
   const selectedEntities = selectedIds.map(id => depots.entities[id])
   return { selectedEntities, locations }
 }
+
+export const selectDeliveriesById =
+  id =>
+  ({ deliveries }) =>
+    id &&
+    deliveries.employedDepots[id]?.deliveries?.length &&
+    deliveries.employedDepots[id].deliveries.map(({ id }) => id)
 
 const { reducer, actions } = depotsSlice
 export const {

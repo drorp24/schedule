@@ -59,9 +59,15 @@ const Map = () => {
       </LayersControl>
       <ZonesControl />
       <ZoomControl position="bottomleft" />
-      <SelectedGeo selectSelectedEntities={selectSelectedRequests} />
-      <SelectedGeo selectSelectedEntities={selectSelectedDepots} />
-      <SelectedGeo selectSelectedEntities={selectSelectedZones} />
+      <SelectedGeo
+        selectSelectedEntities={selectSelectedRequests}
+        entity="request"
+      />
+      <SelectedGeo
+        selectSelectedEntities={selectSelectedDepots}
+        entity="depot"
+      />
+      <SelectedGeo selectSelectedEntities={selectSelectedZones} entity="zone" />
     </MapContainer>
   )
 }

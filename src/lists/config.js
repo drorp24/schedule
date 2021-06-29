@@ -5,6 +5,9 @@ import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
 import DepotsIcon from '@material-ui/icons/HomeWorkOutlined'
 import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
 
+import MatchedIcon from '@material-ui/icons/AssignmentTurnedInOutlined'
+import UnmatchedIcon from '@material-ui/icons/AssignmentLateOutlined'
+
 const config = {
   requests: {
     name: 'requests',
@@ -19,7 +22,8 @@ const config = {
     icon: <DepotsIcon />,
     exclude: ['geolocation'],
     avatar: <DepotsIcon />,
-    criteriaControls: true,
+    criteriaControls: false,
+    listheader: 'depotDeliveries',
   },
   zones: {
     name: 'zones',
@@ -28,6 +32,15 @@ const config = {
     exclude: ['geolocation'],
     avatar: <ZonesIcon />,
     criteriaControls: false,
+    listheader: 'zoneMoreDetails',
+  },
+  matched: {
+    icon: <MatchedIcon />,
+    // color: delivery's color
+  },
+  unmatched: {
+    icon: <UnmatchedIcon />,
+    color: 'grey',
   },
 }
 

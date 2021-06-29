@@ -2,10 +2,13 @@
 import { useEffect, memo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { useMap, Polygon, Marker, FeatureGroup } from 'react-leaflet'
+import { useMap, Polygon, Marker, FeatureGroup, Popup } from 'react-leaflet'
 import farEnough from '../utility/farEnough'
+import FeatureProperties from './FeatureProperties'
+import usePopupContainerFix from './usePopupContainerFix'
 
 import { flyToOptions, dropIcon } from './config'
+import config from '../lists/config'
 
 // https://github.com/PaulLeCam/react-leaflet/issues/453
 import 'leaflet/dist/leaflet.css'
@@ -13,11 +16,7 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import * as L from 'leaflet'
 import 'leaflet-defaulticon-compatibility'
 
-const styles = {
-  pathOptions: { color: 'deepskyblue' },
-}
-
-const SelectedGeo = ({ selectSelectedEntities }) => {
+const SelectedGeo = ({ selectSelectedEntities, entity }) => {
   console.log('SelectedGeo is rendered')
   const map = useMap()
   const { locations } = useSelector(selectSelectedEntities)
@@ -25,13 +24,9 @@ const SelectedGeo = ({ selectSelectedEntities }) => {
   useEffect(() => {
     if (!map || !locations?.length) return
 
-    const locationPoints = locations.map(
-      ({
-        geolocation: {
-          geometry: { coordinates },
-        },
-      }) => [...coordinates]
-    )
+    const locationPoints = locations.map(({ geometry: { coordinates } }) => [
+      ...coordinates,
+    ])
     const locationBounds = L.latLngBounds(locationPoints)
     const mapBounds = map.getBounds()
 
@@ -39,6 +34,25 @@ const SelectedGeo = ({ selectSelectedEntities }) => {
       map.flyToBounds(locationBounds, flyToOptions)
   }, [map, locations])
 
+  usePopupContainerFix()
+
+  const styles = {
+    pathOptions: { color: config.depots.color },
+
+    popup: theme => ({
+      '& .leaflet-popup-content': {
+        margin: '1.5rem 1rem 2.5rem',
+        position: 'relative',
+      },
+      '& .leaflet-popup-content-wrapper': {
+        backgroundColor: theme.palette.background.paper,
+        color: 'pink',
+      },
+      '& .leaflet-popup-tip': {
+        backgroundColor: theme.palette.background.paper,
+      },
+    }),
+  }
   const { pathOptions } = styles
 
   if (!locations?.length) return null
@@ -47,23 +61,29 @@ const SelectedGeo = ({ selectSelectedEntities }) => {
     <FeatureGroup>
       {locations.map(
         (
-          {
-            geolocation: {
-              geometry: { type, coordinates: positions, color },
-            },
-          },
+          { geometry: { type, coordinates: positions, color }, properties },
           index
         ) => {
           switch (type) {
             case 'Polygon':
-              return <Polygon {...{ positions, pathOptions }} key={index} />
+              return (
+                <Polygon {...{ positions, pathOptions }} key={index}>
+                  <Popup direction="left" css={styles.popup}>
+                    <FeatureProperties {...{ properties, entity }} />
+                  </Popup>
+                </Polygon>
+              )
             case 'Point':
               return (
                 <Marker
                   {...{ position: positions, pathOptions }}
                   key={index}
                   icon={dropIcon(color)}
-                />
+                >
+                  <Popup direction="left" css={styles.popup}>
+                    <FeatureProperties {...{ properties, entity }} />
+                  </Popup>
+                </Marker>
               )
             default:
               return <Polygon {...{ positions, pathOptions }} key={index} />

@@ -20,8 +20,8 @@ import config from './config'
 import Table from './Table'
 
 const properties = [
-  { name: 'priority' },
   { name: 'id', fn: id => id.slice(-7) },
+  { name: 'priority' },
 ]
 
 const { requests: conf } = config

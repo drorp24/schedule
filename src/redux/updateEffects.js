@@ -1,13 +1,20 @@
 import { current } from '@reduxjs/toolkit'
 
-// ! All effects recorded once and on one entity
-// While a redux action can be dispatched and consequently update multiple store parts,
-// the update of each is done by its own separate reducer.
-// That reducer is not exposed to any other part of the store, nor can it update anything in it.
-// The way I usually go about that challenge is the following:
+// ! Why update
+// In the common dilemma whether to calculate-on-the-fly or calculate-once-and-record, this case absolutely requires
+// the latter. Mainly because vis-timeline, whenever another task (delivery) is selected, returns all of the selected tasks.
+// Had I calculated the derived requests/depots on the fly I would have repeated previous calculations.
+// Another reason is UX: while it is common to wait for the data from the server, when user selects a delivery, or
+// changes criteria, he expects an instant reaction.
 //
+// ! All effects recorded once and on one entity
+// While a redux action can be processed by multiple store parts,
+// the update of each is done by its own separate reducer, on its own store slice.
+// That reducer is not exposed to any other part of the store, nor can it update anything in a different slice.
+//
+// The way I usually go about that challenge is the following:
 // The effecting entity's selector returns the list of updates on the other entities;
-// then those affected entities' useEffects each dispatches its own updating action to update its affected entity.
+// then those affected entities' useEffects each dispatches its own updating action to update its own entity.
 //
 // Here I employ a different strategy altogether, saving: calling the same selector 3 times
 // (or making 3 separate full-scan selectors),
@@ -16,21 +23,13 @@ import { current } from '@reduxjs/toolkit'
 // My new strategy may actually may be the go-to solution to follow in similar use cases:
 //
 // With no selector at all, just one action, I record all effects on one entity only: the effecting one (here: 'delivery'),
-// with keys that guarantee that the affected entities ('requests', 'depots') can each find its data using a direct access.
+// with keys that enable the affected entities ('requests', 'depots') to directly access their data with their id's.
 //
-// That action should be run from the useEffect whose entity is to blame for all effects,
+// That action should be run from the useEffect whose entity is to effecting one,
 // and get as argument the affected entities (since an action is not otherwise exposed to other keys).
-// Its dependency array should include the effecting entity
-// as well as all affected entities to guranatee they all have been fetched already.
+// Its dependencies should include the effecting as well as affected entities, to guranatee they've all been populated.
+// A 'run already' selector will prevent calling that useEffect for every change in those entities.
 // That's it.
-
-// ! Why update
-// In the common dilemma whether to calculate-on-the-fly or calculate-once-and-record, this case absolutely requires
-// the latter. Mainly because vis-timeline, whenever another task (delivery) is selected, returns all of the selected tasks.
-// Had I calculated the derived requests/depots on the fly I would have repeated previous calculations.
-// Another reason is UX: while it is common to wait to the data from the server, when user selects a delivery, or
-// changes criteria, he expects an instant reaction.
-//
 
 export const updateEffects = (
   state,
@@ -87,6 +86,7 @@ export const updateEffects = (
               deliveryId,
               deliveryPlanId,
               requestId,
+              color,
             },
           }
 

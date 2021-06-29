@@ -204,7 +204,11 @@ export const selectEntityById =
   ({ requests }) =>
     requestsSelectors.selectById(requests, id)
 
-export const selectSelectedEntities = ({ requests, deliveryPlans }) => {
+export const selectSelectedEntities = ({
+  requests,
+  deliveryPlans,
+  deliveries,
+}) => {
   if (
     !requests.ids?.length ||
     !deliveryPlans.ids?.length ||
@@ -222,8 +226,21 @@ export const selectSelectedEntities = ({ requests, deliveryPlans }) => {
     .forEach(({ requestId, deliveryPlanIds = [] }) => {
       deliveryPlanIds.forEach(deliveryPlanId => {
         const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
-        const { geolocation } = deliveryPlan
-        locations.push({ requestId, deliveryPlanId, geolocation })
+
+        const {
+          geolocation: { geometry },
+        } = deliveryPlan
+
+        let properties = { requestId, deliveryPlanId }
+
+        const fulfilledRequest = deliveries.fulfilledRequests[requestId]
+        if (fulfilledRequest?.locations?.length) {
+          const fulfilledRequestProps = fulfilledRequest.locations[0].properties
+          properties = { ...properties, ...fulfilledRequestProps }
+        }
+
+        const location = { geometry, properties }
+        locations.push(location)
       })
     })
   const selectedEntities = selectedIds.map(id => requests.entities[id])

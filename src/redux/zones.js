@@ -207,10 +207,13 @@ export const selectSelectedEntities = ({ zones }) => {
   if (!zones.ids?.length || !zones.selectedIds?.length) return {}
 
   const { selectedIds } = zones
-  const locations = selectedIds.map(zoneId => ({
-    zoneId,
-    geolocation: zones.entities[zoneId].geolocation,
-  }))
+  const locations = selectedIds.map(zoneId => {
+    const {
+      geolocation: { geometry },
+    } = zones.entities[zoneId]
+    const properties = { zoneId }
+    return { geometry, properties }
+  })
 
   const selectedEntities = selectedIds.map(id => zones.entities[id])
   return { selectedEntities, locations }
