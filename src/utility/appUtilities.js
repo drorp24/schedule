@@ -78,6 +78,17 @@ export const localeDateTime = locale => date => {
     ...timeOptions,
   })
 }
+
+export const camel2human = s => {
+  console.log('s: ', s)
+  function capitalise(word) {
+    return word.charAt(0).toUpperCase() + word.substring(1)
+  }
+  const words = s.match(/[A-Za-z][a-z]*/g) || []
+
+  return words.map(capitalise).join(' ')
+}
+
 export const useLocalDate = date => {
   const locale = useSelector(store => store.app.locale)
   const dateFormat = new Date(date)

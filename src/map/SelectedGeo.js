@@ -9,14 +9,13 @@ import usePopupContainerFix from './usePopupContainerFix'
 
 import { flyToOptions, dropIcon } from './config'
 import config from '../lists/config'
-
 // https://github.com/PaulLeCam/react-leaflet/issues/453
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css' // Re-uses images from ~leaflet package
 import * as L from 'leaflet'
 import 'leaflet-defaulticon-compatibility'
 
-const SelectedGeo = ({ selectSelectedEntities, entity }) => {
+const SelectedGeo = ({ selectSelectedEntities, entities }) => {
   console.log('SelectedGeo is rendered')
   const map = useMap()
   const { locations } = useSelector(selectSelectedEntities)
@@ -37,7 +36,7 @@ const SelectedGeo = ({ selectSelectedEntities, entity }) => {
   usePopupContainerFix()
 
   const styles = {
-    pathOptions: { color: config.depots.color },
+    pathOptions: { color: config[entities].color },
 
     popup: theme => ({
       '& .leaflet-popup-content': {
@@ -60,16 +59,14 @@ const SelectedGeo = ({ selectSelectedEntities, entity }) => {
   return (
     <FeatureGroup>
       {locations.map(
-        (
-          { geometry: { type, coordinates: positions, color }, properties },
-          index
-        ) => {
+        ({ geometry: { type, coordinates: positions }, properties }, index) => {
+          const { color } = properties
           switch (type) {
             case 'Polygon':
               return (
                 <Polygon {...{ positions, pathOptions }} key={index}>
                   <Popup direction="left" css={styles.popup}>
-                    <FeatureProperties {...{ properties, entity }} />
+                    <FeatureProperties {...{ properties, entities }} />
                   </Popup>
                 </Polygon>
               )
@@ -78,10 +75,10 @@ const SelectedGeo = ({ selectSelectedEntities, entity }) => {
                 <Marker
                   {...{ position: positions, pathOptions }}
                   key={index}
-                  icon={dropIcon(color)}
+                  icon={dropIcon({ entities, color })}
                 >
                   <Popup direction="left" css={styles.popup}>
-                    <FeatureProperties {...{ properties, entity }} />
+                    <FeatureProperties {...{ properties, entities }} />
                   </Popup>
                 </Marker>
               )

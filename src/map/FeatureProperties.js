@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { selectDeliveriesById } from '../redux/depots'
 
-import { useLocale, useMode } from '../utility/appUtilities'
+import { useLocale, useMode, camel2human } from '../utility/appUtilities'
 import useTranslation from '../i18n/useTranslation'
 import noScrollbar from '../styling/noScrollbar'
 import { atScrollBottom } from '../utility/scrollPositions'
@@ -20,6 +20,8 @@ const Row = ({ prop, value, index }) => {
   const styles = {
     row: {
       width: '100%',
+      height: '2.5rem',
+      padding: '0 0.5rem',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -30,6 +32,7 @@ const Row = ({ prop, value, index }) => {
     },
     prop: {
       textAlign: 'left',
+      fontWeight: 700,
     },
     value: {
       textAlign: 'right',
@@ -39,13 +42,13 @@ const Row = ({ prop, value, index }) => {
     <div
       css={{ ...styles.row, ...(index % 2 ? styles.row.odd : styles.row.even) }}
     >
-      <span css={styles.prop}>{prop}</span>
+      <span css={styles.prop}>{value ? camel2human(prop) : prop}</span>
       {value && <span css={styles.value}>{value}</span>}
     </div>
   )
 }
 
-const FeatureProperties = ({ properties = {}, entity }) => {
+const FeatureProperties = ({ properties = {}, entities }) => {
   const { direction } = useLocale()
   const { light } = useMode()
   const t = useTranslation()
@@ -54,25 +57,31 @@ const FeatureProperties = ({ properties = {}, entity }) => {
 
   const matched = !!deliveryId
 
-  const { icon, color: unmatchedColor } =
-    config[matched ? 'matched' : 'unmatched']
-  const color = deliveryColor || unmatchedColor
+  let icon, color
+  if (entities === 'requests') {
+    const configEntry = config[matched ? 'matched' : 'unmatched']
+    icon = configEntry.icon
+    color = deliveryColor || configEntry.color
+  } else {
+    icon = config[entities].icon
+    color = config[entities].color
+  }
 
   const title =
-    entity === 'request'
+    entities === 'requests'
       ? matched
         ? t('matchedReq')
         : t('unmatchedReq')
-      : t(entity)
+      : t(config[entities].popupTitle)
 
   const subheader = requestId ? requestId.slice(-7) : ''
 
   const listHeader =
-    entity === 'request'
+    entities === 'requests'
       ? matched
         ? t('matchedData')
         : t('unmatchedData')
-      : t(config[entity + 's']?.listheader) // sorry :)
+      : t(config[entities].listheader)
 
   const depotDeliveryIds = useSelector(selectDeliveriesById(depotId))
 
@@ -104,9 +113,6 @@ const FeatureProperties = ({ properties = {}, entity }) => {
       borderRadius: '5px',
       zIndex: 1,
       marginTop: '-0.5rem',
-      '& + div': {
-        marginTop: '5rem',
-      },
       '& .MuiCardHeader-title': {
         fontWeight: '700',
         fontSize: '1rem',
@@ -116,18 +122,22 @@ const FeatureProperties = ({ properties = {}, entity }) => {
       direction: 'ltr',
       border: '1px solid rgba(0, 0, 0, 0.1)',
       borderRadius: '5px',
-      marginTop: '0.5rem',
-    },
-    divider: {
-      '&::before': {
-        zIndex: '-1',
-      },
-      '&::after': {
-        zIndex: '-1',
+      marginTop: '6.7rem',
+      padding: 0,
+      '&:last-child': {
+        paddingBottom: 0,
       },
     },
+    divider: theme => ({
+      position: 'absolute',
+      width: '100%',
+      top: '4.5rem',
+      padding: '0.5rem 0',
+      backgroundColor: theme.palette.background.paper,
+    }),
 
     more: {
+      direction: 'rtl',
       position: 'fixed',
       bottom: '1rem',
       width: '100%',
@@ -135,9 +145,13 @@ const FeatureProperties = ({ properties = {}, entity }) => {
       fontSize: '1rem',
       textAlign: 'center',
       color,
-      direction: 'ltr', // temporary
     },
   }
+
+  useEffect(() => {
+    if (!ref.current) return
+    setBottom(atScrollBottom(ref.current))
+  }, [])
 
   return (
     <div css={styles.container} onScroll={handleScroll} ref={ref}>
@@ -149,19 +163,19 @@ const FeatureProperties = ({ properties = {}, entity }) => {
             avatar={<Avatar css={styles.avatar}>{icon}</Avatar>}
             css={styles.header}
           ></CardHeader>
-          <Divider>{t(listHeader)}</Divider>
+          <Divider css={styles.divider}>{listHeader}</Divider>
         </div>
         <CardContent css={styles.cardContent}>
-          {(entity === 'request' || entity === 'zone') &&
+          {(entities === 'requests' || entities === 'zones') &&
             Object.entries(properties).map(([prop, value], index) => (
               <Row key={prop} {...{ prop, value, index }} />
             ))}
-          {entity === 'depot' &&
+          {entities === 'depots' &&
             Object.entries(depotDeliveryIds).map((prop, index) => (
               <Row key={prop} {...{ prop, index }} />
             ))}
         </CardContent>
-        {!bottom && <div css={styles.more}>more...</div>}
+        {!bottom && <div css={styles.more}>{t('scrollForMore')}</div>}
       </Card>
     </div>
   )

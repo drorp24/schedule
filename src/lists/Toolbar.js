@@ -123,12 +123,13 @@ export const Toolbar = ({
       borderTopRightRadius: '4px',
       margin: '0 -1rem',
       width: 'calc(100% + 2rem)',
-      height: '2rem',
+      minHeight: '2rem',
       backgroundColor: theme.palette.background.prominent,
       color: '#fff',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      flexWrap: 'wrap',
       fontSize: '0.75rem',
       textTransform: 'uppercase',
       '& .MuiIconButton-root': {
@@ -162,6 +163,7 @@ export const Toolbar = ({
       display: 'flex',
       justifyContent: 'flex-end',
       alignItems: 'center',
+      flexWrap: 'wrap',
       '& button': {
         width: '2rem',
       },

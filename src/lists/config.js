@@ -15,6 +15,7 @@ const config = {
     icon: <RequestsIcon />,
     avatar: <RequestsIcon />,
     criteriaControls: true,
+    popupTitle: 'request',
   },
   depots: {
     name: 'depots',
@@ -23,6 +24,7 @@ const config = {
     exclude: ['geolocation'],
     avatar: <DepotsIcon />,
     criteriaControls: false,
+    popupTitle: 'depot',
     listheader: 'depotDeliveries',
   },
   zones: {
@@ -32,6 +34,7 @@ const config = {
     exclude: ['geolocation'],
     avatar: <ZonesIcon />,
     criteriaControls: false,
+    popupTitle: 'zone',
     listheader: 'zoneMoreDetails',
   },
   matched: {

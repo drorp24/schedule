@@ -10,6 +10,7 @@ import mediumpurple from './markers/mediumpurple.svg'
 import red from './markers/red.svg'
 import teal from './markers/teal.svg'
 import defaultIcon from './markers/default.png'
+import depot from './markers/depot.svg'
 
 const icons = {
   red,
@@ -22,13 +23,26 @@ const icons = {
   gold,
 }
 
-export const dropIcon = color =>
-  new L.Icon({
-    iconUrl: color && icons[color] ? icons[color] : defaultIcon,
-    shadowUrl: shadow,
-    iconSize: [20, 25],
-    shadowSize: [20, 20],
+export const dropIcon = ({ entities, color }) => {
+  let iconUrl, shadowUrl, iconSize, shadowSize
+  if (entities === 'depots') {
+    iconUrl = depot
+    shadowUrl = null
+    iconSize = [30, 45]
+    shadowSize = null
+  } else {
+    iconUrl = color && icons[color] ? icons[color] : defaultIcon
+    shadowUrl = shadow
+    iconSize = [20, 25]
+    shadowSize = [20, 20]
+  }
+  return new L.Icon({
+    iconUrl,
+    shadowUrl,
+    iconSize,
+    shadowSize,
   })
+}
 
 export const tileProviders = [
   {

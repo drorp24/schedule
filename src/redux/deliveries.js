@@ -190,14 +190,32 @@ export const selectEffectsRecorded = ({ deliveries: { fulfilledRequests } }) =>
 export const selectIds = ({ deliveries }) =>
   deliveriesSelectors.selectIds(deliveries)
 
-// ToDo: return locations and selectedEntities only; locations should be fetched from the entities
-// and be calculated upon first fetch (below)
 export const selectEntityById =
   id =>
   ({ deliveries }) =>
     deliveriesSelectors.selectById(deliveries, id)
 
-export const selectSelectedEntities = ({
+export const selectSelectedEntities = ({ deliveries }) => {
+  if (!deliveries.ids?.length || !deliveries.selectedIds?.length) return {}
+
+  const selectedEntities = []
+  const locations = []
+  const { selectedIds } = deliveries
+
+  selectedIds.forEach(idAndLeg => {
+    const [deliveryId, legIndex] = idAndLeg.split(':')
+    const delivery = deliveries.entities[deliveryId]
+    selectedEntities.push(delivery)
+    const deliveryLeg = delivery.drone_deliveries[legIndex]
+    deliveryLeg.fulfilledRequests.forEach(({ location }) => {
+      locations.push(location)
+    })
+  })
+
+  return { selectedEntities, locations }
+}
+
+export const oldSelectSelectedEntities = ({
   deliveries,
   deliveryPlans,
   requests,

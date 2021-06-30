@@ -55,11 +55,6 @@ export const updateEffects = (
       arrive_depot_id,
       color,
     }) => {
-      const delivery = state.entities[deliveryId]
-
-      delivery.fulfilledRequests = []
-      delivery.employedDepots = []
-
       const depotIds = []
       depotIds[0] = depart_depot_id
       if (depart_depot_id !== arrive_depot_id) depotIds.push(arrive_depot_id)
@@ -72,42 +67,64 @@ export const updateEffects = (
         state.employedDepots[depotId].deliveries.push({ id: deliveryId, color })
       })
 
-      drone_deliveries.forEach(({ package_delivery_plan_ids = [] }) => {
-        package_delivery_plan_ids.forEach(deliveryPlanId => {
-          const requestId = requests.planIds[deliveryPlanId]
-          const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
-          const {
-            geolocation: { geometry, properties },
-          } = deliveryPlan
-          const extendedGeolocation = {
-            geometry,
-            properties: {
-              ...properties,
-              deliveryId,
-              deliveryPlanId,
-              requestId,
-              color,
-            },
-          }
+      drone_deliveries.forEach(
+        ({ package_delivery_plan_ids = [] }, deliveryLegIndex) => {
+          package_delivery_plan_ids.forEach(
+            (deliveryPlanId, deliveryPlanIndex) => {
+              const requestId = requests.planIds[deliveryPlanId]
 
-          state.fulfilledRequests[requestId] = state.fulfilledRequests[
-            requestId
-          ] || { locations: [], deliveries: [] }
-          let fulfilledRequest = state.fulfilledRequests[requestId]
-          fulfilledRequest.locations.push(extendedGeolocation)
-          fulfilledRequest.deliveries.push({ id: deliveryId, color })
+              const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
 
-          delivery.fulfilledRequests = fulfilledRequest
-          delivery.employedDepots = depotIds
+              const {
+                geolocation: { geometry, properties },
+              } = deliveryPlan
 
-          depotIds.forEach(depotId => {
-            state.employedDepots[depotId].locations.push({
-              geometry,
-              properties: { ...extendedGeolocation.properties, depotId },
-            })
-          })
-        })
-      })
+              const extendedGeolocation = {
+                geometry,
+                properties: {
+                  ...properties,
+                  deliveryId,
+                  deliveryLeg: deliveryLegIndex,
+                  deliveryPlanId,
+                  requestId,
+                  color,
+                },
+              }
+
+              state.entities[deliveryId].drone_deliveries[
+                deliveryLegIndex
+              ].fulfilledRequests =
+                state.entities[deliveryId].drone_deliveries[deliveryLegIndex]
+                  .fulfilledRequests || []
+
+              state.entities[deliveryId].drone_deliveries[
+                deliveryLegIndex
+              ].fulfilledRequests[deliveryPlanIndex] = {
+                deliveryPlanId,
+                location: extendedGeolocation,
+              }
+
+              state.entities[deliveryId].drone_deliveries[
+                deliveryLegIndex
+              ].employedDepots = depotIds
+
+              state.fulfilledRequests[requestId] = state.fulfilledRequests[
+                requestId
+              ] || { locations: [], deliveries: [] }
+              let fulfilledRequest = state.fulfilledRequests[requestId]
+              fulfilledRequest.locations.push(extendedGeolocation)
+              fulfilledRequest.deliveries.push({ id: deliveryId, color })
+
+              depotIds.forEach(depotId => {
+                state.employedDepots[depotId].locations.push({
+                  geometry,
+                  properties: { ...extendedGeolocation.properties, depotId },
+                })
+              })
+            }
+          )
+        }
+      )
     }
   )
 }
