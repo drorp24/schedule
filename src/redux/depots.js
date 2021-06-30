@@ -208,7 +208,8 @@ export const selectSelectedEntity = ({ depots }) => {
 }
 
 export const selectSelectedEntities = ({ depots }) => {
-  if (!depots.ids?.length || !depots.selectedIds?.length) return {}
+  if (!depots.ids?.length || !depots.selectedIds?.length)
+    return { selectedEntities: [], locations: [] }
 
   const { selectedIds } = depots
   const locations = selectedIds.map(depotId => {

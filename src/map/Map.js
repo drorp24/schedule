@@ -1,14 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-
-import SelectedGeo from './SelectedGeo'
-import ZonesControl from './ZonesControl'
-import { selectSelectedEntities as selectSelectedRequests } from '../redux/requests'
-import { selectSelectedEntities as selectSelectedDepots } from '../redux/depots'
-import { selectSelectedEntities as selectSelectedZones } from '../redux/zones'
-import { selectSelectedEntities as selectSelectedDeliveries } from '../redux/deliveries'
 import { fetchDeliveryPlans } from '../redux/deliveryPlans'
+
+import ZonesControl from './ZonesControl'
+import SelectedLocations from './SelectedLocations'
 
 import 'leaflet/dist/leaflet.css'
 import {
@@ -60,22 +56,7 @@ const Map = () => {
       </LayersControl>
       <ZonesControl />
       <ZoomControl position="bottomleft" />
-      <SelectedGeo
-        selectSelectedEntities={selectSelectedRequests}
-        entities="requests"
-      />
-      <SelectedGeo
-        selectSelectedEntities={selectSelectedDepots}
-        entities="depots"
-      />
-      <SelectedGeo
-        selectSelectedEntities={selectSelectedZones}
-        entities="zones"
-      />
-      <SelectedGeo
-        selectSelectedEntities={selectSelectedDeliveries}
-        entities="requests"
-      />
+      <SelectedLocations />
     </MapContainer>
   )
 }

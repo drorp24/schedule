@@ -196,7 +196,8 @@ export const selectEntityById =
     deliveriesSelectors.selectById(deliveries, id)
 
 export const selectSelectedEntities = ({ deliveries }) => {
-  if (!deliveries.ids?.length || !deliveries.selectedIds?.length) return {}
+  if (!deliveries.ids?.length || !deliveries.selectedIds?.length)
+    return { selectedEntities: [], locations: [] }
 
   const selectedEntities = []
   const locations = []

@@ -214,7 +214,7 @@ export const selectSelectedEntities = ({
     !deliveryPlans.ids?.length ||
     !requests.selectedIds?.length
   )
-    return {}
+    return { selectedEntities: [], locations: [] }
 
   const { selectedIds } = requests
   const locations = []

@@ -204,7 +204,8 @@ export const selectSelectedEntity = ({ zones }) => {
 }
 
 export const selectSelectedEntities = ({ zones }) => {
-  if (!zones.ids?.length || !zones.selectedIds?.length) return {}
+  if (!zones.ids?.length || !zones.selectedIds?.length)
+    return { selectedEntities: [], locations: [] }
 
   const { selectedIds } = zones
   const locations = selectedIds.map(zoneId => {
