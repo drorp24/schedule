@@ -1,9 +1,11 @@
 import lime from '@material-ui/core/colors/lime'
 import lightBlue from '@material-ui/core/colors/lightBlue'
+import lightGreen from '@material-ui/core/colors/lightGreen'
 import deepOrange from '@material-ui/core/colors/deepOrange'
+import yellow from '@material-ui/core/colors/yellow'
 import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
-import DepotsIcon from '@material-ui/icons/HomeWorkOutlined'
 import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
+import DepotsIcon from '@material-ui/icons/FlightTakeoffOutlined'
 
 import MatchedIcon from '@material-ui/icons/AssignmentTurnedInOutlined'
 import UnmatchedIcon from '@material-ui/icons/AssignmentLateOutlined'
@@ -11,7 +13,8 @@ import UnmatchedIcon from '@material-ui/icons/AssignmentLateOutlined'
 const config = {
   requests: {
     name: 'requests',
-    color: lime['A400'],
+    // color: lime['A400'],
+    color: yellow[200],
     icon: <RequestsIcon />,
     avatar: <RequestsIcon />,
     criteriaControls: true,
@@ -29,7 +32,7 @@ const config = {
   },
   zones: {
     name: 'zones',
-    color: deepOrange[500],
+    color: lightGreen['A400'],
     icon: <ZonesIcon />,
     exclude: ['geolocation'],
     avatar: <ZonesIcon />,

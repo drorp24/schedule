@@ -104,8 +104,9 @@ export const styles = {
     // border: '1px solid',
   },
   selected: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6) !important',
+    backgroundColor: 'rgba(0, 0, 0, 0.2) !important',
     color: '#fff !important',
+    borderRadius: '4px',
   },
   on: {
     backgroundColor: 'rgba(0, 0, 0, 0.6) !important',

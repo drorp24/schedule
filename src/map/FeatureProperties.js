@@ -156,15 +156,13 @@ const FeatureProperties = ({ properties = {}, entities }) => {
   return (
     <div css={styles.container} onScroll={handleScroll} ref={ref}>
       <Card elevation={0}>
-        <div css={styles.absolute}>
-          <CardHeader
-            title={title}
-            subheader={subheader}
-            avatar={<Avatar css={styles.avatar}>{icon}</Avatar>}
-            css={styles.header}
-          ></CardHeader>
-          <Divider css={styles.divider}>{listHeader}</Divider>
-        </div>
+        <CardHeader
+          title={title}
+          subheader={subheader}
+          avatar={<Avatar css={styles.avatar}>{icon}</Avatar>}
+          css={styles.header}
+        ></CardHeader>
+        <Divider css={styles.divider}>{listHeader}</Divider>
         <CardContent css={styles.cardContent}>
           {(entities === 'requests' || entities === 'zones') &&
             Object.entries(properties).map(([prop, value], index) => (

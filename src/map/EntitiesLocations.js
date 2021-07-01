@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Polygon, Marker, FeatureGroup, Popup } from 'react-leaflet'
 import FeatureProperties from './FeatureProperties'
 import { dropIcon } from './config'

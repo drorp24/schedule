@@ -1,4 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import * as L from 'leaflet'
+import './map.css'
 
 import shadow from '../assets/marker-shadow.png'
 import gold from './markers/gold.svg'
@@ -24,12 +26,13 @@ const icons = {
 }
 
 export const dropIcon = ({ entities, color }) => {
-  let iconUrl, shadowUrl, iconSize, shadowSize
+  let iconUrl, shadowUrl, iconSize, shadowSize, className
   if (entities === 'depots') {
     iconUrl = depot
     shadowUrl = null
     iconSize = [30, 45]
     shadowSize = null
+    className = 'depotIcon'
   } else {
     iconUrl = color && icons[color] ? icons[color] : defaultIcon
     shadowUrl = shadow
@@ -41,6 +44,7 @@ export const dropIcon = ({ entities, color }) => {
     shadowUrl,
     iconSize,
     shadowSize,
+    className,
   })
 }
 
