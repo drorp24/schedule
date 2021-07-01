@@ -68,15 +68,6 @@ const Criteria = ({ selectCriteria, setCriteria, on, off }) => {
       css={styles.buttonGroup}
     >
       <ToggleButton
-        value="selectedDeliveries"
-        css={styles.toggleButton}
-        title={t('fulfilledBySelected')}
-      >
-        <SelectedDeliveriesIcon
-          css={criteria.includes('selectedDeliveries') ? on : off}
-        />
-      </ToggleButton>
-      <ToggleButton
         value="matched"
         css={styles.toggleButton}
         title={t('fulfilled')}
@@ -89,6 +80,15 @@ const Criteria = ({ selectCriteria, setCriteria, on, off }) => {
         title={t('unfulfilled')}
       >
         <UnmatchedIcon css={criteria.includes('unmatched') ? on : off} />
+      </ToggleButton>
+      <ToggleButton
+        value="selectedDeliveries"
+        css={styles.toggleButton}
+        title={t('fulfilledBySelected')}
+      >
+        <SelectedDeliveriesIcon
+          css={criteria.includes('selectedDeliveries') ? on : off}
+        />
       </ToggleButton>
     </ToggleButtonGroup>
   )
@@ -170,6 +170,7 @@ export const Toolbar = ({
     criteria: {
       display: 'flex',
       margin: '0 1rem',
+      marginLeft: '12%',
     },
     display: {
       display: 'flex',
@@ -193,9 +194,8 @@ export const Toolbar = ({
 
   const { on, off } = toolbarStyles
 
-  const { map, filter } = useSelector(selectCriteria)
+  const { map } = useSelector(selectCriteria)
 
-  const modifyFilter = () => dispatch(toggleFilter())
   const modifyShowOnMap = () => dispatch(toggleShowOnMap())
 
   return (
@@ -212,16 +212,6 @@ export const Toolbar = ({
         )}
 
         <div css={toolbarStyles.display}>
-          {criteriaControls && (
-            <IconButton onClick={modifyFilter} title={t('filter')}>
-              <Filter1Icon
-                css={{
-                  ...toolbarStyles.filterIcon,
-                  ...(filter ? toolbarStyles.on : toolbarStyles.off),
-                }}
-              />
-            </IconButton>
-          )}
           <IconButton
             css={toolbarStyles.multi}
             onClick={toggleMulti}

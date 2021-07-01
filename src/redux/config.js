@@ -17,6 +17,5 @@ export const initialCriteria = {
   selectedDeliveries: criteriaDefaults.selectedDeliveries.value,
   matched: criteriaDefaults.matched.value,
   unmatched: criteriaDefaults.unmatched.value,
-  filter: false,
   map: { value: true, user: false },
 }

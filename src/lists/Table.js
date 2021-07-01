@@ -182,15 +182,13 @@ const styles = {
 //   entity's own selectors and setters for the criteria controls activated from the toolbar.
 //   selectCriteriaEntities provides a list of entity ids each with the list of criteria it matches (there can be several)
 //   and its info. It serves to indicate criteria-matching rows and provide info on each criterion.
-//   In addition to the (currently 3) criteria, the set includes 'filter' and a 'show on map' controls,
+//   In addition to the (currently 3) criteria, the set includes a 'show on map' control,
 //   which determine
-//   -  whether to filter rows to include only those that match any of the criteria, and
 //   -  whether to show the locations of the large-volume criteria rows (currently: matched & unmatched) on the map.
 //      Manually selected rows of deliveries, requests and depots are always shown on the map.
 //      System default for large-volume criteria is to not show their locations on the map,
-//      however if user changes that default, his choice is remembered (stored in redux).
-//      Redux - persist could then remember that choice onwards.
-//   The setter and selectors take care of setting the defaults and remembering user's choice.
+//      however if user does choose to show them then his choice is remembered (stored in redux).
+//      If required, redux-persist could then remember that choice onwards.
 // ~ selectEntityById
 //   entity's own selectEntityById selector
 // ~ properties
@@ -217,6 +215,29 @@ const Table = ({
   conf,
 }) => {
   let { isLoading, ids, selectedIds } = useSelector(selectEntities)
+  const criteria = useSelector(selectCriteria)
+  const criteriaEntities = useSelector(selectCriteriaEntities)
+
+  const { criteriaControls } = conf
+
+  const filterIds = ({
+    ids,
+    criteria: { matched, unmatched, selectedDeliveries },
+    criteriaEntities,
+  }) => {
+    if (!criteriaControls || (!matched && !unmatched && !selectedDeliveries))
+      return ids
+
+    return ids.filter(id => {
+      if (matched && criteriaEntities[id]?.fulfilled) return true
+      if (unmatched && !criteriaEntities[id]?.fulfilled) return true
+      if (selectedDeliveries && criteriaEntities[id]?.selectedDelivery)
+        return true
+      return false
+    })
+  }
+
+  ids = filterIds({ ids, criteria, criteriaEntities })
 
   const [multi, setMulti] = useState(false)
 
@@ -258,7 +279,7 @@ const Table = ({
               >
                 {Row({
                   properties,
-                  selectCriteriaEntities,
+                  criteriaEntities,
                   selectOne,
                   selectMulti,
                   selectedIds,
@@ -277,7 +298,7 @@ const Table = ({
 
 const Row = ({
   properties,
-  selectCriteriaEntities,
+  criteriaEntities,
   selectOne,
   selectMulti,
   selectedIds,
@@ -303,7 +324,6 @@ const Row = ({
     const selectedInfo = selectedIds.includes(id) ? styles.selectedInfo : {}
 
     const { criteriaControls, color: entityColor, display } = conf
-    const criteriaEntities = useSelector(selectCriteriaEntities)
     const { fulfilled, selectedDelivery } = criteriaEntities[id] || {}
     const fulfilledDelivery = fulfilled && {
       deliveryId: fulfilled.deliveries[0].id,
@@ -358,41 +378,17 @@ const Row = ({
               <Cell icon={<UnmatchedIcon />} color={entityColor} />
             )))}
 
-        {criteriaControls &&
-          ((selectedDelivery && (
-            <Tooltip
-              title={
-                <TooltipContent
-                  entity={{
-                    ...selectedDelivery,
-                    id: selectedDelivery.deliveryId,
-                  }}
-                  conf={conf}
-                  tTitle="matchedReq"
-                />
-              }
-              arrow
-              TransitionComponent={Zoom}
-              disableFocusListener={true}
-              placement={placement}
-              PopperProps={{ css: styles.tooltip }}
-            >
-              <IconButton>
-                <Cell
-                  icon={<SelectedDeliveriesIcon />}
-                  color={selectedDelivery.color}
-                  cellStyle={{ visibility: 'visible' }}
-                />
-              </IconButton>
-            </Tooltip>
-          )) ||
-            (!selectedDelivery && (
-              <Cell
-                icon={<SelectedDeliveriesIcon />}
-                color={'grey'}
-                cellStyle={{ visibility: 'hidden' }}
-              />
-            )))}
+        {criteriaControls && (
+          <IconButton>
+            <Cell
+              icon={<SelectedDeliveriesIcon />}
+              color={selectedDelivery ? selectedDelivery.color : 'grey'}
+              cellStyle={{
+                visibility: selectedDelivery ? 'visible' : 'hidden',
+              }}
+            />
+          </IconButton>
+        )}
 
         <Tooltip
           // open={id === 'b39e0de1-41ab-4e1f-9e2a-c82aecfa511b'}
