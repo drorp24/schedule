@@ -18,6 +18,9 @@ import Info from '@material-ui/icons/InfoOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import Progress from '../layout/Progress'
 import { Toolbar } from './Toolbar'
+import SelectedDeliveriesIcon from '@material-ui/icons/PlaylistAddCheck'
+import MatchedIcon from '@material-ui/icons/AssignmentTurnedInOutlined'
+import UnmatchedIcon from '@material-ui/icons/AssignmentLateOutlined'
 
 const getFields = ({ entity, properties }) =>
   properties.map(({ name, fn, rowStyle, icon }) => ({
@@ -27,7 +30,7 @@ const getFields = ({ entity, properties }) =>
     icon,
   }))
 
-export const styles = {
+const styles = {
   root: {
     height: '100%',
     fontSize: '0.85rem',
@@ -46,7 +49,6 @@ export const styles = {
     boxSizing: 'border-box',
     cursor: 'pointer',
     borderBottom: '1px solid',
-    padding: '0 0.5rem',
     borderColor: 'white',
     even: {
       light: {
@@ -79,15 +81,18 @@ export const styles = {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: '1.5rem',
     // border: '1px solid',
   },
   icon: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '3rem',
-    width: '3rem',
     alignSelf: 'center',
+    alignItems: 'center',
   },
 
   selectedInfo: {
@@ -173,10 +178,10 @@ export const styles = {
 //   dispatched when a row is selected if toolbar so indicates
 // ~ selectEntities
 //   entity's own selectEntities selector that exposes { isLoading, ids, selectedIds }
-// ~ selectCriteria, selectCriteriaEntities,setCriteria, toggleFilter, toggleShowOnMap
+// ~ selectCriteria, selectCriteriaEntities, setCriteria, toggleFilter, toggleShowOnMap
 //   entity's own selectors and setters for the criteria controls activated from the toolbar.
-//   selectCriteriaEntities fetches the rows that match any of the selected criteria (there can be multiple)
-//   thus enables to indicate such rows on the table.
+//   selectCriteriaEntities provides a list of entity ids each with the list of criteria it matches (there can be several)
+//   and its info. It serves to indicate criteria-matching rows and provide info on each criterion.
 //   In addition to the (currently 3) criteria, the set includes 'filter' and a 'show on map' controls,
 //   which determine
 //   -  whether to filter rows to include only those that match any of the criteria, and
@@ -233,13 +238,11 @@ const Table = ({
                 {...{
                   conf,
                   selectCriteria,
-                  selectCriteriaEntities,
                   setCriteria,
                   toggleFilter,
                   toggleShowOnMap,
                   multi,
                   setMulti,
-                  toggleFilter,
                 }}
               />
               <Header
@@ -254,11 +257,12 @@ const Table = ({
                 {...{ height, width, itemCount, itemSize, direction }}
               >
                 {Row({
+                  properties,
+                  selectCriteriaEntities,
                   selectOne,
                   selectMulti,
                   selectedIds,
                   selectEntityById,
-                  properties,
                   conf,
                   multi,
                 })}
@@ -272,18 +276,18 @@ const Table = ({
 }
 
 const Row = ({
+  properties,
+  selectCriteriaEntities,
   selectOne,
   selectMulti,
   selectedIds,
-  selectedDeliveriesByPlanId,
   selectEntityById,
-  properties,
   conf,
   multi,
 }) =>
   memo(({ index, style, data }) => {
     const entity = useSelector(selectEntityById(data[index]))
-    const { id, package_delivery_plan_ids } = entity
+    const { id } = entity
     const fields = getFields({ entity, properties })
     const dispatch = useDispatch()
 
@@ -298,11 +302,23 @@ const Row = ({
     const selectedRow = selectedIds.includes(id) ? styles.selected : {}
     const selectedInfo = selectedIds.includes(id) ? styles.selectedInfo : {}
 
+    const { criteriaControls, color: entityColor, display } = conf
+    const criteriaEntities = useSelector(selectCriteriaEntities)
+    const { fulfilled, selectedDelivery } = criteriaEntities[id] || {}
+    const fulfilledDelivery = fulfilled && {
+      deliveryId: fulfilled.deliveries[0].id,
+      ...fulfilled.deliveries[0],
+    }
+
     return (
       <div
         css={{
           ...style,
           ...styles.row,
+          ...(display === 'grid' && {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 20%)',
+          }),
           ...(index % 2 ? styles.row.odd[mode] : styles.row.even[mode]),
           ...line,
           ...selectedRow,
@@ -310,9 +326,73 @@ const Row = ({
         style={style}
         onClick={addSelection(id)}
       >
-        {fields.map(({ name, value, icon, rowStyle }) => (
-          <Cell {...{ value, icon, cellStyle: rowStyle, key: name }} />
-        ))}
+        {fields.map(
+          ({ name, value, icon, rowStyle }) =>
+            value && (
+              <Cell {...{ value, icon, cellStyle: rowStyle, key: name }} />
+            )
+        )}
+
+        {criteriaControls &&
+          ((fulfilled && (
+            <Tooltip
+              title={
+                <TooltipContent
+                  entity={fulfilledDelivery}
+                  conf={conf}
+                  tTitle="matchedReq"
+                />
+              }
+              arrow
+              TransitionComponent={Zoom}
+              disableFocusListener={true}
+              placement={placement}
+              PopperProps={{ css: styles.tooltip }}
+            >
+              <IconButton>
+                <Cell icon={<MatchedIcon />} color={entityColor} />
+              </IconButton>
+            </Tooltip>
+          )) ||
+            (!fulfilled && (
+              <Cell icon={<UnmatchedIcon />} color={entityColor} />
+            )))}
+
+        {criteriaControls &&
+          ((selectedDelivery && (
+            <Tooltip
+              title={
+                <TooltipContent
+                  entity={{
+                    ...selectedDelivery,
+                    id: selectedDelivery.deliveryId,
+                  }}
+                  conf={conf}
+                  tTitle="matchedReq"
+                />
+              }
+              arrow
+              TransitionComponent={Zoom}
+              disableFocusListener={true}
+              placement={placement}
+              PopperProps={{ css: styles.tooltip }}
+            >
+              <IconButton>
+                <Cell
+                  icon={<SelectedDeliveriesIcon />}
+                  color={selectedDelivery.color}
+                  cellStyle={{ visibility: 'visible' }}
+                />
+              </IconButton>
+            </Tooltip>
+          )) ||
+            (!selectedDelivery && (
+              <Cell
+                icon={<SelectedDeliveriesIcon />}
+                color={'grey'}
+                cellStyle={{ visibility: 'hidden' }}
+              />
+            )))}
 
         <Tooltip
           // open={id === 'b39e0de1-41ab-4e1f-9e2a-c82aecfa511b'}
@@ -355,6 +435,7 @@ const Cell = ({ value, icon, cellStyle, color }) => {
         ...styles.cell,
         ...cellStyle,
         ...alignment,
+        ...(icon && styles.icon),
         color: icon ? color : 'inherit',
       }}
       title={value}

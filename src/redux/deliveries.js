@@ -7,7 +7,7 @@ import {
 
 import deliveriesApi from '../api/deliveriesApi'
 import deliveriesFields from '../api/conversions/deliveriesFields'
-import { updateEffects } from './updateEffects'
+import { updateEffects, updateSelectedDeliveries } from './updateEffects'
 
 // * normalization
 const deliveriesAdapter = createEntityAdapter({
@@ -80,6 +80,7 @@ const initialState = deliveriesAdapter.getInitialState({
   loading: 'idle',
   issues: [],
   selectedIds: [],
+  selectedRequests: {},
 })
 
 const deliveriesSlice = createSlice({
@@ -102,8 +103,9 @@ const deliveriesSlice = createSlice({
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
     },
-    updateSelection: (state, { payload }) => {
-      state.selectedIds = payload
+    updateSelection: (state, { payload: { selection, requests } }) => {
+      state.selectedIds = selection
+      updateSelectedDeliveries({ state, selection, requests })
     },
     updateDeliveryEffects: updateEffects,
     error: (state, { payload: error }) => ({ ...state, error }),

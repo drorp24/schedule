@@ -195,8 +195,6 @@ export const selectLoaded = ({ requests: { ids, loading, error } }) =>
 
 export const selectCriteria = ({ requests }) => requests.criteria
 
-export const selectCriteriaEntities = ({ requests }) => ({ requests })
-
 export const selectIds = ({ requests }) => requestsSelectors.selectIds(requests)
 
 export const selectEntityById =
@@ -245,6 +243,30 @@ export const selectSelectedEntities = ({
     })
   const selectedEntities = selectedIds.map(id => requests.entities[id])
   return { selectedEntities, locations }
+}
+
+export const selectCriteriaEntities = ({
+  deliveries: { selectedRequests, fulfilledRequests },
+}) => {
+  const criteriaEntities = {}
+
+  for (const selectedRequestId in selectedRequests) {
+    criteriaEntities[selectedRequestId] =
+      criteriaEntities[selectedRequestId] || {}
+    const request = criteriaEntities[selectedRequestId]
+    if (request?.selectedDelivery)
+      console.warn(`more than one delivery for request ${selectedRequestId}`)
+    request.selectedDelivery = selectedRequests[selectedRequestId]
+  }
+
+  for (const fulfilledRequestId in fulfilledRequests) {
+    criteriaEntities[fulfilledRequestId] =
+      criteriaEntities[fulfilledRequestId] || {}
+    const request = criteriaEntities[fulfilledRequestId]
+    request.fulfilled = fulfilledRequests[fulfilledRequestId]
+  }
+
+  return criteriaEntities
 }
 
 // ToDo: remove

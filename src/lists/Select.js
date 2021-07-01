@@ -6,7 +6,7 @@ import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup'
 import ToggleButton from '@material-ui/core/ToggleButton'
 
 import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
-import DepotsIcon from '@material-ui/icons/HomeWorkOutlined'
+import DepotsIcon from '@material-ui/icons/FlightTakeoffOutlined'
 import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
 
 const styles = {

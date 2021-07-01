@@ -100,6 +100,17 @@ const Gantt = () => {
     }),
   }
 
+  const deliveriesLoaded = useSelector(selectDeliveriesLoaded)
+
+  const { requests, loaded: requestsLoaded } = useSelector(
+    selectRequestsEntities
+  )
+  const { deliveryPlans, loaded: deliveryPlansLoaded } = useSelector(
+    selectDeliveryPlansEntities
+  )
+
+  const effectsRecorded = useSelector(selectEffectsRecorded)
+
   // fetch deliveries
   useEffect(() => {
     const container = ref.current
@@ -121,26 +132,9 @@ const Gantt = () => {
         })
       ).then(() => {
         setLoading(false)
-        // setTimeout(() => {
-        //   ref.current.scrollTo({
-        //     top: ref.current.scrollHeight,
-        //     behavior: 'smooth',
-        //   })
-        // }, 0)
       })
     }
   }, [dispatch, options, runId])
-
-  const deliveriesLoaded = useSelector(selectDeliveriesLoaded)
-
-  const { requests, loaded: requestsLoaded } = useSelector(
-    selectRequestsEntities
-  )
-  const { deliveryPlans, loaded: deliveryPlansLoaded } = useSelector(
-    selectDeliveryPlansEntities
-  )
-
-  const effectsRecorded = useSelector(selectEffectsRecorded)
 
   // Update effects
   useEffect(() => {

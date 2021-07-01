@@ -19,9 +19,7 @@ export const fetchRuns = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await runsApi()
-      console.log('response: ', response)
       const runs = Object.values(response).map(runsFields)
-      console.log('runs: ', runs)
       return { runs }
     } catch (error) {
       console.error('fetch catch error:', error)

@@ -13,7 +13,7 @@ import ToggleButton from '@material-ui/core/ToggleButton'
 import IconButton from '@material-ui/core/IconButton'
 import TableRowsIcon from '@material-ui/icons/TableRows'
 import Filter1Icon from '@material-ui/icons/FilterAltOutlined'
-import MapCriteriaIcon from '@material-ui/icons/ShareLocationOutlined'
+import MapCriteriaIcon from '@material-ui/icons/PinDropOutlined'
 
 const Criteria = ({ selectCriteria, setCriteria, on, off }) => {
   const { selectedDeliveries, matched, unmatched } = useSelector(selectCriteria)
@@ -98,7 +98,6 @@ export const Toolbar = ({
   conf,
   setCriteria,
   selectCriteria,
-  selectCriteriaEntities,
   multi,
   setMulti,
   toggleFilter,

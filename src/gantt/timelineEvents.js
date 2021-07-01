@@ -1,19 +1,13 @@
-import { selectOne, updateSelection } from '../redux/deliveries'
-
-export const selectRecommendation =
-  ({ dispatch, timeline }) =>
-  ({ items }) => {
-    const selectedId = items[0]
-    // const selected = timeline.getSelection()
-    dispatch(selectOne(selectedId))
-  }
+import store from '../redux/store'
+import { updateSelection } from '../redux/deliveries'
 
 export const updateSelected =
   ({ dispatch, timeline }) =>
   ({ item }) => {
     setTimeout(() => {
       const selection = timeline.getSelection()
-      dispatch(updateSelection(selection))
+      const { requests } = store.getState()
+      dispatch(updateSelection({ selection, requests }))
     }, 0)
   }
 

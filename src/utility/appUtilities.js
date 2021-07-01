@@ -80,7 +80,6 @@ export const localeDateTime = locale => date => {
 }
 
 export const camel2human = s => {
-  console.log('s: ', s)
   function capitalise(word) {
     return word.charAt(0).toUpperCase() + word.substring(1)
   }

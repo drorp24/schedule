@@ -1,7 +1,9 @@
 import lime from '@material-ui/core/colors/lime'
 import lightBlue from '@material-ui/core/colors/lightBlue'
 import lightGreen from '@material-ui/core/colors/lightGreen'
+import orange from '@material-ui/core/colors/orange'
 import deepOrange from '@material-ui/core/colors/deepOrange'
+import red from '@material-ui/core/colors/red'
 import yellow from '@material-ui/core/colors/yellow'
 import RequestsIcon from '@material-ui/icons/ContentPasteOutlined'
 import ZonesIcon from '@material-ui/icons/TravelExploreOutlined'
@@ -14,11 +16,12 @@ const config = {
   requests: {
     name: 'requests',
     // color: lime['A400'],
-    color: yellow[200],
+    color: orange['A400'],
     icon: <RequestsIcon />,
     avatar: <RequestsIcon />,
     criteriaControls: true,
     popupTitle: 'request',
+    display: 'grid',
   },
   depots: {
     name: 'depots',

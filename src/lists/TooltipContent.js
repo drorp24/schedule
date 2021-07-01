@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import useTheme from '../styling/useTheme'
-import { useLocale, useMode, snake2human } from '../utility/appUtilities'
+import {
+  useLocale,
+  useMode,
+  snake2human,
+  camel2human,
+} from '../utility/appUtilities'
 import excludeKeys from '../utility/excludeKeys'
 import useTranslation from '../i18n/useTranslation'
 import jsStringify from '../utility/jsStringify'
@@ -24,7 +29,9 @@ import Avatar from '@material-ui/core/Avatar'
 const TooltipContent = ({
   entity: { id, ...rest },
   conf: { color, avatar, exclude },
+  tTitle,
 }) => {
+  console.log('TooltipContent is rendered')
   const { direction } = useLocale()
   const { otherMode } = useMode()
   const t = useTranslation()
@@ -141,7 +148,7 @@ const TooltipContent = ({
       <Card elevation={0} css={styles.root}>
         <CardHeader
           avatar={<Avatar css={styles.avatar}>{inAvatar}</Avatar>}
-          title={id}
+          title={tTitle ? t(tTitle) : id}
           classes={{ title, content, subheader }}
           css={styles.cardHeader}
         />
@@ -159,7 +166,7 @@ const TooltipContent = ({
                   ...(!(index % 2) && styles.explainer.line.even),
                 }}
               >
-                <span>{snake2human(key)}:</span>
+                <span>{camel2human(key)}:</span>
                 <span css={styles.explainer.value}>
                   {typeof value === 'object' ? jsStringify(value) : value}
                 </span>

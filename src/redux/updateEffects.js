@@ -1,11 +1,16 @@
 import { current } from '@reduxjs/toolkit'
 
 // ! Why update
-// In the common dilemma whether to calculate-on-the-fly or calculate-once-and-record, this case absolutely requires
-// the latter. Mainly because vis-timeline, whenever another task (delivery) is selected, returns all of the selected tasks.
-// Had I calculated the derived requests/depots on the fly I would have repeated previous calculations.
-// Another reason is UX: while it is common to wait for the data from the server, when user selects a delivery, or
-// changes criteria, he expects an instant reaction.
+// In the common dilemma whether to calculate-on-the-fly or calculate-once-and-record, I chose
+// the latter, becasue:
+//   -  It is much easier to debug: instead of setting debugger traps or console logs, everything is recorded.
+//      In fact that enables to test data correctness separately from the UI.
+//   -  redux in particular is great at finding where a data issue happened,
+//      since one can go back in time and view the exact effect of each action on the data.
+//   -  vis - timeline, whenever another task(delivery) is selected, returns all of the selected tasks.
+//      Had I calculated the derived requests/depots on the fly I would have repeated previous calculations.
+//   -  UX: while user can usually tolerate waiting for the data from the server, when he selects a delivery or
+//      changes criteria, he would expect an instant response.
 //
 // ! All effects recorded once and on one entity
 // While a redux action can be processed by multiple store parts,
@@ -113,7 +118,12 @@ export const updateEffects = (
               ] || { locations: [], deliveries: [] }
               let fulfilledRequest = state.fulfilledRequests[requestId]
               fulfilledRequest.locations.push(extendedGeolocation)
-              fulfilledRequest.deliveries.push({ id: deliveryId, color })
+              fulfilledRequest.deliveries.push({
+                id: deliveryId,
+                deliveryLegIndex,
+                deliveryPlanId,
+                color,
+              })
 
               depotIds.forEach(depotId => {
                 state.employedDepots[depotId].locations.push({
@@ -127,4 +137,26 @@ export const updateEffects = (
       )
     }
   )
+}
+
+export const updateSelectedDeliveries = ({ state, selection, requests }) => {
+  state.selectedRequests = {}
+
+  selection.forEach(id => {
+    const [deliveryId, deliveryLeg] = id.split(':')
+    const delivery = state.entities[deliveryId]
+    const { drone_deliveries = [], color } = delivery
+
+    drone_deliveries[deliveryLeg].package_delivery_plan_ids.forEach(
+      deliveryPlanId => {
+        const requestId = requests.planIds[deliveryPlanId]
+        state.selectedRequests[requestId] = {
+          deliveryId,
+          deliveryLeg,
+          deliveryPlanId,
+          color,
+        }
+      }
+    )
+  })
 }

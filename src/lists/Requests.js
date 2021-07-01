@@ -22,6 +22,8 @@ import Table from './Table'
 const properties = [
   { name: 'id', fn: id => id.slice(-7) },
   { name: 'priority' },
+  { name: 'match' },
+  { name: 'selection' },
 ]
 
 const { requests: conf } = config

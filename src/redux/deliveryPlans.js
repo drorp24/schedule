@@ -14,35 +14,11 @@ const deliveryPlansAdapter = createEntityAdapter({
   sortComparer: (a, b) => {},
 })
 
-// !Error handling
-// ~ Players
-//  There are 3 players in the fetch game:
-//  - caller component, via its useEffect
-//  - this file's action/payload creator and reducer
-//  - the respective xApi file
-// ~ Api failures
-//  - are identified in the respective xApi,
-//  - throw there a POJO object (instead of Error object, which is not redux seralizable)
-//  - reach this file's catch clause below
-//  - don't reach the [fetchx.fullfilled] below but the [fetchx.rejected] instead
-//  - if caller useEffect then wants to know about / react to the error
-//    it should call 'unwrapResult' then 'catch',
-//    or else the error is handled by [fetchx.rejected] and swallowed there.
-//  - either way, [fetchx.rejected] records the error (as a POJO object) in the entity's error key
-//  - which gets noticed by useNotification and renders a snackbar to the user.
-// ~ Issues
-//  - are identified by some post processor,
-//  - can be set either in xApi, the fetchx below or the[fetchx.fulfilled].
-//  - either way, they should be one of [fetchx.fullfilled]'s arguments,
-//    so it can add them to the list of issues on the entity's issues key.
-//  - unlike api failures, issues don't require user's attention nor any bugfix.
-
 // * thunk
 export const fetchDeliveryPlans = createAsyncThunk(
   'deliveryPlans/fetch',
   async ({ runId }, { rejectWithValue }) => {
     try {
-      console.log('2. fetchDeliveryPlans entered')
       const response = await deliveryPlansApi(runId)
       const deliveryPlans = Object.values(response).map(deliveryPlansFields)
       return { runId, deliveryPlans }
@@ -69,7 +45,6 @@ export const fetchDeliveryPlans = createAsyncThunk(
         deliveryPlans: { meta },
       } = getState()
       console.group('dup fetch prevention')
-      console.log('1. condition: meta?.runId, runId: ', meta?.runId, runId)
       if (meta?.runId === runId) return false
     },
   }

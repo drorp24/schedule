@@ -48,8 +48,6 @@ const SelectedLocations = () => {
 
   useEffect(() => {
     if (!map || !locations?.length) return
-    console.log('locations: ', locations)
-    console.log('locations.length: ', locations.length)
 
     const locationPoints = locations.map(({ geometry: { coordinates } }) => [
       ...coordinates,
@@ -58,7 +56,6 @@ const SelectedLocations = () => {
     const mapBounds = map.getBounds()
 
     if (farEnough(locationBounds, mapBounds)) {
-      console.log('far enough')
       map.flyToBounds(locationBounds, flyToOptions)
     }
   }, [map, locations])
