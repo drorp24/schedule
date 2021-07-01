@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   fetchRequests,

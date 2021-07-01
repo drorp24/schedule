@@ -22,5 +22,5 @@ const deliveriesApi = async runId => {
 // test data
 const sampleDeliveriesApi = runId => Promise.resolve(sampleDeliveries)
 
-// export default deliveriesApi
-export default sampleDeliveriesApi
+export default deliveriesApi
+// export default sampleDeliveriesApi

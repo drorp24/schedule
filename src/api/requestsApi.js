@@ -22,5 +22,5 @@ const requestsApi = async runId => {
 // test data
 const sampleRequestsApi = runId => Promise.resolve(sampleRequests)
 
-// export default requestsApi
-export default sampleRequestsApi
+export default requestsApi
+// export default sampleRequestsApi

@@ -2,7 +2,7 @@ import axios from 'axios'
 import sampleRuns from './sampleData/runs.json'
 
 const runsApi = async runId => {
-  const runs = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_RUNS_ENDPOINT}`
+  const runs = `${process.env.REACT_APP_API_SERVER}/${process.env.REACT_APP_RUNS_ENDPOINT}`
   try {
     const response = await axios.get(runs)
     if (!response) throw new Error('No response')

@@ -43,12 +43,12 @@ const RunSelection = () => {
   const { locale } = useLocale()
   const dispatch = useDispatch()
 
-  const d = useCallback(() => {
-    localeDateTime(locale)
-  }, [locale])
-  const selectRun = ({ target: { value } }) => {
-    if (value !== selectedId) dispatch(select(value))
-  }
+  // const d = useCallback(() => {
+  //   localeDateTime(locale)
+  // }, [locale])
+  // const selectRun = ({ target: { value } }) => {
+  //   if (value !== selectedId) dispatch(select(value))
+  // }
 
   const runs = useMemo(
     () =>
@@ -57,9 +57,9 @@ const RunSelection = () => {
       sortedEntities.length &&
       sortedEntities.map(({ id, date }) => ({
         id,
-        date: d(date),
+        date: localeDateTime(locale)(date),
       })),
-    [d, loaded, locale, sortedEntities]
+    [loaded, locale, sortedEntities]
   )
 
   useEffect(() => {

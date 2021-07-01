@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fetchDeliveryPlans } from '../redux/deliveryPlans'
+import { selectEntities as selectRuns } from '../redux/runs'
 
 import ZonesControl from './ZonesControl'
 import SelectedLocations from './SelectedLocations'
@@ -16,7 +17,6 @@ import {
 import { tileProviders, locations } from './config'
 
 import { useMode } from '../utility/appUtilities'
-import { useRunId } from '../utility/appUtilities'
 
 const styles = {
   map: {
@@ -29,11 +29,11 @@ const Map = () => {
   console.log('Map is rendered')
   const { mode } = useMode()
 
-  const runId = useRunId()
+  const { selectedId: runId } = useSelector(selectRuns)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchDeliveryPlans({ runId }))
+    if (runId) dispatch(fetchDeliveryPlans({ runId }))
   }, [dispatch, runId])
 
   return (

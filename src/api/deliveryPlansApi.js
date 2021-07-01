@@ -26,5 +26,5 @@ const sampleDeliveryPlansApi = runId => {
   return Promise.resolve(sampleDeliveryPlans)
 }
 
-// export default deliveryPlansApi
-export default sampleDeliveryPlansApi
+export default deliveryPlansApi
+// export default sampleDeliveryPlansApi

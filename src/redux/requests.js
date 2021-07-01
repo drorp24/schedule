@@ -245,6 +245,10 @@ export const selectSelectedEntities = ({
   return { selectedEntities, locations }
 }
 
+// in order to show *all* criteria-matching (e.g. all matched, all unmatched) locations on the map,
+// this selector needs to also
+// - return unmatched ids as well
+// - return locations for all criteria-matching rows
 export const selectCriteriaEntities = ({
   deliveries: { selectedRequests, fulfilledRequests },
 }) => {

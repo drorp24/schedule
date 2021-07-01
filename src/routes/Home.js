@@ -146,13 +146,13 @@ const Home = () => {
   }
 
   const routes = [
-    {
-      path: 'file',
-      component: <File />,
-      icon: <Folder />,
-      title: t('file'),
-      color: pathname === '/home/file' ? menuItem.active : menuItem.inactive,
-    },
+    // {
+    //   path: 'file',
+    //   component: <File />,
+    //   icon: <Folder />,
+    //   title: t('file'),
+    //   color: pathname === '/home/file' ? menuItem.active : menuItem.inactive,
+    // },
     {
       path: 'schedule',
       component: <Schedule />,
@@ -161,13 +161,13 @@ const Home = () => {
       color:
         pathname === '/home/schedule' ? menuItem.active : menuItem.inactive,
     },
-    {
-      path: 'routes',
-      component: <Routes />,
-      icon: <RoutesIcon />,
-      title: t('routes'),
-      color: pathname === '/home/routes' ? menuItem.active : menuItem.inactive,
-    },
+    // {
+    //   path: 'routes',
+    //   component: <Routes />,
+    //   icon: <RoutesIcon />,
+    //   title: t('routes'),
+    //   color: pathname === '/home/routes' ? menuItem.active : menuItem.inactive,
+    // },
     {
       path: 'dashboard',
       component: <Dashboard />,

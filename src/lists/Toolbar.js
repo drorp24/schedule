@@ -12,8 +12,8 @@ import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup'
 import ToggleButton from '@material-ui/core/ToggleButton'
 import IconButton from '@material-ui/core/IconButton'
 import TableRowsIcon from '@material-ui/icons/TableRows'
-import Filter1Icon from '@material-ui/icons/FilterAltOutlined'
-import MapCriteriaIcon from '@material-ui/icons/PinDropOutlined'
+// import Filter1Icon from '@material-ui/icons/FilterAltOutlined'
+// import MapCriteriaIcon from '@material-ui/icons/PinDropOutlined'
 
 const Criteria = ({ selectCriteria, setCriteria, on, off }) => {
   const { selectedDeliveries, matched, unmatched } = useSelector(selectCriteria)
@@ -100,11 +100,10 @@ export const Toolbar = ({
   selectCriteria,
   multi,
   setMulti,
-  toggleFilter,
-  toggleShowOnMap,
+  // toggleShowOnMap,
 }) => {
   const t = useTranslation()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const { name, icon, criteriaControls, color } = conf
 
   const toggleMulti = () => setMulti(value => !value)
@@ -170,7 +169,7 @@ export const Toolbar = ({
     criteria: {
       display: 'flex',
       margin: '0 1rem',
-      marginLeft: '12%',
+      marginLeft: '25%',
     },
     display: {
       display: 'flex',
@@ -194,9 +193,9 @@ export const Toolbar = ({
 
   const { on, off } = toolbarStyles
 
-  const { map } = useSelector(selectCriteria)
+  // const { map } = useSelector(selectCriteria)
 
-  const modifyShowOnMap = () => dispatch(toggleShowOnMap())
+  // const modifyShowOnMap = () => dispatch(toggleShowOnMap())
 
   return (
     <div css={toolbarStyles.toolbar}>
@@ -219,14 +218,14 @@ export const Toolbar = ({
           >
             <TableRowsIcon />
           </IconButton>
-          <IconButton title={t('showOnMap')} onClick={modifyShowOnMap}>
+          {/* <IconButton title={t('showOnMap')} onClick={modifyShowOnMap}>
             <MapCriteriaIcon
               css={{
                 ...toolbarStyles.mapCriteriaIcon,
                 ...(map.value ? toolbarStyles.on : toolbarStyles.off),
               }}
             />
-          </IconButton>
+          </IconButton> */}
         </div>
       </div>
     </div>
