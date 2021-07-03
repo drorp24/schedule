@@ -7,7 +7,11 @@ import {
 
 import deliveriesApi from '../api/deliveriesApi'
 import deliveriesFields from '../api/conversions/deliveriesFields'
-import { updateEffects, updateSelectedDeliveries } from './updateEffects'
+import {
+  updateEffects,
+  removeEffects,
+  updateSelectedDeliveries,
+} from './updateEffects'
 
 // * normalization
 const deliveriesAdapter = createEntityAdapter({
@@ -46,6 +50,8 @@ export const fetchDeliveries = createAsyncThunk(
       const response = await deliveriesApi(runId)
       const deliveries = Object.values(response).map(deliveriesFields)
       buildTimeline({ deliveries })
+      window.buildTimeline = buildTimeline
+      window.deliveries = deliveries
       return { runId, deliveries }
     } catch (error) {
       console.error('fetch catch error:', error)
@@ -108,6 +114,7 @@ const deliveriesSlice = createSlice({
       updateSelectedDeliveries({ state, selection, requests })
     },
     updateDeliveryEffects: updateEffects,
+    removeDeliveryEffects: removeEffects,
     error: (state, { payload: error }) => ({ ...state, error }),
   },
   extraReducers: {
@@ -183,11 +190,17 @@ export const selectEntities = ({ deliveries }) => {
   }
 }
 
-export const selectLoaded = ({ deliveries: { ids, loading, error } }) =>
-  ids.length > 0 && loading === 'idle' && !error
+export const selectLoaded =
+  runId =>
+  ({ deliveries: { meta, ids, loading, error } }) =>
+    meta?.runId === runId && ids.length > 0 && loading === 'idle' && !error
 
-export const selectEffectsRecorded = ({ deliveries: { fulfilledRequests } }) =>
-  fulfilledRequests && !!Object.keys(fulfilledRequests)?.length
+export const selectEffectsRecorded =
+  runId =>
+  ({ deliveries: { meta, fulfilledRequests } }) =>
+    meta?.runId === runId &&
+    fulfilledRequests &&
+    !!Object.keys(fulfilledRequests)?.length
 
 export const selectIds = ({ deliveries }) =>
   deliveriesSelectors.selectIds(deliveries)
@@ -218,80 +231,6 @@ export const selectSelectedEntities = ({ deliveries }) => {
   return { selectedEntities, locations }
 }
 
-export const oldSelectSelectedEntities = ({
-  deliveries,
-  deliveryPlans,
-  requests,
-  depots,
-}) => {
-  if (
-    !deliveries.ids?.length ||
-    !deliveryPlans.ids?.length ||
-    !deliveries.selectedIds?.length
-  )
-    return {}
-
-  const { selectedIds } = deliveries
-  const locations = []
-  const selectedDeliveriesByPlanId = {}
-  const selectedDeliveriesByRequestId = {}
-  const selectedDeliveriesByDepotId = {}
-  depots.ids.forEach(id => {
-    selectedDeliveriesByDepotId[id] = []
-  })
-  selectedIds
-    .map(deliveryId => {
-      const delivery = deliveries.entities[deliveryId]
-      if (!delivery) return null
-      const { drone_deliveries, depart_depot_id, arrive_depot_id, color } =
-        delivery
-
-      return {
-        deliveryId,
-        drone_deliveries,
-        depart_depot_id,
-        arrive_depot_id,
-        color,
-      }
-    })
-    .forEach(
-      ({
-        deliveryId,
-        drone_deliveries = [],
-        depart_depot_id,
-        arrive_depot_id,
-        color,
-      }) => {
-        drone_deliveries.forEach(({ package_delivery_plan_ids = [] }) => {
-          package_delivery_plan_ids.forEach(deliveryPlanId => {
-            const requestId = requests.planIds[deliveryPlanId]
-            const deliveryPlan = deliveryPlans.entities[deliveryPlanId]
-            const { geolocation } = deliveryPlan
-
-            locations.push({ deliveryId, deliveryPlanId, geolocation, color })
-
-            const deliveryInfo = { deliveryId, color }
-
-            selectedDeliveriesByPlanId[deliveryPlanId] = deliveryInfo
-            selectedDeliveriesByRequestId[requestId] = deliveryInfo
-            selectedDeliveriesByDepotId[depart_depot_id].push(deliveryInfo)
-            if (depart_depot_id !== arrive_depot_id) {
-              selectedDeliveriesByDepotId[arrive_depot_id].push(deliveryInfo)
-            }
-          })
-        })
-      }
-    )
-  const selectedEntities = selectedIds.map(id => deliveries.entities[id])
-  return {
-    locations,
-    selectedDeliveriesByPlanId,
-    selectedDeliveriesByRequestId,
-    selectedDeliveriesByDepotId,
-    selectedEntities,
-  }
-}
-
 const { reducer, actions } = deliveriesSlice
 export const {
   clear,
@@ -301,6 +240,7 @@ export const {
   selectMulti,
   updateSelection,
   updateDeliveryEffects,
+  removeDeliveryEffects,
   error,
 } = actions
 

@@ -178,15 +178,15 @@ const Home = () => {
     },
   ]
   const toggles = [
-    {
-      key: 'lang',
-      icon: <SwitchRightOutlinedIcon />,
-      onClick: () => {
-        setDir(dir => (dir === 'ltr' ? 'rtl' : 'ltr'))
-        setTimeout(() => dispatch(toggleLocale()), 500)
-      },
-      title: t('lang'),
-    },
+    // {
+    //   key: 'lang',
+    //   icon: <SwitchRightOutlinedIcon />,
+    //   onClick: () => {
+    //     setDir(dir => (dir === 'ltr' ? 'rtl' : 'ltr'))
+    //     setTimeout(() => dispatch(toggleLocale()), 500)
+    //   },
+    //   title: t('lang'),
+    // },
     {
       key: 'mode',
       icon:
@@ -194,12 +194,12 @@ const Home = () => {
       onClick: () => dispatch(toggleMode()),
       title: t('mode'),
     },
-    {
-      key: 'logout',
-      icon: <Logout />,
-      onClick: () => dispatch(logout()),
-      title: t('logout'),
-    },
+    // {
+    //   key: 'logout',
+    //   icon: <Logout />,
+    //   onClick: () => dispatch(logout()),
+    //   title: t('logout'),
+    // },
   ]
 
   return (

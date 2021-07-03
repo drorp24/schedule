@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { criteriaDefaults } from '../redux/config'
 
@@ -27,6 +27,10 @@ const Criteria = ({ selectCriteria, setCriteria, on, off }) => {
   const [criteria, updateCriteria] = useState(
     criteriaToState({ selectedDeliveries, matched, unmatched })
   )
+
+  useEffect(() => {
+    updateCriteria(criteriaToState({ selectedDeliveries, matched, unmatched }))
+  }, [selectedDeliveries, matched, unmatched])
 
   const handleChange = (e, newCriteria) => {
     const criteria = []
@@ -117,12 +121,10 @@ export const Toolbar = ({
     toolbar: theme => ({
       position: 'absolute',
       top: '-1rem',
-      borderTopLeftRadius: '4px',
-      borderTopRightRadius: '4px',
       margin: '0 -1rem',
       width: 'calc(100% + 2rem)',
       minHeight: '2rem',
-      backgroundColor: theme.palette.background.prominent,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
       color: '#fff',
       display: 'flex',
       justifyContent: 'space-between',

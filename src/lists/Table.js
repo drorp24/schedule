@@ -87,6 +87,9 @@ const styles = {
     minWidth: '1.5rem',
     // border: '1px solid',
   },
+  infoButton: {
+    width: '4rem',
+  },
   icon: {
     display: 'flex',
     flexDirection: 'column',
@@ -225,8 +228,7 @@ const Table = ({
     criteria: { matched, unmatched, selectedDeliveries },
     criteriaEntities,
   }) => {
-    if (!criteriaControls || (!matched && !unmatched && !selectedDeliveries))
-      return ids
+    if (!criteriaControls) return ids
 
     return ids.filter(id => {
       if (matched && criteriaEntities[id]?.fulfilled) return true
@@ -400,7 +402,13 @@ const Row = ({
           PopperProps={{ css: styles.tooltip }}
         >
           <IconButton
-            style={{ ...styles.icon, ...selectedInfo, ...styles.dimText }}
+            style={{
+              ...styles.icon,
+              ...styles.cell,
+              ...styles.infoButton,
+              ...selectedInfo,
+              ...styles.dimText,
+            }}
           >
             <Info />
           </IconButton>

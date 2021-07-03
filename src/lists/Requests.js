@@ -34,6 +34,7 @@ const Requests = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    console.log('requests useEffect entered')
     if (runId) dispatch(fetchRequests({ runId }))
   }, [dispatch, runId])
 

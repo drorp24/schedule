@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, memo, useMemo, useCallback } from 'react'
+import { useEffect, memo, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchRuns, selectEntities, select } from '../../redux/runs'
+import { removeDeliveryEffects } from '../../redux/deliveries'
 
 import { useLocale, localeDateTime } from '../../utility/appUtilities'
 
@@ -14,6 +15,7 @@ const styles = {
     fontSize: '0.75rem',
   },
   select: {
+    padding: '0 0.5rem',
     '& .MuiInputBase-input': {
       fontSize: '0.65rem',
     },
@@ -46,9 +48,13 @@ const RunSelection = () => {
   // const d = useCallback(() => {
   //   localeDateTime(locale)
   // }, [locale])
-  // const selectRun = ({ target: { value } }) => {
-  //   if (value !== selectedId) dispatch(select(value))
-  // }
+
+  const selectRun = ({ target: { value } }) => {
+    if (value !== selectedId) {
+      dispatch(removeDeliveryEffects())
+      dispatch(select(value))
+    }
+  }
 
   const runs = useMemo(
     () =>
@@ -67,7 +73,6 @@ const RunSelection = () => {
   }, [dispatch])
 
   if (!runs || !runs.length) return null
-  console.log('RunSelection. runs: ', runs)
 
   return (
     <FormControl fullWidth>

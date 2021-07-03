@@ -153,6 +153,11 @@ export const selectEntities = ({ deliveryPlans }) => {
   }
 }
 
+export const selectLoaded =
+  runId =>
+  ({ deliveryPlans: { meta, ids, loading, error } }) =>
+    meta?.runId === runId && ids.length > 0 && loading === 'idle' && !error
+
 export const selectIds = ({ deliveryPlans }) =>
   deliveryPlansSelectors.selectIds(deliveryPlans)
 

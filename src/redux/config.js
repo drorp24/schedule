@@ -1,15 +1,15 @@
 export const criteriaDefaults = {
-  selectedDeliveries: {
-    value: false,
-    map: true,
-  },
   matched: {
-    value: false,
+    value: true,
     map: false,
   },
   unmatched: {
-    value: false,
+    value: true,
     map: false,
+  },
+  selectedDeliveries: {
+    value: true,
+    map: true,
   },
 }
 

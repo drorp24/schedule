@@ -47,6 +47,7 @@ const styles = {
 const ListSelection = memo(({ list, setList }) => {
   console.log('ListSelection is rendered')
   const handleListSelection = (event, newList) => {
+    console.log('List Selection, setting newList: ', newList)
     setList(newList)
   }
 

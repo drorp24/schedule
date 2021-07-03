@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState, memo, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-// import useTranslation from '../i18n/useTranslation'
+import { useMode } from '../utility/appUtilities'
 
 import Select from '../lists/Select'
 import Requests from '../lists/Requests'
@@ -13,34 +13,52 @@ import RecDetails, { useRecDetails } from '../gantt/RecDetails'
 
 import noScrollBar from '../styling/noScrollbar'
 import Paper from '@material-ui/core/Paper'
+import blueGrey from '@material-ui/core/colors/blueGrey'
+import grey from '@material-ui/core/colors/grey'
 
 const Schedule = () => {
   const [list, setList] = useState(null)
+  const { light } = useMode()
   const noListSelected = list === null
 
   const mode = useSelector(store => store.app.mode)
 
-  const heights = {
-    run: 5,
-  }
+  const rowHeights = headerHeight => {
+    let r = []
+    const remainderHeight = 100 - headerHeight
+    if (noListSelected) {
+      const remainderHeightThird = remainderHeight / 3
+      r = [
+        headerHeight,
+        remainderHeightThird,
+        remainderHeightThird,
+        remainderHeightThird,
+      ]
+    } else {
+      r = [
+        headerHeight,
+        +(list === 'requests') * remainderHeight,
+        +(list === 'depots') * remainderHeight,
+        +(list === 'zones') * remainderHeight,
+      ]
+    }
 
-  heights.list = (100 - heights.run - 6) / 3
+    return r.join('% ') + '%'
+  }
 
   const styles = {
     root: theme => ({
       display: 'grid',
       gridTemplateColumns: '30% 70%',
-      backgroundColor: theme.palette.background.backdrop,
+      // backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-around',
-      padding: '0 0.5rem',
+      display: 'grid',
+      gridTemplateRows: rowHeights(7),
+      // padding: '0 0.5rem',
       zIndex: 401,
     },
     run: {
-      height: `${heights.run}%`,
       overflow: 'hidden',
       display: 'flex',
       justifyContent: 'space-between',
@@ -48,52 +66,25 @@ const Schedule = () => {
       borderRadius: '3px',
     },
     requests: theme => ({
-      height: noListSelected
-        ? `${heights.list}%`
-        : list === 'requests'
-        ? '100%'
-        : 0,
       padding: noListSelected || list === 'requests' ? '1rem' : '0 1rem',
-      border: noListSelected || list === 'requests' ? '1px solid' : 'none',
-      borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
-      borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.backdrop,
+      backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
     }),
     depots: theme => ({
-      height: noListSelected
-        ? `${heights.list}%`
-        : list === 'depots'
-        ? '100%'
-        : 0,
       padding: noListSelected || list === 'depots' ? '1rem' : '0 1rem',
-      border: noListSelected || list === 'depots' ? '1px solid' : 'none',
-      borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
-      borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.backdrop,
+      backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,
     }),
     zones: theme => ({
-      height: noListSelected
-        ? `${heights.list}%`
-        : list === 'zones'
-        ? '100%'
-        : 0,
       padding: noListSelected || list === 'zones' ? '1rem' : '0 1rem',
-      border: noListSelected || list === 'zones' ? '1px solid' : 'none',
-      borderColor:
-        mode === 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(256, 256, 256, 0.2)',
-      borderRadius: '4px',
       borderTop: 'none',
-      backgroundColor: theme.palette.background.backdrop,
+      backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',
       overflow: 'scroll',
       ...noScrollBar,

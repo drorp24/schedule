@@ -1,11 +1,29 @@
 import store from '../redux/store'
 import { updateSelection } from '../redux/deliveries'
+import { setCriteria } from '../redux/requests'
 
 export const updateSelected =
   ({ dispatch, timeline }) =>
   ({ item }) => {
     setTimeout(() => {
       const selection = timeline.getSelection()
+      if (selection?.length) {
+        dispatch(
+          setCriteria([
+            { prop: 'matched', value: false },
+            { prop: 'unmatched', value: false },
+            { prop: 'selectedDeliveries', value: true },
+          ])
+        )
+      } else {
+        dispatch(
+          setCriteria([
+            { prop: 'matched', value: true },
+            { prop: 'unmatched', value: true },
+            { prop: 'selectedDeliveries', value: false },
+          ])
+        )
+      }
       const { requests } = store.getState()
       dispatch(updateSelection({ selection, requests }))
     }, 0)

@@ -159,8 +159,10 @@ export const selectEntities = ({ depots }) => {
   }
 }
 
-export const selectLoaded = ({ depots: { ids, loading, error } }) =>
-  ids.length > 0 && loading === 'idle' && !error
+export const selectLoaded =
+  runId =>
+  ({ depots: { meta, ids, loading, error } }) =>
+    meta?.runId === runId && ids.length > 0 && loading === 'idle' && !error
 
 export const selectCriteria = ({ depots }) => depots.criteria
 

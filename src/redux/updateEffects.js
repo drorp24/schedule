@@ -139,6 +139,18 @@ export const updateEffects = (
   )
 }
 
+export const removeEffects = state => {
+  state.fulfilledRequests = null
+  state.employedDepots = null
+  state.selectedIds = null
+  Object.values(state.entities).forEach(({ drone_deliveries = [] }) => {
+    drone_deliveries.forEach(delivery => {
+      delivery.fulfilledRequests = null
+      delivery.employedDepots = null
+    })
+  })
+}
+
 export const updateSelectedDeliveries = ({ state, selection, requests }) => {
   state.selectedRequests = {}
 

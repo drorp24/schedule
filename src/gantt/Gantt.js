@@ -1,15 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+
+import { selectEntities as selectRuns } from '../redux/runs'
+import {
+  selectEntities as selectRequestsEntities,
+  selectLoaded as selectRequestsLoaded,
+} from '../redux/requests'
+import {
+  selectEntities as selectDeliveryPlansEntities,
+  selectLoaded as selectDeliveryPlansLoaded,
+} from '../redux/deliveryPlans'
 import {
   fetchDeliveries,
   selectLoaded as selectDeliveriesLoaded,
   selectEffectsRecorded,
   updateDeliveryEffects,
 } from '../redux/deliveries'
-import { selectEntities as selectRequestsEntities } from '../redux/requests'
-import { selectEntities as selectDeliveryPlansEntities } from '../redux/deliveryPlans'
-import { selectEntities as selectRuns } from '../redux/runs'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css'
 import createTimeline from './createTimeline'
@@ -23,6 +30,7 @@ import flight from '../assets/flight.png'
 import './gantt.css'
 
 const Gantt = () => {
+  console.log('Gantt is rendered')
   const ref = useRef()
   const { locale, rtl } = useLocale()
   const options = useMemo(() => timelineOptions({ locale, rtl }), [locale, rtl])
@@ -100,19 +108,9 @@ const Gantt = () => {
     }),
   }
 
-  const deliveriesLoaded = useSelector(selectDeliveriesLoaded)
-
-  const { requests, loaded: requestsLoaded } = useSelector(
-    selectRequestsEntities
-  )
-  const { deliveryPlans, loaded: deliveryPlansLoaded } = useSelector(
-    selectDeliveryPlansEntities
-  )
-
-  const effectsRecorded = useSelector(selectEffectsRecorded)
-
   // fetch deliveries
   useEffect(() => {
+    console.log('deliveries useEffect entered')
     const container = ref.current
     const buildTimeline = createTimeline({
       container,
@@ -137,8 +135,17 @@ const Gantt = () => {
   }, [dispatch, options, runId])
 
   // Update effects
+  const requestsLoaded = useSelector(selectRequestsLoaded(runId))
+  const deliveryPlansLoaded = useSelector(selectDeliveryPlansLoaded(runId))
+  const deliveriesLoaded = useSelector(selectDeliveriesLoaded(runId))
+  const effectsRecorded = useSelector(selectEffectsRecorded(runId))
+
+  const { requests } = useSelector(selectRequestsEntities)
+  const { deliveryPlans } = useSelector(selectDeliveryPlansEntities)
+
   useEffect(() => {
     if (
+      !runId ||
       !deliveriesLoaded ||
       !requestsLoaded ||
       !deliveryPlansLoaded ||
@@ -146,8 +153,11 @@ const Gantt = () => {
     )
       return
 
+    console.log('Gantt effects useEffect survivied the if')
+
     dispatch(updateDeliveryEffects({ requests, deliveryPlans }))
   }, [
+    runId,
     deliveriesLoaded,
     requestsLoaded,
     deliveryPlansLoaded,

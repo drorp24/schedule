@@ -107,6 +107,7 @@ const requestsSlice = createSlice({
       state.selectedIds = [...currentIds]
     },
     setCriteria: (state, { payload }) => {
+      console.log('setCriteria called')
       payload.forEach(({ prop, value }) => {
         state.criteria[prop] = value
         if (value && !criteriaDefaults[prop].map && !state.criteria.map.user)
@@ -190,8 +191,10 @@ export const selectEntities = ({ requests }) => {
   }
 }
 
-export const selectLoaded = ({ requests: { ids, loading, error } }) =>
-  ids.length > 0 && loading === 'idle' && !error
+export const selectLoaded =
+  runId =>
+  ({ requests: { meta, ids, loading, error } }) =>
+    meta?.runId === runId && ids.length > 0 && loading === 'idle' && !error
 
 export const selectCriteria = ({ requests }) => requests.criteria
 
@@ -231,7 +234,9 @@ export const selectSelectedEntities = ({
 
         let properties = { requestId, deliveryPlanId }
 
-        const fulfilledRequest = deliveries.fulfilledRequests[requestId]
+        const fulfilledRequest =
+          deliveries.fulfilledRequests &&
+          deliveries.fulfilledRequests[requestId]
         if (fulfilledRequest?.locations?.length) {
           const fulfilledRequestProps = fulfilledRequest.locations[0].properties
           properties = { ...properties, ...fulfilledRequestProps }
