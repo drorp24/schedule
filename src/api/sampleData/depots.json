@@ -1,16 +1,1 @@
-{
-  "aa": {
-    "depot_id": "aa",
-    "start_time": "01/01/2021 00:00:00",
-    "end_time": "01/01/2021 23:59:00",
-    "drone_type": "drone_type_3",
-    "location": [35.396493999243475, 32.6675]
-  },
-  "bb": {
-    "depot_id": "bb",
-    "start_time": "01/01/2021 00:00:00",
-    "end_time": "01/01/2021 23:59:00",
-    "drone_type": "drone_type_3",
-    "location": [35.30978651595514, 32.6675]
-  }
-}
+{"cc": {"depot_id": "cc", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_1", "location": [35.56916053473782, 32.6675]}, "bb": {"depot_id": "bb", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_1", "location": [35.301544320771804, 32.6675]}, "dd": {"depot_id": "dd", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_3", "location": [35.548295895460605, 32.6675]}, "ee": {"depot_id": "ee", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_1", "location": [35.41953891935575, 32.6675]}, "ff": {"depot_id": "ff", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_1", "location": [35.195130556362166, 32.6675]}, "aa": {"depot_id": "aa", "start_time": "01/01/2021 00:00:00", "end_time": "01/01/2021 23:59:00", "drone_type": "drone_type_3", "location": [35.49252002841416, 32.6675]}}

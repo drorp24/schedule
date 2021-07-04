@@ -22,5 +22,5 @@ const zonesApi = async runId => {
 // test data
 const sampleZonesApi = runId => Promise.resolve(sampleZones)
 
-export default zonesApi
-// export default sampleZonesApi
+// export default zonesApi
+export default sampleZonesApi
