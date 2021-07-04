@@ -17,3 +17,18 @@ ul.MuiList-root.MuiMenu-list.MuiList-padding {
   flex-direction: column;
   align-items: stretch;
 }
+
+@keyframes slideGrid {
+  0% {
+    grid-template-rows: 7% 31% 31% 31%;
+  }
+  33% {
+    grid-template-rows: 7% 52% 21% 20%;
+  }
+  66% {
+    grid-template-rows: 7% 72% 11% 10%;
+  }
+  33% {
+    grid-template-rows: 7% 93% 0% 0%;
+  }
+}

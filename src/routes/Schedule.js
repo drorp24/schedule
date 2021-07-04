@@ -50,13 +50,13 @@ const Schedule = () => {
     root: theme => ({
       display: 'grid',
       gridTemplateColumns: '30% 70%',
-      // backgroundColor: theme.palette.background.backdrop,
     }),
     lists: {
       display: 'grid',
       gridTemplateRows: rowHeights(7),
-      // padding: '0 0.5rem',
       zIndex: 401,
+      // animationName: 'slideGrid',
+      // animationDuration: '1s',
     },
     run: {
       overflow: 'hidden',

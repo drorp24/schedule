@@ -95,8 +95,7 @@ const FeatureProperties = ({ properties = {}, entities }) => {
   const styles = {
     container: {
       direction,
-      maxHeight: '35vh',
-      minWidth: '20vw',
+      maxHeight: '25vh',
       overflow: 'scroll',
       ...noScrollbar,
     },

@@ -16,9 +16,7 @@ const styles = {
   },
   select: {
     padding: '0 0.5rem',
-    '& .MuiInputBase-input': {
-      fontSize: '0.65rem',
-    },
+    '& .MuiInputBase-input': {},
     '&:hover': {
       border: 'none',
     },

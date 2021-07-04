@@ -130,7 +130,6 @@ export const Toolbar = ({
       justifyContent: 'space-between',
       alignItems: 'center',
       flexWrap: 'wrap',
-      fontSize: '0.75rem',
       textTransform: 'uppercase',
       '& .MuiIconButton-root': {
         color: 'inherit',
