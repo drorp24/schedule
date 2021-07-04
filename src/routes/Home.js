@@ -168,14 +168,14 @@ const Home = () => {
     //   title: t('routes'),
     //   color: pathname === '/home/routes' ? menuItem.active : menuItem.inactive,
     // },
-    {
-      path: 'dashboard',
-      component: <Dashboard />,
-      icon: <DashboardOutlinedIcon />,
-      title: t('dashboard'),
-      color:
-        pathname === '/home/dashboard' ? menuItem.active : menuItem.inactive,
-    },
+    // {
+    //   path: 'dashboard',
+    //   component: <Dashboard />,
+    //   icon: <DashboardOutlinedIcon />,
+    //   title: t('dashboard'),
+    //   color:
+    //     pathname === '/home/dashboard' ? menuItem.active : menuItem.inactive,
+    // },
   ]
   const toggles = [
     // {
