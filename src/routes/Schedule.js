@@ -66,7 +66,7 @@ const Schedule = () => {
       borderRadius: '3px',
     },
     requests: theme => ({
-      padding: noListSelected || list === 'requests' ? '1rem' : '0 1rem',
+      padding: '1rem',
       borderTop: 'none',
       backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',
@@ -74,7 +74,7 @@ const Schedule = () => {
       ...noScrollBar,
     }),
     depots: theme => ({
-      padding: noListSelected || list === 'depots' ? '1rem' : '0 1rem',
+      padding: '1rem',
       borderTop: 'none',
       backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',
@@ -82,7 +82,7 @@ const Schedule = () => {
       ...noScrollBar,
     }),
     zones: theme => ({
-      padding: noListSelected || list === 'zones' ? '1rem' : '0 1rem',
+      padding: '1rem',
       borderTop: 'none',
       backgroundColor: light ? blueGrey[50] : grey[900],
       transition: 'height 0.5s',

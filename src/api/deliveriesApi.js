@@ -1,5 +1,6 @@
 import axios from 'axios'
 import sampleDeliveries from './sampleData/work_plan.json'
+import fakeDelay from './fakeDelay'
 
 const deliveriesApi = async runId => {
   const deliveries = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_DELIVERIES_ENDPOINT}`
@@ -20,7 +21,7 @@ const deliveriesApi = async runId => {
 }
 
 // test data
-const sampleDeliveriesApi = runId => Promise.resolve(sampleDeliveries)
+const sampleDeliveriesApi = runId => fakeDelay(sampleDeliveries, 400)
 
 // export default deliveriesApi
 export default sampleDeliveriesApi

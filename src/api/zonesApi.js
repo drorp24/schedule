@@ -1,5 +1,6 @@
 import axios from 'axios'
 import sampleZones from './sampleData/zones.json'
+import fakeDelay from './fakeDelay'
 
 const zonesApi = async runId => {
   const zones = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_ZONES_ENDPOINT}`
@@ -20,7 +21,7 @@ const zonesApi = async runId => {
 }
 
 // test data
-const sampleZonesApi = runId => Promise.resolve(sampleZones)
+const sampleZonesApi = runId => fakeDelay(sampleZones)
 
 // export default zonesApi
 export default sampleZonesApi
