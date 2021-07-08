@@ -191,9 +191,9 @@ const Home = () => {
         setTimeout(() => {
           dispatch(toggleLocale())
           dispatch(resetCriteria())
-          // dispatch(deselectRequests())
-          // dispatch(deselectDepots())
-          // dispatch(deselectZones())
+          dispatch(deselectRequests())
+          dispatch(deselectDepots())
+          dispatch(deselectZones())
           dispatch(updateDeliveriesSelection({ selection: [] }))
         }, 500)
       },
