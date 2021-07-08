@@ -1,5 +1,5 @@
 const config = {
-  fake: true,
+  fake: false,
 }
 
 export default config
