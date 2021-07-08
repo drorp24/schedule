@@ -79,6 +79,9 @@ const zonesSlice = createSlice({
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
     },
+    deselect: state => {
+      state.selectedIds = []
+    },
     setCriteria: (state, { payload }) => {
       payload.forEach(({ prop, value }) => {
         state.criteria[prop] = value
@@ -204,6 +207,7 @@ export const {
   update,
   selectOne,
   selectMulti,
+  deselect,
   setCriteria,
   toggleFilter,
   toggleShowOnMap,

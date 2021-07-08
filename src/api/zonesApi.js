@@ -1,6 +1,7 @@
 import axios from 'axios'
 import sampleZones from './sampleData/zones.json'
 import fakeDelay from './fakeDelay'
+import config from './config'
 
 const zonesApi = async runId => {
   const zones = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_ZONES_ENDPOINT}`
@@ -23,5 +24,6 @@ const zonesApi = async runId => {
 // test data
 const sampleZonesApi = runId => fakeDelay(sampleZones)
 
-// export default zonesApi
-export default sampleZonesApi
+const api = config.fake ? sampleZonesApi : zonesApi
+
+export default api

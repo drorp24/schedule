@@ -34,11 +34,7 @@ const EntitiesLocations = ({ entities, locations }) => {
           switch (type) {
             case 'Polygon':
               return (
-                <Polygon {...{ positions, pathOptions }} key={index}>
-                  <Popup direction="left" css={styles.popup}>
-                    <FeatureProperties {...{ properties, entities }} />
-                  </Popup>
-                </Polygon>
+                <Polygon {...{ positions, pathOptions }} key={index}></Polygon>
               )
             case 'Point':
               return (

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useRef, useEffect, memo, useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { unwrapResult } from '@reduxjs/toolkit'
 
 import { selectEntities as selectRuns } from '../redux/runs'
 import {
@@ -14,6 +13,7 @@ import {
 } from '../redux/deliveryPlans'
 import {
   fetchDeliveries,
+  selectLoaded as selectDeliveriesLoaded,
   selectEffectsRecorded,
   updateDeliveryEffects,
 } from '../redux/deliveries'
@@ -121,29 +121,10 @@ const Gantt = () => {
     }),
   }
 
-  const requestsLoaded = useSelector(selectRequestsLoaded(runId))
-  const deliveryPlansLoaded = useSelector(selectDeliveryPlansLoaded(runId))
-  const effectsRecorded = useSelector(selectEffectsRecorded(runId))
-
-  const { requests } = useSelector(selectRequestsEntities)
-  const { deliveryPlans } = useSelector(selectDeliveryPlansEntities)
-  const localeRef = useRef()
-
   // fetch deliveries
-
   useEffect(() => {
-    if (
-      !runId ||
-      !requestsLoaded ||
-      !deliveryPlansLoaded ||
-      (effectsRecorded && locale === localeRef.current?.locale) ||
-      !containerRef.current
-    )
-      return
-
+    console.log('deliveries useEffect entered')
     const container = containerRef.current
-    localeRef.current = { locale }
-
     const buildTimeline = createTimeline({
       container,
       options,
@@ -151,31 +132,61 @@ const Gantt = () => {
     })
 
     if (runId) {
+      console.log('Gantt fetch useEffect. survived the if runId')
       setLoading(true)
+      // force a re-render for an otherwise unchanging DOM element
+      if (containerRef.current) {
+        window.container = containerRef.current
+        containerRef.current.innerHTML = ''
+      }
 
       dispatch(
         fetchDeliveries({
           runId,
           buildTimeline,
         })
-      )
-        .then(unwrapResult)
-        .then(() => {
-          dispatch(updateDeliveryEffects({ requests, deliveryPlans }))
-          setLoading(false)
-        })
-        .catch(error => console.error(error))
+      ).then(() => {
+        setLoading(false)
+      })
     }
+  }, [dispatch, options, runId])
+
+  // Update effects
+  const requestsLoaded = useSelector(selectRequestsLoaded(runId))
+  const deliveryPlansLoaded = useSelector(selectDeliveryPlansLoaded(runId))
+  const deliveriesLoaded = useSelector(selectDeliveriesLoaded(runId))
+  const effectsRecorded = useSelector(selectEffectsRecorded(runId))
+
+  const { requests } = useSelector(selectRequestsEntities)
+  const { deliveryPlans } = useSelector(selectDeliveryPlansEntities)
+  const localeRef = useRef()
+
+  useEffect(() => {
+    console.log('Gantt useEffect. effectsRecorded: ', effectsRecorded)
+    console.log('Gantt useEffect. deliveriesLoaded: ', deliveriesLoaded)
+    if (
+      !runId ||
+      !deliveriesLoaded ||
+      !requestsLoaded ||
+      !deliveryPlansLoaded ||
+      (effectsRecorded && locale === localeRef.current?.locale)
+    )
+      return
+
+    localeRef.current = { locale }
+    console.log('Gantt effects useEffect survived the if')
+
+    dispatch(updateDeliveryEffects({ requests, deliveryPlans }))
   }, [
-    dispatch,
-    options,
     runId,
+    deliveriesLoaded,
+    requestsLoaded,
     deliveryPlansLoaded,
     effectsRecorded,
     requests,
     deliveryPlans,
     locale,
-    requestsLoaded,
+    dispatch,
   ])
 
   if (loading)

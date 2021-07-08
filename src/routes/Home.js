@@ -2,7 +2,11 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleDrawer, toggleLocale, toggleMode } from '../redux/app'
-import { logout } from '../redux/users'
+// import { logout } from '../redux/users'
+import { deselect as deselectRequests, resetCriteria } from '../redux/requests'
+import { deselect as deselectDepots } from '../redux/depots'
+import { deselect as deselectZones } from '../redux/zones'
+import { updateSelection as updateDeliveriesSelection } from '../redux/deliveries'
 import { useLocale } from '../utility/appUtilities'
 
 import {
@@ -13,25 +17,25 @@ import {
   useLocation,
 } from 'react-router-dom'
 
-import Folder from '@material-ui/icons/FolderOpenOutlined'
+// import Folder from '@material-ui/icons/FolderOpenOutlined'
 import ScheduleIcon from '@material-ui/icons/Schedule'
-import RoutesIcon from '@material-ui/icons/AltRouteOutlined'
+// import RoutesIcon from '@material-ui/icons/AltRouteOutlined'
 import SwitchRightOutlinedIcon from '@material-ui/icons/SwitchRightOutlined'
 import DarkModeOutlinedIcon from '@material-ui/icons/DarkModeOutlined'
 import LightModeOutlinedIcon from '@material-ui/icons/LightModeOutlined'
-import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
+// import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import Logout from '@material-ui/icons/PowerSettingsNewOutlined'
+// import Logout from '@material-ui/icons/PowerSettingsNewOutlined'
 import Button from '@material-ui/core/Button'
 import Logo from '../assets/Rafael-2.svg'
 
 import useTranslation from '../i18n/useTranslation'
 
 import Page from '../layout/Page'
-import File from './File'
+// import File from './File'
 import Schedule from './Schedule'
-import Dashboard from './Dashboard'
-import Routes from './Routes'
+// import Dashboard from './Dashboard'
+// import Routes from './Routes'
 
 const Home = () => {
   const { url } = useRouteMatch()
@@ -178,15 +182,23 @@ const Home = () => {
     // },
   ]
   const toggles = [
-    // {
-    //   key: 'lang',
-    //   icon: <SwitchRightOutlinedIcon />,
-    //   onClick: () => {
-    //     setDir(dir => (dir === 'ltr' ? 'rtl' : 'ltr'))
-    //     setTimeout(() => dispatch(toggleLocale()), 500)
-    //   },
-    //   title: t('lang'),
-    // },
+    {
+      key: 'lang',
+      icon: <SwitchRightOutlinedIcon />,
+      onClick: () => {
+        setDir(dir => (dir === 'ltr' ? 'rtl' : 'ltr'))
+
+        setTimeout(() => {
+          dispatch(toggleLocale())
+          dispatch(resetCriteria())
+          // dispatch(deselectRequests())
+          // dispatch(deselectDepots())
+          // dispatch(deselectZones())
+          dispatch(updateDeliveriesSelection({ selection: [] }))
+        }, 500)
+      },
+      title: t('lang'),
+    },
     {
       key: 'mode',
       icon:

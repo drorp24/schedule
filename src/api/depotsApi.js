@@ -1,6 +1,7 @@
 import axios from 'axios'
 import sampleDepots from './sampleData/depots.json'
 import fakeDelay from './fakeDelay'
+import config from './config'
 
 const depotsApi = async runId => {
   const depots = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_DEPOTS_ENDPOINT}`
@@ -20,8 +21,8 @@ const depotsApi = async runId => {
   }
 }
 
-// test data
 const sampleDepotsApi = runId => fakeDelay(sampleDepots)
 
-// export default depotsApi
-export default sampleDepotsApi
+const api = config.fake ? sampleDepotsApi : depotsApi
+
+export default api

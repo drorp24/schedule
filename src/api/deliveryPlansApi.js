@@ -1,5 +1,6 @@
 import axios from 'axios'
 import sampleDeliveryPlans from './sampleData/package_delivery_plans.json'
+import config from './config'
 
 const deliveryPlansApi = async runId => {
   const deliveryPlans = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_DELIVERYPLANS_ENDPOINT}`
@@ -26,5 +27,6 @@ const sampleDeliveryPlansApi = runId => {
   return Promise.resolve(sampleDeliveryPlans)
 }
 
-// export default deliveryPlansApi
-export default sampleDeliveryPlansApi
+const api = config.fake ? sampleDeliveryPlansApi : deliveryPlansApi
+
+export default api

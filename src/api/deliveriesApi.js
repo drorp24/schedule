@@ -1,6 +1,7 @@
 import axios from 'axios'
 import sampleDeliveries from './sampleData/work_plan.json'
 import fakeDelay from './fakeDelay'
+import config from './config'
 
 const deliveriesApi = async runId => {
   const deliveries = `${process.env.REACT_APP_API_SERVER}${runId}/${process.env.REACT_APP_DELIVERIES_ENDPOINT}`
@@ -23,5 +24,6 @@ const deliveriesApi = async runId => {
 // test data
 const sampleDeliveriesApi = runId => fakeDelay(sampleDeliveries, 400)
 
-// export default deliveriesApi
-export default sampleDeliveriesApi
+const api = config.fake ? sampleDeliveriesApi : deliveriesApi
+
+export default api

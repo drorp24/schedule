@@ -106,13 +106,18 @@ const requestsSlice = createSlice({
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
     },
+    deselect: state => {
+      state.selectedIds = []
+    },
     setCriteria: (state, { payload }) => {
-      console.log('setCriteria called')
       payload.forEach(({ prop, value }) => {
         state.criteria[prop] = value
         if (value && !criteriaDefaults[prop].map && !state.criteria.map.user)
           state.criteria.map.value = false
       })
+    },
+    resetCriteria: state => {
+      state.criteria = initialCriteria
     },
     toggleFilter: state => {
       state.criteria.filter = !state.criteria.filter
@@ -297,7 +302,9 @@ export const {
   update,
   selectOne,
   selectMulti,
+  deselect,
   setCriteria,
+  resetCriteria,
   toggleFilter,
   toggleShowOnMap,
   error,

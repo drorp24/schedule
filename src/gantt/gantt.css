@@ -1,21 +1,11 @@
 .vis-panel.vis-right {
   width: 2rem;
 }
-
-.vis-time-axis.vis-foreground {
-  position: fixed;
-  top: 60vh;
-  right: calc(4rem + 0.3 * (100vw - 4rem) - 5px);
-  width: calc(100vw - 4rem - 0.3 * (100vw - 4rem) + 5px);
-  padding-right: 2rem;
-  z-index: 401;
-  height: 2rem !important;
-  display: flex;
-  align-items: center;
-  font-size: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+.vis-panel.vis-left {
+  width: 2rem;
 }
 
+/*
 .vis-label[title]:hover::after {
   content: attr(title);
   position: fixed;

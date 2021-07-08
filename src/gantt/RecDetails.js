@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from 'react'
-import { useLocalDateTime } from '../utility/appUtilities'
+import { useLocalDateTime, useLocale } from '../utility/appUtilities'
 
 import StartIcon from '@material-ui/icons/Timer'
 import EndIcon from '@material-ui/icons/TimerOff'
@@ -9,40 +9,6 @@ import PackageIcon from '@material-ui/icons/GroupWorkOutlined'
 import RecIcon from '@material-ui/icons/DateRangeOutlined'
 import Divider from '@material-ui/core/Divider'
 import FormationIcon from '@material-ui/icons/DoneAllOutlined'
-
-const styles = {
-  root: theme => ({
-    visibility: 'hidden',
-    direction: 'ltr',
-    position: 'absolute',
-    display: 'grid',
-    gridTemplateColumns: '15% 85%',
-    gap: '0.5rem',
-    alignItems: 'center',
-    zIndex: 400,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    color: 'white',
-    fontWeight: 100,
-    fontSize: '0.8rem',
-    right: '10px',
-    top: '10px',
-    borderRadius: '5px',
-    padding: '0.5rem',
-    textAlign: 'left',
-    width: '13rem',
-  }),
-  line: {
-    width: '100%',
-  },
-  divider: {
-    paddingRight: '0.5rem',
-    '& hr': {
-      color: 'white',
-      borderBottomColor: 'rgba(256, 256, 256, 0.4)',
-      borderWidth: '1px',
-    },
-  },
-}
 
 // ! hover vs. select
 // vis-timeline elements are rendered by vis-timeline, outside of React domain.
@@ -92,43 +58,79 @@ const RecDetails = ({
   drone_type,
   package_type_amounts,
   classname,
-}) => (
-  <div css={styles.root} id="recDetails" className={classname}>
-    <div>
-      <RecIcon />
-    </div>
-    <div style={{ width: 'calc(100% - 50px)' }}>{id}</div>
+}) => {
+  const { antiPlacement } = useLocale()
+  const styles = {
+    root: theme => ({
+      visibility: 'hidden',
+      direction: 'ltr',
+      position: 'absolute',
+      display: 'grid',
+      gridTemplateColumns: '15% 85%',
+      gap: '0.5rem',
+      alignItems: 'center',
+      zIndex: 400,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      color: 'white',
+      fontWeight: 100,
+      fontSize: '0.8rem',
+      [antiPlacement]: '10px',
+      top: '10px',
+      borderRadius: '5px',
+      padding: '0.5rem',
+      textAlign: 'left',
+      width: '13rem',
+    }),
+    line: {
+      width: '100%',
+    },
+    divider: {
+      paddingRight: '0.5rem',
+      '& hr': {
+        color: 'white',
+        borderBottomColor: 'rgba(256, 256, 256, 0.4)',
+        borderWidth: '1px',
+      },
+    },
+  }
+  return (
+    <div css={styles.root} id="recDetails" className={classname}>
+      <div>
+        <RecIcon />
+      </div>
+      <div style={{ width: 'calc(100% - 50px)' }}>{id}</div>
 
-    <div></div>
-    <div css={styles.divider}>
-      <Divider />
-    </div>
+      <div></div>
+      <div css={styles.divider}>
+        <Divider />
+      </div>
 
-    <div>
-      <StartIcon />
-    </div>
-    <div>{useLocalDateTime(start)}</div>
+      <div>
+        <StartIcon />
+      </div>
+      <div>{useLocalDateTime(start)}</div>
 
-    <div>
-      <EndIcon />
-    </div>
-    <div>{useLocalDateTime(end)}</div>
+      <div>
+        <EndIcon />
+      </div>
+      <div>{useLocalDateTime(end)}</div>
 
-    <div>
-      <PlatformIcon />
-    </div>
-    <div>{drone_type}</div>
+      <div>
+        <PlatformIcon />
+      </div>
+      <div>{drone_type}</div>
 
-    <div>
-      <FormationIcon />
-    </div>
-    <div>{drone_formation}</div>
+      <div>
+        <FormationIcon />
+      </div>
+      <div>{drone_formation}</div>
 
-    <div>
-      <PackageIcon />
+      <div>
+        <PackageIcon />
+      </div>
+      <div>{package_type_amounts}</div>
     </div>
-    <div>{package_type_amounts}</div>
-  </div>
-)
+  )
+}
 
 export default RecDetails

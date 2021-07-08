@@ -48,10 +48,9 @@ export const fetchDeliveries = createAsyncThunk(
   async ({ runId, buildTimeline }, { rejectWithValue }) => {
     try {
       const response = await deliveriesApi(runId)
+      console.log('deliveries api was just called')
       const deliveries = Object.values(response).map(deliveriesFields)
       buildTimeline({ deliveries })
-      window.buildTimeline = buildTimeline
-      window.deliveries = deliveries
       return { runId, deliveries }
     } catch (error) {
       console.error('fetch catch error:', error)
@@ -71,12 +70,15 @@ export const fetchDeliveries = createAsyncThunk(
     //
     // Redundant fetching would otherwise happen if component is re-rendered
     // for reasons such as locale change that trigger an overall rerender.
-    condition: ({ runId }, { getState }) => {
-      const {
-        deliveries: { meta },
-      } = getState()
-      if (meta?.runId === runId) return false
-    },
+    // condition: ({ runId }, { getState }) => {
+    //   const {
+    //     deliveries: { meta },
+    //   } = getState()
+    //   if (meta?.runId === runId) {
+    //     console.log('duplicate deliveries data fetching prevented')
+    //     return false
+    //   }
+    // },
   }
 )
 
@@ -109,6 +111,7 @@ const deliveriesSlice = createSlice({
         : currentIds.add(payload)
       state.selectedIds = [...currentIds]
     },
+
     updateSelection: (state, { payload: { selection, requests } }) => {
       state.selectedIds = selection
       updateSelectedDeliveries({ state, selection, requests })
@@ -223,9 +226,10 @@ export const selectSelectedEntities = ({ deliveries }) => {
     const delivery = deliveries.entities[deliveryId]
     selectedEntities.push(delivery)
     const deliveryLeg = delivery.drone_deliveries[legIndex]
-    deliveryLeg.fulfilledRequests.forEach(({ location }) => {
-      locations.push(location)
-    })
+    deliveryLeg.fulfilledRequests?.length &&
+      deliveryLeg.fulfilledRequests.forEach(({ location }) => {
+        locations.push(location)
+      })
   })
 
   return { selectedEntities, locations }
